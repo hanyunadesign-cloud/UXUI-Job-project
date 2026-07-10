@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 다크모드 미지원: OS 설정과 무관하게 항상 라이트 색상 스킴을 강제한다. */
+  color-scheme: light;
+}
+
+html,
+body {
+  background-color: #ffffff;
+  color: #111111;
+}
+
+* {
+  border-color: #e5e5e5;
+}

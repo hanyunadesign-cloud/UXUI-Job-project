@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime   @default(now())
+  accounts      Account[]
+  sessions      Session[]
+  preference    Preference?
+  savedJobs     SavedJob[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// 온보딩에서 선택한 관심 직무/플랫폼/산업/목표 스테이지 및 이메일 알림 수신 여부
+model Preference {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  roles       String[]
+  platforms   String[]
+  industries  String[]
+  stages      String[]
+  emailOptIn  Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Job {
+  id          String       @id @default(cuid())
+  title       String
+  companyName String
+  companyLogo String?
+  role        String
+  platforms   String[]
+  industry    String
+  stage       String
+  location    String?
+  description String       @db.Text
+  applyUrl    String       @unique
+  // 공고 원문에서 추출한 서류접수 기간 텍스트(참고용 원문). 명시된 기간이 없으면 "상시채용".
+  applicationPeriod String @default("상시채용")
+  // 위 텍스트에서 파싱한 실제 마감일. 상시채용이면 null. D-day 계산에 사용.
+  applicationDeadline DateTime?
+  // 공고 원문에서 추출. 명시되지 않으면 각각 "정규직" / "경력무관"으로 기본 처리.
+  employmentType    String @default("정규직")
+  experienceLevel   String @default("경력무관")
+  postedAt    DateTime     @default(now())
+  savedBy     SavedJob[]
+  analysis    JobAnalysis?
+}
+
+// 공고 상세페이지 진입 시 실행되는 AI 분석 결과 캐시 (재실행 방지)
+model JobAnalysis {
+  id           String   @id @default(cuid())
+  jobId        String   @unique
+  coreKeywords String[]
+  resumeTip    String   @db.Text
+  // 공고 목록 카드에 보여줄, 이 직무가 주로 하는 업무를 나타내는 단어 (최대 4개)
+  taskKeywords String[]
+  createdAt    DateTime @default(now())
+  job          Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
+model SavedJob {
+  id        String   @id @default(cuid())
+  userId    String
+  jobId     String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+}
