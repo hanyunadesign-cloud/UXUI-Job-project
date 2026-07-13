@@ -124,7 +124,7 @@ export function OnboardingWizard() {
       <div className="flex items-center justify-between border-t border-neutral-100 pt-6">
         <div className="flex items-center gap-3">
           {stepIndex === 0 ? (
-            <Button variant="ghost" onClick={handleSkipAll} disabled={submitting}>
+            <Button variant="tertiary" onClick={handleSkipAll} disabled={submitting}>
               나중에 설정하기
             </Button>
           ) : (
