@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyFilterBar } from "@/components/CompanyFilterBar";
+import { ActiveOnlyCheckbox } from "@/components/ActiveOnlyCheckbox";
 import { Pagination } from "@/components/Pagination";
 import { EmptyState } from "@/components/EmptyState";
 import { getApplicationStatus } from "@/lib/dday";
@@ -123,10 +124,11 @@ export default async function CompaniesPage({
 
       <CompanyFilterBar />
 
-      <div>
+      <div className="flex items-center justify-between gap-4">
         <p className="text-sm text-neutral-500">
           검색 결과 <span className="font-semibold text-ink">{filtered.length}</span>건
         </p>
+        <ActiveOnlyCheckbox />
       </div>
 
       {pageItems.length === 0 ? (

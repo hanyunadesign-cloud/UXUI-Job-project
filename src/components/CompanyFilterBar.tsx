@@ -66,17 +66,6 @@ export function CompanyFilterBar() {
     });
   };
 
-  const activeOnly = searchParams.get("activeOnly") === "1";
-  const toggleActiveOnly = () => {
-    updateParams((params) => {
-      if (activeOnly) {
-        params.delete("activeOnly");
-      } else {
-        params.set("activeOnly", "1");
-      }
-    });
-  };
-
   return (
     <div className="flex flex-col gap-3">
       <div ref={containerRef} className="flex flex-wrap items-center gap-2">
@@ -130,7 +119,7 @@ export function CompanyFilterBar() {
           );
         })}
 
-        <div className="flex flex-1 items-center gap-2 rounded-full border border-neutral-200 pl-4 pr-1.5 py-1.5 min-w-[200px]">
+        <div className="ml-auto flex w-full items-center gap-2 rounded-full border border-neutral-200 bg-white pl-4 pr-1.5 py-1.5 sm:w-72">
           <input
             type="text"
             value={query}
@@ -150,16 +139,6 @@ export function CompanyFilterBar() {
             <MagnifyingGlassIcon className="h-4 w-4" aria-hidden />
           </button>
         </div>
-
-        <label className="flex w-fit shrink-0 cursor-pointer items-center gap-2 text-sm text-neutral-500">
-          <input
-            type="checkbox"
-            checked={activeOnly}
-            onChange={toggleActiveOnly}
-            className="h-4 w-4 rounded border-neutral-300 text-primary focus:ring-primary"
-          />
-          채용중인 기업만 보기
-        </label>
       </div>
     </div>
   );
