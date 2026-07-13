@@ -42,7 +42,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               aria-hidden
               className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-ink"
             >
-              <CheckIcon className="h-4 w-4" strokeWidth={2.5} />
+              <CheckIcon className="h-3.5 w-3.5" strokeWidth={2.5} />
             </span>
             <span>{toast.message}</span>
             {toast.action && (

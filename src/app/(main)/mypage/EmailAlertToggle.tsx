@@ -38,7 +38,7 @@ export function EmailAlertToggle({ initialEnabled }: { initialEnabled: boolean }
           : "bg-primary text-white hover:bg-primary-strong"
       )}
     >
-      {enabled && <CheckIcon className="h-4 w-4" strokeWidth={2.5} aria-hidden />}
+      {enabled && <CheckIcon className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />}
       {enabled ? "알림 받는 중" : "이메일로 알림 받기"}
     </button>
   );
