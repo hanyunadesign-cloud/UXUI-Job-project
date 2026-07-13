@@ -3,8 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // 런타임 쿼리는 트랜잭션 모드 풀러(pgbouncer)로 — 서버리스 환경에서 동시 연결이 늘어나도
+  // 커넥션이 고갈되지 않는다. 세션 모드(5432)는 동시 연결 제한이 낮아 실제 배포 트래픽에서
+  // "max clients reached" 에러가 날 수 있다.
+  url       = env("DATABASE_URL")
+  // db push/migrate 같은 DDL은 트랜잭션 모드가 지원하지 않아 세션 모드로 직접 붙는다.
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
