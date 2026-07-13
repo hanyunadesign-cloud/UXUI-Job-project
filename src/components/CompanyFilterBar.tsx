@@ -119,7 +119,7 @@ export function CompanyFilterBar() {
           );
         })}
 
-        <div className="ml-auto flex w-full items-center gap-2 rounded-full border border-neutral-200 bg-white pl-4 pr-1.5 py-1.5 sm:w-72">
+        <div className="ml-auto flex h-[47px] w-full items-center gap-2 rounded-full border border-neutral-200 bg-white pl-4 pr-1.5 sm:w-72">
           <input
             type="text"
             value={query}
