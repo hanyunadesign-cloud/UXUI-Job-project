@@ -87,7 +87,7 @@ export default async function JobsPage({
       <OnboardingSuccessModal initialOpen={searchParams.onboarded === "1"} />
 
       <div>
-        <h1 className="text-xl font-bold text-ink">주요 IT기업의 최신 공고를 한곳에서 확인하세요.</h1>
+        <h1 className="text-xl font-bold text-ink">주요 IT기업의 최신 공고를 한곳에서 확인하세요</h1>
         <p className="mt-1 text-sm text-neutral-500">{jobs.length}개의 공고</p>
       </div>
 
