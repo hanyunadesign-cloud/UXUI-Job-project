@@ -117,7 +117,7 @@ export function FeedbackWidget({
           className={clsx(
             "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",
             choice === "unhelpful"
-              ? "border-primary bg-blue-50 text-primary"
+              ? "border-negative bg-negative-weak text-negative"
               : "border-neutral-300 text-neutral-600 hover:bg-neutral-50"
           )}
         >

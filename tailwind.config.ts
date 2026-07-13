@@ -39,7 +39,11 @@ const config: Config = {
           900: "oklch(0.268 0.030 263)",
         },
         positive: "oklch(0.745 0.176 162)",
-        negative: "oklch(0.649 0.219 19)",
+        negative: {
+          DEFAULT: "oklch(0.649 0.219 19)",
+          weak: "oklch(0.957 0.025 14)",
+          strong: "oklch(0.594 0.249 21)",
+        },
         caution: "oklch(0.741 0.166 56)",
       },
       fontFamily: {

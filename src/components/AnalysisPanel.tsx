@@ -74,7 +74,7 @@ export function AnalysisPanel({
             <p className="mb-2 text-xs font-medium text-neutral-400">핵심 역량 키워드</p>
             <div className="flex flex-wrap gap-1.5">
               {analysis.coreKeywords.map((keyword) => (
-                <Badge key={keyword}>{keyword}</Badge>
+                <Badge key={keyword} tone="ink">{keyword}</Badge>
               ))}
             </div>
           </div>
