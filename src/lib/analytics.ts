@@ -2,11 +2,14 @@ import mixpanel from "mixpanel-browser";
 
 const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+// 로컬 개발 트래픽이 실제 운영 지표에 섞이지 않도록, next build로 빌드된
+// 프로덕션 환경(Vercel 배포)에서만 실제로 전송한다. next dev에서는 항상 no-op.
+const IS_PROD = process.env.NODE_ENV === "production";
 
 let mixpanelReady = false;
 
 function ensureMixpanel() {
-  if (mixpanelReady || typeof window === "undefined") return;
+  if (mixpanelReady || typeof window === "undefined" || !IS_PROD) return;
   if (!MIXPANEL_TOKEN) {
     console.warn("NEXT_PUBLIC_MIXPANEL_TOKEN이 설정되지 않아 Mixpanel을 건너뜁니다.");
     return;
@@ -27,7 +30,7 @@ declare global {
 }
 
 function gtag(...args: unknown[]) {
-  if (typeof window === "undefined" || !window.gtag || !GA_ID) return;
+  if (typeof window === "undefined" || !window.gtag || !GA_ID || !IS_PROD) return;
   window.gtag(...args);
 }
 
