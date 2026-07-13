@@ -106,7 +106,11 @@ export default async function CompaniesPage({
 
       {recommended.length > 0 && (
         <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-ink">🎁 추천 기업</h2>
+          <h2 className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/gift.svg" alt="" className="h-6 w-6" aria-hidden />
+            추천 기업
+          </h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {recommended.map((company) => (
               <CompanyCard
