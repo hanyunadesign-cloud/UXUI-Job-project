@@ -89,7 +89,7 @@ export default async function CompaniesPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-ink">기업 정보</h1>
           <p className="mt-1 text-sm text-neutral-500">
@@ -98,7 +98,7 @@ export default async function CompaniesPage({
         </div>
         <Link
           href="/mypage?tab=following"
-          className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-neutral-500 hover:text-ink"
+          className="inline-flex shrink-0 items-center gap-1 rounded-full bg-neutral-200 px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-neutral-300 active:scale-[0.95]"
         >
           나의 관심기업 보기
           <ArrowRightIcon className="h-4 w-4" aria-hidden />
