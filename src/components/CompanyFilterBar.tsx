@@ -119,7 +119,7 @@ export function CompanyFilterBar() {
           );
         })}
 
-        <div className="ml-auto flex h-[47px] w-full items-center rounded-full border border-neutral-200 bg-white pl-4 sm:w-72">
+        <div className="ml-auto flex h-[47px] w-full items-center gap-2 rounded-full border border-neutral-200 bg-white pl-4 pr-[5.5px] sm:w-72">
           <input
             type="text"
             value={query}
@@ -130,14 +130,13 @@ export function CompanyFilterBar() {
             placeholder="기업명 검색"
             className="flex-1 bg-transparent text-sm font-medium text-ink placeholder:text-neutral-400 focus:outline-none"
           />
-          {/* 버튼을 컨테이너 높이(47px)와 동일하게 키워서 알약 오른쪽 끝을 그대로 채우는
-              캡슐형 버튼으로 만든다. 이렇게 하면 버튼 원과 컨테이너의 둥근 끝이 겹쳐서
-              상/우/하 간격이 달라 보이는 문제 자체가 사라진다. */}
+          {/* 컨테이너(47px)와 버튼(36px) 높이 차이의 절반(5.5px)을 오른쪽 패딩으로도 동일하게
+              줘서, 세로 중앙정렬로 생기는 상/하 여백과 오른쪽 여백이 정확히 같아지게 한다. */}
           <button
             type="button"
             onClick={submitSearch}
             aria-label="검색"
-            className="flex h-[47px] w-[47px] shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary-strong active:scale-[0.92]"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary-strong active:scale-[0.92]"
           >
             <MagnifyingGlassIcon className="h-4 w-4" aria-hidden />
           </button>
