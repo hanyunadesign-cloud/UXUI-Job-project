@@ -109,9 +109,9 @@ export function OnboardingWizard() {
               type="button"
               onClick={() => toggleOption(option)}
               className={clsx(
-                "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                "rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",
                 isSelected
-                  ? "border-ink bg-ink text-white"
+                  ? "border-primary bg-blue-50 text-primary"
                   : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300"
               )}
             >
