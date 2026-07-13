@@ -40,9 +40,11 @@ export function SaveButton({
     });
   };
 
-  // 배경/보더/패딩 없이 아이콘만 노출. 터치 영역은 아이콘이 작아도 접근성 기준(24~44px)을
-  // 지키도록 36px(sm)/40px(md)로 유지한다. 아이콘 자체는 시스템 규칙상 독립 토글 아이콘
-  // 크기(24px, h-6 w-6) 고정.
+  // 아이콘(24px, h-6 w-6 고정)을 사방 동일한 패딩으로 감싸 터치 영역을 확보한다.
+  // 기존에는 아이콘을 오버사이즈 박스 오른쪽에 justify-end로 붙이는 방식이라 아이콘의
+  // 실제 시각적 위치가 카드의 다른 16px(p-4) 기준선과 어긋났다. 패딩 기반으로 바꾸고
+  // 카드 쪽 absolute 오프셋에서 이 패딩만큼을 미리 빼서, 아이콘의 실제 가장자리가
+  // 카드 콘텐츠의 16px 인셋과 정확히 맞도록 한다.
   const Icon = saved ? BookmarkSolid : BookmarkOutline;
 
   return (
@@ -53,8 +55,8 @@ export function SaveButton({
       aria-pressed={saved}
       aria-label={saved ? "저장 취소" : "저장하기"}
       className={clsx(
-        "flex shrink-0 items-center justify-end transition-colors active:scale-[0.92] disabled:opacity-60",
-        size === "md" ? "h-10 w-10" : "h-9 w-9",
+        "flex shrink-0 items-center justify-center rounded-full transition-colors active:scale-[0.92] disabled:opacity-60",
+        size === "md" ? "p-2" : "p-1.5",
         saved ? "text-primary" : "text-neutral-300 hover:text-neutral-500"
       )}
     >

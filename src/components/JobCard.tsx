@@ -42,7 +42,9 @@ export function JobCard({ job, saved }: { job: JobCardData; saved: boolean }) {
         status.closed && "opacity-60"
       )}
     >
-      <div className="absolute right-4 top-4">
+      {/* SaveButton의 p-1.5(6px) 내부 패딩을 미리 빼서, 아이콘 실제 가장자리가
+          카드의 다른 콘텐츠와 동일한 16px 인셋에 오도록 한다 (16 - 6 = 10px). */}
+      <div className="absolute right-2.5 top-2.5">
         <SaveButton jobId={job.id} initialSaved={saved} size="sm" />
       </div>
 
