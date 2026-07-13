@@ -92,7 +92,7 @@ export default async function MyPage({
                 }
               />
             ) : (
-              <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 {savedJobs.map(({ job }) => (
                   <JobCard
                     key={job.id}
