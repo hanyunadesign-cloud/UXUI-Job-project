@@ -6,6 +6,7 @@ import { clsx } from "clsx";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
 import { useToast } from "@/components/ToastProvider";
+import { trackEvent } from "@/lib/analytics";
 
 export function FollowButton({
   companyId,
@@ -29,6 +30,7 @@ export function FollowButton({
 
     const next = !following;
     setFollowing(next);
+    trackEvent(next ? "Company Followed" : "Company Unfollowed", { companyId });
     showToast(next ? "관심기업으로 등록했어요" : "관심기업에서 해제했어요");
     startTransition(async () => {
       try {

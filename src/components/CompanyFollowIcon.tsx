@@ -6,6 +6,7 @@ import { clsx } from "clsx";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
 import { useToast } from "@/components/ToastProvider";
+import { trackEvent } from "@/lib/analytics";
 
 // 카드 그리드처럼 좁은 공간에서 기업을 빠르게 팔로우/해제하기 위한 아이콘 전용 토글.
 // FollowButton(알약형)과 API/로그인 리다이렉트 동작은 동일하되, JobCard의 SaveButton과
@@ -32,6 +33,7 @@ export function CompanyFollowIcon({
 
     const next = !following;
     setFollowing(next);
+    trackEvent(next ? "Company Followed" : "Company Unfollowed", { companyId, surface: "card" });
     showToast(next ? "이 기업을 팔로우했어요" : "팔로우를 취소했어요");
     startTransition(async () => {
       try {

@@ -5,6 +5,7 @@ import { clsx } from "clsx";
 import { BookmarkIcon as BookmarkOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkSolid } from "@heroicons/react/24/solid";
 import { useToast } from "@/components/ToastProvider";
+import { trackEvent } from "@/lib/analytics";
 
 export function SaveButton({
   jobId,
@@ -22,6 +23,7 @@ export function SaveButton({
   const toggle = () => {
     const next = !saved;
     setSaved(next);
+    trackEvent(next ? "Job Saved" : "Job Unsaved", { jobId });
     showToast(
       next ? "공고가 저장되었습니다" : "공고가 해제되었습니다",
       next ? { label: "보러가기", href: "/mypage" } : undefined

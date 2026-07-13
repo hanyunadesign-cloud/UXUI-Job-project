@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/Badge";
-import { Button } from "@/components/Button";
+import { ApplyButton } from "@/components/ApplyButton";
 import { SaveButton } from "@/components/SaveButton";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { AnalysisPanel } from "@/components/AnalysisPanel";
@@ -67,9 +67,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         </div>
         <div className="flex shrink-0 items-center gap-4">
           <SaveButton jobId={job.id} initialSaved={saved} />
-          <a href={job.applyUrl} target="_blank" rel="noopener noreferrer">
-            <Button>지원 페이지로 이동</Button>
-          </a>
+          <ApplyButton jobId={job.id} applyUrl={job.applyUrl} companyName={job.companyName} />
         </div>
       </div>
 

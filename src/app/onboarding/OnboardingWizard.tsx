@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
 import { Button } from "@/components/Button";
 import { ROLES, PLATFORMS, INDUSTRIES, STAGES } from "@/lib/constants";
+import { trackEvent } from "@/lib/analytics";
 
 const STEPS = [
   { key: "roles", question: "관심 직무를 선택해주세요", options: ROLES },
@@ -58,6 +59,12 @@ export function OnboardingWizard() {
     setSubmitting(true);
     try {
       await savePreference(selections);
+      trackEvent("Onboarding Completed", {
+        roles: selections.roles,
+        platforms: selections.platforms,
+        industries: selections.industries,
+        stages: selections.stages,
+      });
       router.push("/jobs?onboarded=1");
     } finally {
       setSubmitting(false);
@@ -72,6 +79,7 @@ export function OnboardingWizard() {
     setSubmitting(true);
     try {
       await savePreference(EMPTY_SELECTIONS);
+      trackEvent("Onboarding Skipped");
       router.push("/jobs");
     } finally {
       setSubmitting(false);

@@ -12,6 +12,7 @@ import {
   HandThumbUpIcon as ThumbUpSolid,
   HandThumbDownIcon as ThumbDownSolid,
 } from "@heroicons/react/24/solid";
+import { trackEvent } from "@/lib/analytics";
 
 type Choice = "helpful" | "unhelpful";
 
@@ -74,6 +75,7 @@ export function FeedbackWidget({
         body: JSON.stringify({ helpful: choice === "helpful", comment: comment.trim() }),
       });
       if (!res.ok) throw new Error("failed");
+      trackEvent("AI Analysis Feedback Submitted", { jobId, helpful: choice === "helpful" });
       setSubmitted(true);
     } catch {
       setIsSubmitting(false);

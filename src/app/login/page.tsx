@@ -2,6 +2,7 @@
 
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/Button";
+import { trackEvent } from "@/lib/analytics";
 
 export default function LoginPage() {
   return (
@@ -13,7 +14,10 @@ export default function LoginPage() {
       <Button
         variant="secondary"
         className="px-6 py-3 text-sm"
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => {
+          trackEvent("Login Button Clicked");
+          signIn("google", { callbackUrl: "/" });
+        }}
       >
         구글 계정으로 로그인
       </Button>
