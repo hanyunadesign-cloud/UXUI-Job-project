@@ -119,26 +119,26 @@ export function CompanyFilterBar() {
           );
         })}
 
-        <div className="ml-auto flex h-[47px] w-full items-center gap-2 rounded-full border border-neutral-200 bg-white pl-4 pr-[5.5px] sm:w-72">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") submitSearch();
-            }}
-            placeholder="기업명 검색"
-            className="flex-1 bg-transparent text-sm font-medium text-ink placeholder:text-neutral-400 focus:outline-none"
-          />
-          {/* 컨테이너(47px)와 버튼(36px) 높이 차이의 절반(5.5px)을 오른쪽 패딩으로도 동일하게
-              줘서, 세로 중앙정렬로 생기는 상/하 여백과 오른쪽 여백이 정확히 같아지게 한다. */}
+        <div className="ml-auto flex w-full items-center gap-2 sm:w-auto">
+          <div className="flex h-[47px] flex-1 items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 sm:w-72 sm:flex-none">
+            <MagnifyingGlassIcon className="h-4 w-4 shrink-0 text-neutral-400" aria-hidden />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") submitSearch();
+              }}
+              placeholder="기업명 검색"
+              className="flex-1 bg-transparent text-sm font-medium text-ink placeholder:text-neutral-400 focus:outline-none"
+            />
+          </div>
           <button
             type="button"
             onClick={submitSearch}
-            aria-label="검색"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary-strong active:scale-[0.92]"
+            className="flex h-[47px] shrink-0 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-white transition-colors hover:bg-primary-strong active:scale-[0.95]"
           >
-            <MagnifyingGlassIcon className="h-4 w-4" aria-hidden />
+            검색
           </button>
         </div>
       </div>
