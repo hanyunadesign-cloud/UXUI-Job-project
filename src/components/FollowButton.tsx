@@ -29,7 +29,7 @@ export function FollowButton({
 
     const next = !following;
     setFollowing(next);
-    showToast(next ? "이 기업을 팔로우했어요" : "팔로우를 취소했어요");
+    showToast(next ? "관심기업으로 등록했어요" : "관심기업에서 해제했어요");
     startTransition(async () => {
       try {
         const res = await fetch("/api/follows", {
@@ -45,6 +45,9 @@ export function FollowButton({
   };
 
   // 텍스트와 나란히 붙는 인라인 아이콘이라 시스템 규칙상 16px(h-4 w-4) 고정.
+  // 버튼 자체는 상태와 무관하게 항상 같은 중립 아웃라인 필로, 상태는 하트 아이콘의
+  // 색/채움 여부(회색 아웃라인 ↔ primary 블루 solid)로만 표현한다. 라벨도 "팔로우/팔로잉"
+  // 대신 상태와 무관한 "관심기업"으로 고정.
   const Icon = following ? HeartSolid : HeartOutline;
 
   return (
@@ -53,15 +56,11 @@ export function FollowButton({
       onClick={toggle}
       disabled={isPending}
       aria-pressed={following}
-      className={clsx(
-        "inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95] disabled:cursor-not-allowed",
-        following
-          ? "border border-primary bg-blue-50 text-primary hover:bg-blue-100"
-          : "bg-primary text-white hover:bg-primary-strong"
-      )}
+      aria-label={following ? "관심기업 해제" : "관심기업으로 등록"}
+      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-ink transition-colors active:scale-[0.95] disabled:cursor-not-allowed hover:bg-neutral-50"
     >
-      <Icon className="h-4 w-4" aria-hidden />
-      {following ? "팔로잉" : "팔로우"}
+      <Icon className={clsx("h-4 w-4", following ? "text-primary" : "text-neutral-400")} aria-hidden />
+      관심기업
     </button>
   );
 }
