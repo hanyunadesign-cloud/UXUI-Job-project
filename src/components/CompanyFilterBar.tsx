@@ -132,7 +132,7 @@ export function CompanyFilterBar() {
               params.delete("page");
               router.push(`${pathname}?${params.toString()}`);
             }}
-            className="text-xs font-medium text-neutral-400 underline underline-offset-2 hover:text-ink"
+            className="ml-1 text-xs font-medium text-neutral-400 underline underline-offset-2 hover:text-ink"
           >
             필터 초기화
           </button>
