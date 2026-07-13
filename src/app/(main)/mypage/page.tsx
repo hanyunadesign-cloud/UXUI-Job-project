@@ -48,15 +48,20 @@ export default async function MyPage({
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-sm font-semibold text-ink">채용공고 알림</h2>
-          <p className="mt-1 text-sm text-neutral-500">
-            관심 조건에 맞는 새 공고를 이메일로 받아보세요.
-          </p>
+      {/* MVP 단계에서는 실제 발송 로직이 아직 없어 프로덕션에서는 숨기고, 로컬 개발 환경에서만
+          계속 작업할 수 있도록 노출한다. process.env.VERCEL은 Vercel 플랫폼에서 자동으로
+          설정되는 값이라 로컬에는 존재하지 않는다. */}
+      {!process.env.VERCEL && (
+        <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-sm font-semibold text-ink">채용공고 알림</h2>
+            <p className="mt-1 text-sm text-neutral-500">
+              관심 조건에 맞는 새 공고를 이메일로 받아보세요.
+            </p>
+          </div>
+          <EmailAlertToggle initialEnabled={preference?.emailOptIn ?? false} />
         </div>
-        <EmailAlertToggle initialEnabled={preference?.emailOptIn ?? false} />
-      </div>
+      )}
 
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 border-b border-neutral-200">
