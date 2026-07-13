@@ -22,6 +22,7 @@ model User {
   notifications Notification[]
   jobFeedback   JobFeedback[]
   externalJobSaves ExternalJobSave[]
+  serviceFeedback ServiceFeedback[]
 }
 
 model Account {
@@ -171,6 +172,19 @@ model ExternalJobSave {
   resumeTip    String   @db.Text
   createdAt    DateTime @default(now())
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// GNB "서비스 의견" 탭에서 남기는 자유 의견. JobFeedback과 달리 특정 공고에 묶이지 않고,
+// 유저당 여러 건 남길 수 있다. 별도 조회 UI 없이 관리자가 DB에서 직접 확인하는 용도.
+model ServiceFeedback {
+  id        String   @id @default(cuid())
+  userId    String
+  category  String?
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
 }

@@ -8,6 +8,7 @@ import { ProfileMenu } from "@/components/ProfileMenu";
 const NAV_ITEMS = [
   { href: "/jobs", label: "채용" },
   { href: "/companies", label: "기업" },
+  { href: "/feedback", label: "서비스 의견" },
 ];
 
 export function Header() {
