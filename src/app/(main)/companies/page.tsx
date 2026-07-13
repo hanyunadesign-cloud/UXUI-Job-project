@@ -16,6 +16,11 @@ export const dynamic = "force-dynamic";
 const PAGE_SIZE = 16;
 const RECOMMENDED_COUNT = 4;
 
+function toArray(value: string | string[] | undefined): string[] {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
 export default async function CompaniesPage({
   searchParams,
 }: {
@@ -24,9 +29,8 @@ export default async function CompaniesPage({
   const session = await getServerSession(authOptions);
   const userId = (session?.user as { id?: string } | undefined)?.id;
 
-  const stage = typeof searchParams.stage === "string" ? searchParams.stage : undefined;
-  const industry =
-    typeof searchParams.industry === "string" ? searchParams.industry : undefined;
+  const stages = toArray(searchParams.stage);
+  const industries = toArray(searchParams.industry);
   const q = typeof searchParams.q === "string" ? searchParams.q.trim() : "";
   const activeOnly = searchParams.activeOnly === "1";
   const page = Math.max(1, Number(searchParams.page) || 1);
@@ -59,8 +63,8 @@ export default async function CompaniesPage({
     .slice(0, RECOMMENDED_COUNT);
 
   const filtered = withOpenJobs.filter((company) => {
-    if (stage && company.stage !== stage) return false;
-    if (industry && company.industry !== industry) return false;
+    if (stages.length && !stages.includes(company.stage)) return false;
+    if (industries.length && !industries.includes(company.industry)) return false;
     if (activeOnly && !company.hasOpenJobs) return false;
     if (q && !company.name.toLowerCase().includes(q.toLowerCase())) return false;
     return true;
@@ -82,8 +86,8 @@ export default async function CompaniesPage({
     : new Set<string>();
 
   const currentSearchParams = new URLSearchParams();
-  if (stage) currentSearchParams.set("stage", stage);
-  if (industry) currentSearchParams.set("industry", industry);
+  stages.forEach((s) => currentSearchParams.append("stage", s));
+  industries.forEach((i) => currentSearchParams.append("industry", i));
   if (q) currentSearchParams.set("q", q);
   if (activeOnly) currentSearchParams.set("activeOnly", "1");
 
