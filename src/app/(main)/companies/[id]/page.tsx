@@ -117,7 +117,7 @@ export default async function CompanyProfilePage({
       {sortedJobs.length === 0 ? (
         <EmptyState title="현재 등록된 공고가 없어요" />
       ) : (
-        <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {sortedJobs.map((job) => (
             <JobCard
               key={job.id}
