@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import Link from "next/link";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 type ToastAction = { label: string; href: string };
 type ToastState = { id: number; message: string; action?: ToastAction } | null;
@@ -39,9 +40,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div className="pointer-events-auto flex w-80 items-center gap-3 rounded-2xl bg-ink px-5 py-3.5 text-sm text-white shadow-sheet">
             <span
               aria-hidden
-              className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-ink"
+              className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-ink"
             >
-              ✓
+              <CheckIcon className="h-4 w-4" />
             </span>
             <span>{toast.message}</span>
             {toast.action && (

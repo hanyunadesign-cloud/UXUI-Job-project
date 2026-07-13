@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -96,9 +97,10 @@ export default async function CompaniesPage({
         </div>
         <Link
           href="/mypage?tab=following"
-          className="shrink-0 text-sm font-medium text-neutral-500 hover:text-ink"
+          className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-neutral-500 hover:text-ink"
         >
-          나의 관심기업 보기 →
+          나의 관심기업 보기
+          <ArrowRightIcon className="h-4 w-4" aria-hidden />
         </Link>
       </div>
 

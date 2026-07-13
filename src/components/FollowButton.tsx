@@ -3,25 +3,9 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
+import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
 import { useToast } from "@/components/ToastProvider";
-
-function HeartIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width={16}
-      height={16}
-      fill={filled ? "currentColor" : "none"}
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M12 21s-6.7-4.35-9.3-8.2C1 10.1 1.6 6.6 4.5 5.1c2.3-1.2 4.8-.4 6.2 1.4l1.3 1.6 1.3-1.6c1.4-1.8 3.9-2.6 6.2-1.4 2.9 1.5 3.5 5 1.8 7.7C18.7 16.65 12 21 12 21z" />
-    </svg>
-  );
-}
 
 export function FollowButton({
   companyId,
@@ -60,6 +44,9 @@ export function FollowButton({
     });
   };
 
+  // 텍스트와 나란히 붙는 인라인 아이콘이라 시스템 규칙상 16px(h-4 w-4) 고정.
+  const Icon = following ? HeartSolid : HeartOutline;
+
   return (
     <button
       type="button"
@@ -73,7 +60,7 @@ export function FollowButton({
           : "bg-primary text-white hover:bg-primary-strong"
       )}
     >
-      <HeartIcon filled={following} />
+      <Icon className="h-4 w-4" aria-hidden />
       {following ? "팔로잉" : "팔로우"}
     </button>
   );

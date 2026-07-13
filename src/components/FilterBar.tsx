@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { clsx } from "clsx";
+import { ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 import {
   ROLES,
   PLATFORMS,
@@ -97,20 +98,10 @@ export function FilterBar() {
             >
               {group.label}
               {active.length > 0 && <span>{active.length}</span>}
-              <svg
+              <ChevronDownIcon
                 aria-hidden
-                viewBox="0 0 24 24"
-                width="12"
-                height="12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={clsx("shrink-0", isOpen && "rotate-180")}
-              >
-                <path d="M6 9l6 6 6-6" />
-              </svg>
+                className={clsx("h-4 w-4 shrink-0 transition-transform", isOpen && "rotate-180")}
+              />
             </button>
 
             {isOpen && (
@@ -138,9 +129,7 @@ export function FilterBar() {
                         )}
                       </span>
                       {isSelected && (
-                        <span aria-hidden className="shrink-0 pt-0.5">
-                          ✓
-                        </span>
+                        <CheckIcon aria-hidden className="h-4 w-4 shrink-0" />
                       )}
                     </button>
                   );

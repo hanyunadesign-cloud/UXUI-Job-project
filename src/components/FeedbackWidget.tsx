@@ -3,60 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
-
-function ThumbsUpIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width={16}
-      height={16}
-      fill={filled ? "currentColor" : "none"}
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M7 10v11H3V10zM7 10l4-7a2 2 0 0 1 2 2v5h5.5a2 2 0 0 1 1.94 2.5l-1.67 6.5A2 2 0 0 1 16.83 21H7" />
-    </svg>
-  );
-}
-
-function ThumbsDownIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width={16}
-      height={16}
-      fill={filled ? "currentColor" : "none"}
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M17 14V3h4v11zM17 14l-4 7a2 2 0 0 1-2-2v-5H5.5a2 2 0 0 1-1.94-2.5l1.67-6.5A2 2 0 0 1 7.17 3H17" />
-    </svg>
-  );
-}
-
-function SendIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width={16}
-      height={16}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    </svg>
-  );
-}
+import {
+  HandThumbUpIcon as ThumbUpOutline,
+  HandThumbDownIcon as ThumbDownOutline,
+  PaperAirplaneIcon,
+} from "@heroicons/react/24/outline";
+import {
+  HandThumbUpIcon as ThumbUpSolid,
+  HandThumbDownIcon as ThumbDownSolid,
+} from "@heroicons/react/24/solid";
 
 type Choice = "helpful" | "unhelpful";
 
@@ -148,7 +103,11 @@ export function FeedbackWidget({
               : "border-neutral-300 text-neutral-600 hover:bg-neutral-50"
           )}
         >
-          <ThumbsUpIcon filled={choice === "helpful"} />
+          {choice === "helpful" ? (
+            <ThumbUpSolid className="h-4 w-4" aria-hidden />
+          ) : (
+            <ThumbUpOutline className="h-4 w-4" aria-hidden />
+          )}
           도움됐어요
         </button>
         <button
@@ -162,7 +121,11 @@ export function FeedbackWidget({
               : "border-neutral-300 text-neutral-600 hover:bg-neutral-50"
           )}
         >
-          <ThumbsDownIcon filled={choice === "unhelpful"} />
+          {choice === "unhelpful" ? (
+            <ThumbDownSolid className="h-4 w-4" aria-hidden />
+          ) : (
+            <ThumbDownOutline className="h-4 w-4" aria-hidden />
+          )}
           아쉬워요
         </button>
       </div>
@@ -190,7 +153,7 @@ export function FeedbackWidget({
             aria-label="피드백 전송"
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary-strong active:scale-[0.92] disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:active:scale-100"
           >
-            <SendIcon />
+            <PaperAirplaneIcon className="h-4 w-4" aria-hidden />
           </button>
         </div>
       )}

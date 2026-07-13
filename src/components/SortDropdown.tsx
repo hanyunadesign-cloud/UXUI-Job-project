@@ -3,32 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { clsx } from "clsx";
+import { ArrowsUpDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 const SORT_OPTIONS = [
   { value: "match", label: "매칭순" },
   { value: "deadline", label: "마감임박순" },
 ] as const;
-
-// 필터(⌄)와 구분되도록 정렬 전용 아이콘(↕) 사용
-function SortIcon() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 24 24"
-      width="14"
-      height="14"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="shrink-0"
-    >
-      <path d="M7 4v16m0 0l-3-3m3 3l3-3" />
-      <path d="M17 20V4m0 0l-3 3m3-3l3 3" />
-    </svg>
-  );
-}
 
 export function SortDropdown() {
   const router = useRouter();
@@ -72,7 +52,7 @@ export function SortDropdown() {
           className="invisible col-start-1 row-start-1 flex items-center gap-1.5 whitespace-nowrap"
         >
           마감임박순
-          <SortIcon />
+          <ArrowsUpDownIcon aria-hidden className="h-4 w-4 shrink-0" />
         </span>
         <span
           className={clsx(
@@ -81,7 +61,7 @@ export function SortDropdown() {
           )}
         >
           {currentOption.label}
-          <SortIcon />
+          <ArrowsUpDownIcon aria-hidden className="h-4 w-4 shrink-0" />
         </span>
       </button>
 
@@ -102,7 +82,7 @@ export function SortDropdown() {
                 )}
               >
                 {option.label}
-                {isSelected && <span aria-hidden>✓</span>}
+                {isSelected && <CheckIcon aria-hidden className="h-4 w-4 shrink-0" />}
               </button>
             );
           })}

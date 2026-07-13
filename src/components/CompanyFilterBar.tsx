@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { clsx } from "clsx";
+import {
+  ChevronDownIcon,
+  CheckIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import { INDUSTRIES, STAGES } from "@/lib/constants";
 
 const DROPDOWNS = [
@@ -92,20 +97,10 @@ export function CompanyFilterBar() {
                 )}
               >
                 {active ?? group.label}
-                <svg
+                <ChevronDownIcon
                   aria-hidden
-                  viewBox="0 0 24 24"
-                  width="12"
-                  height="12"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={clsx("shrink-0", isOpen && "rotate-180")}
-                >
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
+                  className={clsx("h-4 w-4 shrink-0 transition-transform", isOpen && "rotate-180")}
+                />
               </button>
 
               {isOpen && (
@@ -125,7 +120,7 @@ export function CompanyFilterBar() {
                         )}
                       >
                         {option}
-                        {isSelected && <span aria-hidden>✓</span>}
+                        {isSelected && <CheckIcon aria-hidden className="h-4 w-4 shrink-0" />}
                       </button>
                     );
                   })}
@@ -152,10 +147,7 @@ export function CompanyFilterBar() {
             aria-label="검색"
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary-strong active:scale-[0.92]"
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <circle cx="11" cy="11" r="7" />
-              <path d="M21 21l-4.3-4.3" />
-            </svg>
+            <MagnifyingGlassIcon className="h-4 w-4" aria-hidden />
           </button>
         </div>
 

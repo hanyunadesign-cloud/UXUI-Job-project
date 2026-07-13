@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { clsx } from "clsx";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 // 서버 컴포넌트로 구현: 페이지 이동은 링크 클릭만으로 충분해 클라이언트 JS가 필요 없다.
 export function Pagination({
@@ -35,9 +36,7 @@ export function Pagination({
             : "hover:bg-neutral-100 hover:text-ink"
         )}
       >
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
+        <ChevronLeftIcon className="h-4 w-4" aria-hidden />
       </Link>
 
       {pages.map((page) => (
@@ -66,9 +65,7 @@ export function Pagination({
             : "hover:bg-neutral-100 hover:text-ink"
         )}
       >
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <path d="M9 18l6-6-6-6" />
-        </svg>
+        <ChevronRightIcon className="h-4 w-4" aria-hidden />
       </Link>
     </nav>
   );
