@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { clsx } from "clsx";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 export function EmailAlertToggle({ initialEnabled }: { initialEnabled: boolean }) {
   const [enabled, setEnabled] = useState(initialEnabled);
@@ -31,12 +32,13 @@ export function EmailAlertToggle({ initialEnabled }: { initialEnabled: boolean }
       disabled={isPending}
       aria-pressed={enabled}
       className={clsx(
-        "shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-60",
+        "inline-flex h-[47px] shrink-0 items-center justify-center gap-1.5 rounded-[14px] px-5 text-sm font-medium transition-colors active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-60",
         enabled
-          ? "border-ink bg-ink text-white"
-          : "border-neutral-300 bg-white text-ink hover:bg-neutral-50"
+          ? "bg-neutral-200 text-ink hover:bg-neutral-300"
+          : "bg-primary text-white hover:bg-primary-strong"
       )}
     >
+      {enabled && <CheckIcon className="h-4 w-4" aria-hidden />}
       {enabled ? "알림 받는 중" : "이메일로 알림 받기"}
     </button>
   );
