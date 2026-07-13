@@ -44,7 +44,7 @@ export function CompanyLogo({
       src={src}
       alt={alt}
       onError={() => setErrored(true)}
-      className="shrink-0 rounded-full object-cover"
+      className="shrink-0 rounded-full bg-neutral-100 object-cover"
       style={{ width: size, height: size }}
     />
   );
