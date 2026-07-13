@@ -119,7 +119,7 @@ export function CompanyFilterBar() {
           );
         })}
 
-        <div className="ml-auto flex h-[47px] w-full items-center gap-2 rounded-full border border-neutral-200 bg-white pl-4 pr-1.5 sm:w-72">
+        <div className="ml-auto flex h-[47px] w-full items-center gap-2 rounded-full border border-neutral-200 bg-white pl-4 pr-[7.5px] sm:w-72">
           <input
             type="text"
             value={query}
@@ -128,7 +128,7 @@ export function CompanyFilterBar() {
               if (e.key === "Enter") submitSearch();
             }}
             placeholder="기업명 검색"
-            className="flex-1 bg-transparent text-sm text-ink placeholder:text-neutral-400 focus:outline-none"
+            className="flex-1 bg-transparent text-sm font-medium text-ink placeholder:text-neutral-400 focus:outline-none"
           />
           <button
             type="button"
