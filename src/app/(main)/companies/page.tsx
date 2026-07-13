@@ -90,10 +90,7 @@ export default async function CompaniesPage({
     <div className="flex flex-col gap-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-ink">기업정보</h1>
-          <p className="mt-1 text-sm text-neutral-500">
-            관심 기업을 팔로우하고, 주요 IT 업계 현황을 한눈에 파악하세요.
-          </p>
+          <h1 className="text-xl font-bold text-ink">관심기업과 업계현황을 파악하세요</h1>
         </div>
         <Link
           href="/mypage?tab=following"
