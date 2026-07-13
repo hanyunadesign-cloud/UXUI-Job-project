@@ -106,7 +106,7 @@ export default async function CompaniesPage({
 
       {recommended.length > 0 && (
         <div className="flex flex-col gap-3">
-          <h2 className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+          <h2 className="flex items-center gap-1.5 text-lg font-bold text-ink">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/icons/gift.svg" alt="" className="h-6 w-6" aria-hidden />
             추천 기업
