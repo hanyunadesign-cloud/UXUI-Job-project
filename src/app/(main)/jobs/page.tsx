@@ -88,7 +88,9 @@ export default async function JobsPage({
 
       <div>
         <h1 className="text-xl font-bold text-ink">채용공고</h1>
-        <p className="mt-1 text-sm text-neutral-500">{jobs.length}개의 공고</p>
+        <p className="mt-1 text-sm text-neutral-500">
+          주요 IT기업의 최신 공고를 한곳에서 확인하세요.
+        </p>
       </div>
 
       <FilterBar />
