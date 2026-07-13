@@ -89,20 +89,20 @@ export default async function CompaniesPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-bold text-ink">기업 정보</h1>
-        <div className="flex items-end justify-between gap-4">
-          <p className="text-sm text-neutral-500">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold text-ink">기업 정보</h1>
+          <p className="mt-1 text-sm text-neutral-500">
             관심 기업을 팔로우하고, 주요 IT 업계 현황을 한눈에 파악하세요.
           </p>
-          <Link
-            href="/mypage?tab=following"
-            className="inline-flex shrink-0 items-center gap-1 rounded-[14px] bg-white px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-neutral-200 active:scale-[0.95]"
-          >
-            나의 관심기업 보기
-            <ChevronRightIcon className="h-4 w-4" aria-hidden />
-          </Link>
         </div>
+        <Link
+          href="/mypage?tab=following"
+          className="inline-flex shrink-0 items-center gap-1 rounded-[14px] bg-white px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-neutral-200 active:scale-[0.95]"
+        >
+          나의 관심기업 보기
+          <ChevronRightIcon className="h-4 w-4" aria-hidden />
+        </Link>
       </div>
 
       {recommended.length > 0 && (
