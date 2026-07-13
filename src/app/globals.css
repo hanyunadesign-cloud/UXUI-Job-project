@@ -1,3 +1,7 @@
+/* SOCAR Frame 2.0의 Pretendard Variable. CDN이 막히면 tailwind.config의 font-sans
+   폴백 스택(자체 호스팅 Noto Sans KR → 시스템 폰트)으로 자연스럽게 넘어간다. */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,10 +13,12 @@
 
 html,
 body {
-  background-color: #ffffff;
-  color: #111111;
+  /* SOCAR의 시그니처 표면 구성: 흰 카드가 옅은 블루-그레이 워시 위에 놓이고,
+     그림자 대신 카드 보더(1px 디바이더)만으로 계층을 구분한다. */
+  background-color: oklch(0.967 0.004 271);
+  color: oklch(0.211 0.026 261);
 }
 
 * {
-  border-color: #e5e5e5;
+  border-color: oklch(0.927 0.009 264);
 }

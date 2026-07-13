@@ -48,7 +48,7 @@ export default async function MyPage({
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-sm font-semibold text-ink">채용공고 알림</h2>
           <p className="mt-1 text-sm text-neutral-500">

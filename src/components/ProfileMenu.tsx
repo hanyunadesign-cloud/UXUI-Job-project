@@ -46,14 +46,14 @@ export function ProfileMenu() {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={user.image} alt={user.name ?? "프로필"} className="h-8 w-8 rounded-full object-cover" />
         ) : (
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100 text-xs font-semibold text-neutral-500">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-white">
             {user.name?.slice(0, 1) ?? "U"}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-[calc(100%+8px)] z-20 flex w-40 flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg">
+        <div className="absolute right-0 top-[calc(100%+8px)] z-20 flex w-40 flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-dropdown">
           <Link
             href="/mypage"
             onClick={() => setIsOpen(false)}

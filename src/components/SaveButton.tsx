@@ -76,9 +76,9 @@ export function SaveButton({
       aria-pressed={saved}
       aria-label={saved ? "저장 취소" : "저장하기"}
       className={clsx(
-        "group flex shrink-0 items-center justify-end transition-colors disabled:opacity-60",
+        "group flex shrink-0 items-center justify-end transition-colors active:scale-[0.92] disabled:opacity-60",
         size === "md" ? "h-10 w-10" : "h-9 w-9",
-        saved ? "text-ink" : "text-neutral-300 hover:text-neutral-500"
+        saved ? "text-primary" : "text-neutral-300 hover:text-neutral-500"
       )}
     >
       <BookmarkIcon

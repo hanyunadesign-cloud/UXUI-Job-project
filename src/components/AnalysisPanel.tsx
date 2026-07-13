@@ -44,7 +44,7 @@ export function AnalysisPanel({
   }, []);
 
   return (
-    <div className="rounded-2xl border border-neutral-200 p-6">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6">
       <h2 className="mb-4 text-sm font-semibold text-ink">AI 분석</h2>
 
       {status === "loading" && (

@@ -13,7 +13,7 @@ export type CompanyFollowCardData = {
 
 export function CompanyFollowCard({ company }: { company: CompanyFollowCardData }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-neutral-200 p-4">
+    <div className="flex items-center gap-4 rounded-2xl border border-neutral-200 bg-white p-4">
       <Link href={`/companies/${company.id}`} className="flex min-w-0 flex-1 items-center gap-3">
         <CompanyLogo
           src={company.logo}

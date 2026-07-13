@@ -83,8 +83,8 @@ export function CompanyFollowIcon({
       aria-pressed={following}
       aria-label={following ? "팔로우 취소" : "팔로우하기"}
       className={clsx(
-        "group flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors disabled:opacity-60",
-        following ? "text-ink" : "text-neutral-300 hover:text-neutral-500"
+        "group flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors active:scale-[0.92] disabled:opacity-60",
+        following ? "text-primary" : "text-neutral-300 hover:text-neutral-500"
       )}
     >
       <HeartIcon filled={following} hoverFills={!following} size={20} />

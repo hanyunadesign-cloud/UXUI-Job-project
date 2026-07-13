@@ -36,7 +36,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       <div className="pointer-events-none fixed inset-x-0 top-16 z-50 flex justify-center px-4">
         {toast && (
-          <div className="pointer-events-auto flex w-80 items-center gap-3 rounded-2xl bg-ink px-5 py-3.5 text-sm text-white shadow-lg">
+          <div className="pointer-events-auto flex w-80 items-center gap-3 rounded-2xl bg-ink px-5 py-3.5 text-sm text-white shadow-sheet">
             <span
               aria-hidden
               className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-ink"

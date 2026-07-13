@@ -86,7 +86,7 @@ export function SortDropdown() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-[calc(100%+8px)] z-20 flex w-36 flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg">
+        <div className="absolute right-0 top-[calc(100%+8px)] z-20 flex w-36 flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-dropdown">
           {SORT_OPTIONS.map((option) => {
             const isSelected = option.value === current;
             return (
@@ -97,7 +97,7 @@ export function SortDropdown() {
                 className={clsx(
                   "flex items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition-colors",
                   isSelected
-                    ? "bg-neutral-100 font-medium text-ink"
+                    ? "bg-blue-50 font-medium text-primary"
                     : "text-neutral-600 hover:bg-neutral-50"
                 )}
               >

@@ -48,7 +48,7 @@ export function Pagination({
           className={clsx(
             "flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors",
             page === currentPage
-              ? "bg-ink text-white"
+              ? "bg-primary text-white"
               : "text-neutral-500 hover:bg-neutral-100 hover:text-ink"
           )}
         >

@@ -85,9 +85,9 @@ export function CompanyFilterBar() {
                 type="button"
                 onClick={() => setOpenGroup(isOpen ? null : group.key)}
                 className={clsx(
-                  "flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                  "flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",
                   active
-                    ? "border-ink bg-ink text-white"
+                    ? "border-primary bg-blue-50 text-primary"
                     : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300"
                 )}
               >
@@ -109,7 +109,7 @@ export function CompanyFilterBar() {
               </button>
 
               {isOpen && (
-                <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-48 max-w-[calc(100vw-2rem)] flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg">
+                <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-48 max-w-[calc(100vw-2rem)] flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-dropdown">
                   {group.options.map((option) => {
                     const isSelected = active === option;
                     return (
@@ -120,7 +120,7 @@ export function CompanyFilterBar() {
                         className={clsx(
                           "flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors",
                           isSelected
-                            ? "bg-neutral-100 font-medium text-ink"
+                            ? "bg-blue-50 font-medium text-primary"
                             : "text-neutral-600 hover:bg-neutral-50"
                         )}
                       >
@@ -150,7 +150,7 @@ export function CompanyFilterBar() {
             type="button"
             onClick={submitSearch}
             aria-label="검색"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink text-white transition-colors hover:bg-neutral-800"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary-strong active:scale-[0.92]"
           >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <circle cx="11" cy="11" r="7" />
@@ -164,7 +164,7 @@ export function CompanyFilterBar() {
             type="checkbox"
             checked={activeOnly}
             onChange={toggleActiveOnly}
-            className="h-4 w-4 rounded border-neutral-300 text-ink focus:ring-ink"
+            className="h-4 w-4 rounded border-neutral-300 text-primary focus:ring-primary"
           />
           채용중인 기업만 보기
         </label>

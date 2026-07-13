@@ -142,10 +142,10 @@ export function FeedbackWidget({
           onClick={() => selectChoice("helpful")}
           aria-pressed={choice === "helpful"}
           className={clsx(
-            "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+            "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",
             choice === "helpful"
-              ? "bg-ink text-white"
-              : "border border-neutral-300 text-neutral-600 hover:bg-neutral-50"
+              ? "border-primary bg-blue-50 text-primary"
+              : "border-neutral-300 text-neutral-600 hover:bg-neutral-50"
           )}
         >
           <ThumbsUpIcon filled={choice === "helpful"} />
@@ -156,10 +156,10 @@ export function FeedbackWidget({
           onClick={() => selectChoice("unhelpful")}
           aria-pressed={choice === "unhelpful"}
           className={clsx(
-            "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+            "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",
             choice === "unhelpful"
-              ? "bg-ink text-white"
-              : "border border-neutral-300 text-neutral-600 hover:bg-neutral-50"
+              ? "border-primary bg-blue-50 text-primary"
+              : "border-neutral-300 text-neutral-600 hover:bg-neutral-50"
           )}
         >
           <ThumbsDownIcon filled={choice === "unhelpful"} />
@@ -188,7 +188,7 @@ export function FeedbackWidget({
             onClick={submit}
             disabled={isSubmitting}
             aria-label="피드백 전송"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary-strong active:scale-[0.92] disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:active:scale-100"
           >
             <SendIcon />
           </button>

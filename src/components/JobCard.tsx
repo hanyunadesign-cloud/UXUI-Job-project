@@ -38,7 +38,7 @@ export function JobCard({ job, saved }: { job: JobCardData; saved: boolean }) {
   return (
     <div
       className={clsx(
-        "relative flex h-full flex-col gap-3 rounded-2xl border border-neutral-200 p-4 transition-colors hover:border-neutral-300",
+        "relative flex h-full flex-col gap-3 rounded-2xl border border-neutral-200 bg-white p-4 transition-colors hover:border-neutral-300",
         status.closed && "opacity-60"
       )}
     >
@@ -107,7 +107,7 @@ export function JobCard({ job, saved }: { job: JobCardData; saved: boolean }) {
         <p
           className={clsx(
             "text-xs",
-            status.urgent && "font-semibold text-red-600",
+            status.urgent && "font-semibold text-negative",
             status.closed && "text-neutral-300",
             !status.urgent && !status.closed && "text-neutral-400"
           )}

@@ -75,7 +75,7 @@ export default async function CompanyProfilePage({
     <div className="flex flex-col gap-8">
       <BackButton />
 
-      <div className="flex flex-col gap-6 rounded-2xl border border-neutral-200 p-6 sm:flex-row sm:items-start">
+      <div className="flex flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-start">
         <CompanyLogo
           src={company.logo}
           alt={company.name}

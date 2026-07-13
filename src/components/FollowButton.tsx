@@ -67,10 +67,10 @@ export function FollowButton({
       disabled={isPending}
       aria-pressed={following}
       className={clsx(
-        "inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed",
+        "inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-medium transition-colors active:scale-[0.95] disabled:cursor-not-allowed",
         following
-          ? "bg-neutral-100 text-neutral-500 hover:bg-neutral-200"
-          : "bg-ink text-white hover:bg-neutral-800"
+          ? "border border-primary bg-blue-50 text-primary hover:bg-blue-100"
+          : "bg-primary text-white hover:bg-primary-strong"
       )}
     >
       <HeartIcon filled={following} />

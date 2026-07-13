@@ -113,14 +113,14 @@ export function NotificationBell() {
       >
         <BellIcon />
         {unreadCount > 0 && (
-          <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold leading-none text-white">
+          <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-negative px-1 text-[10px] font-semibold leading-none text-white">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-[calc(100%+8px)] z-20 flex max-h-96 w-80 flex-col overflow-y-auto rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg">
+        <div className="absolute right-0 top-[calc(100%+8px)] z-20 flex max-h-96 w-80 flex-col overflow-y-auto rounded-2xl border border-neutral-200 bg-white p-2 shadow-dropdown">
           {items.length === 0 ? (
             <p className="px-3 py-6 text-center text-sm text-neutral-400">
               아직 알림이 없어요
@@ -138,7 +138,7 @@ export function NotificationBell() {
               >
                 <div className="flex items-center gap-1.5">
                   {!item.read && (
-                    <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-red-600" />
+                    <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-negative" />
                   )}
                   <p className="truncate text-sm font-semibold text-ink">{item.companyName}</p>
                 </div>

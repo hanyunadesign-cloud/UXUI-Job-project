@@ -3,10 +3,12 @@ import type { ButtonHTMLAttributes } from "react";
 
 type Variant = "primary" | "secondary" | "ghost";
 
+// SOCAR Frame 2.0의 ActionButton 위계를 차용: fill/primary(강조) · fill/secondary(연한 블루,
+// 낮은 우선순위 확정 행동) · outlined 톤(ghost). 라운드는 large 버튼 기준 14px(radius-350).
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-ink text-white hover:bg-neutral-800 disabled:bg-neutral-300",
+  primary: "bg-primary text-white hover:bg-primary-strong disabled:bg-neutral-300",
   secondary:
-    "bg-white text-ink border border-neutral-300 hover:bg-neutral-50 disabled:text-neutral-300",
+    "bg-blue-100 text-primary-strong hover:bg-blue-200 disabled:bg-neutral-100 disabled:text-neutral-300",
   ghost: "bg-transparent text-neutral-600 hover:text-ink disabled:text-neutral-300",
 };
 
@@ -18,7 +20,7 @@ export function Button({
   return (
     <button
       className={clsx(
-        "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed",
+        "inline-flex items-center justify-center gap-2 rounded-[14px] px-5 py-2.5 text-sm font-medium transition-colors active:scale-[0.92] disabled:cursor-not-allowed disabled:active:scale-100",
         variantClasses[variant],
         className
       )}

@@ -74,7 +74,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr]">
-        <div className="rounded-2xl border border-neutral-200 p-6">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6">
           <h2 className="mb-4 text-sm font-semibold text-ink">공고 내용</h2>
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-700">
             {job.description}
