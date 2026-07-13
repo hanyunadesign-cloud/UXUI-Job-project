@@ -10,8 +10,10 @@ const variantClasses: Record<Variant, string> = {
   primary: "bg-primary text-white hover:bg-primary-strong disabled:bg-neutral-300",
   secondary:
     "bg-blue-100 text-primary-strong hover:bg-blue-200 disabled:bg-neutral-100 disabled:text-neutral-300",
+  // neutral-100은 페이지 배경 워시와 같은 색이라 기본 상태에서 안 보인다. neutral-200을
+  // 기본값으로 써서 워시 위에서도 필 버튼임이 항상 구분되게 한다.
   tertiary:
-    "bg-neutral-100 text-ink hover:bg-neutral-200 disabled:text-neutral-300",
+    "bg-neutral-200 text-ink hover:bg-neutral-300 disabled:text-neutral-300",
   ghost: "bg-transparent text-neutral-600 hover:text-ink disabled:text-neutral-300",
 };
 

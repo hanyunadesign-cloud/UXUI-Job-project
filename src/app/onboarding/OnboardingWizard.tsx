@@ -86,7 +86,7 @@ export function OnboardingWizard() {
             key={s.key}
             className={clsx(
               "h-1 flex-1 rounded-full transition-colors",
-              i <= stepIndex ? "bg-ink" : "bg-neutral-200"
+              i <= stepIndex ? "bg-primary" : "bg-neutral-200"
             )}
           />
         ))}
@@ -124,11 +124,16 @@ export function OnboardingWizard() {
       <div className="flex items-center justify-between border-t border-neutral-100 pt-6">
         <div className="flex items-center gap-3">
           {stepIndex === 0 ? (
-            <Button variant="tertiary" onClick={handleSkipAll} disabled={submitting}>
+            <Button
+              variant="ghost"
+              onClick={handleSkipAll}
+              disabled={submitting}
+              className="!px-0 !py-0"
+            >
               나중에 설정하기
             </Button>
           ) : (
-            <Button variant="ghost" onClick={handlePrev} disabled={submitting}>
+            <Button variant="tertiary" onClick={handlePrev} disabled={submitting}>
               이전
             </Button>
           )}
