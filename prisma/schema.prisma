@@ -21,6 +21,7 @@ model User {
   follows       Follow[]
   notifications Notification[]
   jobFeedback   JobFeedback[]
+  externalJobSaves ExternalJobSave[]
 }
 
 model Account {
@@ -154,6 +155,24 @@ model SavedJob {
   job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@unique([userId, jobId])
+}
+
+// 유저가 마이페이지에서 외부(우리 DB에 없는) 채용공고 링크를 붙여넣어 저장한 기록.
+// Job과 달리 여러 유저가 공유하는 공개 리스팅이 아니라 유저 개인 소유의 스냅샷이라,
+// SavedJob처럼 Job을 참조하지 않고 원문 텍스트/분석 결과를 이 레코드 안에 통째로 저장한다.
+model ExternalJobSave {
+  id           String   @id @default(cuid())
+  userId       String
+  sourceUrl    String
+  title        String
+  companyName  String
+  description  String   @db.Text
+  coreKeywords String[]
+  resumeTip    String   @db.Text
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
 
 // 유저가 팔로우한 기업. 팔로우한 기업이 새 공고를 올리면 Notification이 생성된다.

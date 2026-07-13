@@ -34,7 +34,7 @@ export function EmailAlertToggle({ initialEnabled }: { initialEnabled: boolean }
       className={clsx(
         "inline-flex h-[47px] shrink-0 items-center justify-center gap-1.5 rounded-[14px] px-5 text-sm font-medium transition-colors active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-60",
         enabled
-          ? "bg-neutral-200 text-ink hover:bg-neutral-300"
+          ? "bg-neutral-200 text-neutral-600 hover:bg-neutral-300"
           : "bg-primary text-white hover:bg-primary-strong"
       )}
     >
