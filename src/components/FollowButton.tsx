@@ -54,7 +54,7 @@ export function FollowButton({
       disabled={isPending}
       aria-pressed={following}
       className={clsx(
-        "inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium transition-colors active:scale-[0.95] disabled:cursor-not-allowed",
+        "inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95] disabled:cursor-not-allowed",
         following
           ? "border border-primary bg-blue-50 text-primary hover:bg-blue-100"
           : "bg-primary text-white hover:bg-primary-strong"
