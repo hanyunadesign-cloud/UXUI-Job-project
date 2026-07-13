@@ -15,7 +15,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex w-full items-center justify-between px-4 py-4 sm:px-6 lg:max-w-[1440px] lg:px-8 3xl:max-w-[1760px] 3xl:px-16">
+      <div className="mx-auto flex h-14 w-full items-center justify-between px-4 sm:px-6 lg:max-w-[1440px] lg:px-8 3xl:max-w-[1760px] 3xl:px-16">
         <Link href="/jobs" className="text-base font-bold tracking-tight text-ink">
           UXUI Job
         </Link>
