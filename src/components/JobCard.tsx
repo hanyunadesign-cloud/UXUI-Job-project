@@ -11,6 +11,7 @@ export type JobCardData = {
   title: string;
   companyName: string;
   companyLogo: string | null;
+  companyId: string | null;
   location: string | null;
   platforms: string[];
   industry: string;
@@ -35,13 +36,35 @@ export function JobCard({ job, saved }: { job: JobCardData; saved: boolean }) {
   const status = getApplicationStatus(job.applicationDeadline);
 
   return (
-    <div className="relative flex h-full flex-col gap-3 rounded-2xl border border-neutral-200 p-4 transition-colors hover:border-neutral-300">
+    <div
+      className={clsx(
+        "relative flex h-full flex-col gap-3 rounded-2xl border border-neutral-200 p-4 transition-colors hover:border-neutral-300",
+        status.closed && "opacity-60"
+      )}
+    >
       <div className="absolute right-4 top-4">
         <SaveButton jobId={job.id} initialSaved={saved} size="sm" />
       </div>
 
-      <Link href={`/jobs/${job.id}`} className="flex flex-col gap-3">
-        {/* 프로필 행: 아바타 높이(48px)가 행 높이를 결정, 회사명/지역은 항상 1줄씩 고정 */}
+      {/* 프로필 행: 기업 로고/기업명은 카드 나머지 부분과 별도로 기업 프로필로 연결된다 */}
+      {job.companyId ? (
+        <Link href={`/companies/${job.companyId}`} className="flex items-center gap-3 pr-12">
+          <CompanyLogo
+            src={job.companyLogo}
+            alt={job.companyName}
+            initial={initial}
+            size={48}
+          />
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-ink hover:underline">
+              {job.companyName}
+            </p>
+            <p className="truncate text-xs text-neutral-400">
+              {formatLocation(job.location) ?? "위치 미정"}
+            </p>
+          </div>
+        </Link>
+      ) : (
         <div className="flex items-center gap-3 pr-12">
           <CompanyLogo
             src={job.companyLogo}
@@ -56,7 +79,9 @@ export function JobCard({ job, saved }: { job: JobCardData; saved: boolean }) {
             </p>
           </div>
         </div>
+      )}
 
+      <Link href={`/jobs/${job.id}`} className="flex flex-col gap-3">
         {/* 제목: 최대 2줄 고정, 1줄짜리 제목도 동일한 자리를 차지 */}
         <h3 className="line-clamp-2 min-h-11 text-base font-bold leading-snug text-ink">
           {job.title}
@@ -82,7 +107,9 @@ export function JobCard({ job, saved }: { job: JobCardData; saved: boolean }) {
         <p
           className={clsx(
             "text-xs",
-            status.urgent ? "font-semibold text-red-600" : "text-neutral-400"
+            status.urgent && "font-semibold text-red-600",
+            status.closed && "text-neutral-300",
+            !status.urgent && !status.closed && "text-neutral-400"
           )}
         >
           {status.label}

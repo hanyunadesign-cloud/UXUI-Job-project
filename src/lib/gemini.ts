@@ -16,7 +16,8 @@ const model = genAI.getGenerativeModel({
     "당신은 UXUI 디자이너 구직자를 돕는 커리어 코치입니다. 주어진 채용 공고 원문만 근거로 분석하세요. " +
     "공고에 명시되지 않은 내용은 추측하거나 지어내지 마세요. 간결하고 실용적인 톤을 유지하세요. " +
     "task_keywords는 개수를 채우기 위한 형식적인 단어를 넣지 말고, 이 공고에서 실제로 대표성이 있는 핵심 업무만 골라 " +
-    "그 공고에 맞는 개수(2~4개)로 뽑으세요. 억지로 4개를 채우지 마세요.",
+    "그 공고에 맞는 개수(2~4개)로 뽑으세요. 억지로 4개를 채우지 마세요. " +
+    "resume_tip은 반드시 해요체(예: ~해요, ~예요, ~돼요, ~보여주세요)로 작성하고, 합쇼체(~습니다, ~하세요)는 쓰지 마세요.",
   generationConfig: {
     responseMimeType: "application/json",
     responseSchema: {
@@ -29,7 +30,8 @@ const model = genAI.getGenerativeModel({
         },
         resume_tip: {
           type: SchemaType.STRING,
-          description: "포트폴리오/이력서에서 어필해야 할 포인트, 두 문장 이내",
+          description:
+            "포트폴리오/이력서에서 어필해야 할 포인트, 두 문장 이내. 반드시 해요체로 작성 (합쇼체 금지)",
         },
         task_keywords: {
           type: SchemaType.ARRAY,

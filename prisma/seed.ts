@@ -6,7 +6,7 @@ const jobs = [
   {
     title: "커머스 프로덕트 디자이너 (앱)",
     companyName: "그린카트",
-    role: "프로덕트 디자이너",
+    role: "프로덕트 디자인",
     platforms: ["앱", "웹"],
     industry: "커머스",
     stage: "유니콘",
@@ -18,7 +18,7 @@ const jobs = [
   {
     title: "UXUI 디자이너 (핀테크 웹)",
     companyName: "페이브릿지",
-    role: "UXUI 디자이너",
+    role: "UXUI 디자인",
     platforms: ["웹"],
     industry: "핀테크",
     stage: "스타트업",
@@ -30,7 +30,7 @@ const jobs = [
   {
     title: "GUI 디자이너 (모빌리티 클러스터)",
     companyName: "모션랩스",
-    role: "GUI 디자이너",
+    role: "GUI 디자인",
     platforms: ["모빌리티", "태블릿"],
     industry: "모빌리티",
     stage: "대기업",
@@ -42,7 +42,7 @@ const jobs = [
   {
     title: "프로덕트 디자이너 (SNS 앱)",
     companyName: "루프소셜",
-    role: "프로덕트 디자이너",
+    role: "프로덕트 디자인",
     platforms: ["앱"],
     industry: "SNS",
     stage: "스타트업",
@@ -54,7 +54,7 @@ const jobs = [
   {
     title: "UX 리서처 (헬스케어)",
     companyName: "케어노트",
-    role: "UX 리서처",
+    role: "UX 리서치",
     platforms: ["앱", "웹"],
     industry: "헬스케어",
     stage: "중견 기업",
@@ -66,7 +66,7 @@ const jobs = [
   {
     title: "UX 라이터 (여행 플랫폼)",
     companyName: "어라운드트립",
-    role: "UX 라이터",
+    role: "UX 라이팅",
     platforms: ["앱", "웹"],
     industry: "여행/로컬",
     stage: "유니콘",
@@ -78,7 +78,7 @@ const jobs = [
   {
     title: "UXUI 디자이너 (B2B SaaS 대시보드)",
     companyName: "워크플로우웍스",
-    role: "UXUI 디자이너",
+    role: "UXUI 디자인",
     platforms: ["웹"],
     industry: "B2B SaaS",
     stage: "중견 기업",
@@ -90,7 +90,7 @@ const jobs = [
   {
     title: "프로덕트 디자이너 (가전 앱 연동)",
     companyName: "홈센스",
-    role: "프로덕트 디자이너",
+    role: "프로덕트 디자인",
     platforms: ["앱", "가전"],
     industry: "커머스",
     stage: "대기업",
@@ -102,7 +102,7 @@ const jobs = [
   {
     title: "GUI 디자이너 (웨어러블)",
     companyName: "핏싱크",
-    role: "GUI 디자이너",
+    role: "GUI 디자인",
     platforms: ["워치/웨어러블"],
     industry: "헬스케어",
     stage: "스타트업",
@@ -114,7 +114,7 @@ const jobs = [
   {
     title: "UXUI 디자이너 (VR/AR 프로토타입)",
     companyName: "스페이셜웍스",
-    role: "UXUI 디자이너",
+    role: "UXUI 디자인",
     platforms: ["VR/AR"],
     industry: "SNS",
     stage: "스타트업",
@@ -126,7 +126,7 @@ const jobs = [
   {
     title: "프로덕트 디자이너 (에이전시, 다양한 클라이언트)",
     companyName: "스튜디오널",
-    role: "프로덕트 디자이너",
+    role: "프로덕트 디자인",
     platforms: ["웹", "앱"],
     industry: "B2B SaaS",
     stage: "에이전시",
@@ -138,7 +138,7 @@ const jobs = [
   {
     title: "UX 리서처 (모빌리티 서비스)",
     companyName: "라이드플로우",
-    role: "UX 리서처",
+    role: "UX 리서치",
     platforms: ["앱", "모빌리티"],
     industry: "모빌리티",
     stage: "유니콘",
@@ -150,7 +150,7 @@ const jobs = [
   {
     title: "UX 라이터 (핀테크 앱)",
     companyName: "머니루트",
-    role: "UX 라이터",
+    role: "UX 라이팅",
     platforms: ["앱"],
     industry: "핀테크",
     stage: "중견 기업",
@@ -162,7 +162,7 @@ const jobs = [
   {
     title: "GUI 디자이너 (커머스 웹)",
     companyName: "셀프마켓",
-    role: "GUI 디자이너",
+    role: "GUI 디자인",
     platforms: ["웹", "태블릿"],
     industry: "커머스",
     stage: "대기업",
@@ -174,7 +174,7 @@ const jobs = [
   {
     title: "프로덕트 디자이너 (B2B SaaS, 스타트업)",
     companyName: "테이블핏",
-    role: "프로덕트 디자이너",
+    role: "프로덕트 디자인",
     platforms: ["웹"],
     industry: "B2B SaaS",
     stage: "스타트업",
@@ -186,7 +186,7 @@ const jobs = [
   {
     title: "UXUI 디자이너 (여행 앱)",
     companyName: "로컬퍼즐",
-    role: "UXUI 디자이너",
+    role: "UXUI 디자인",
     platforms: ["앱"],
     industry: "여행/로컬",
     stage: "스타트업",

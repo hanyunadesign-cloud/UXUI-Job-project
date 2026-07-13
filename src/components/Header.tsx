@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
 import { clsx } from "clsx";
+import { ProfileMenu } from "@/components/ProfileMenu";
 
 const NAV_ITEMS = [
-  { href: "/jobs", label: "홈" },
-  { href: "/mypage", label: "마이페이지" },
+  { href: "/jobs", label: "채용" },
+  { href: "/companies", label: "기업" },
 ];
 
 export function Header() {
@@ -34,12 +34,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
-            className="text-sm font-medium text-neutral-400 transition-colors hover:text-ink"
-          >
-            로그아웃
-          </button>
+          <ProfileMenu />
         </nav>
       </div>
     </header>

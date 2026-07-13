@@ -1,0 +1,75 @@
+import Link from "next/link";
+import { clsx } from "clsx";
+
+// 서버 컴포넌트로 구현: 페이지 이동은 링크 클릭만으로 충분해 클라이언트 JS가 필요 없다.
+export function Pagination({
+  currentPage,
+  totalPages,
+  basePath,
+  searchParams,
+}: {
+  currentPage: number;
+  totalPages: number;
+  basePath: string;
+  searchParams: URLSearchParams;
+}) {
+  if (totalPages <= 1) return null;
+
+  const hrefFor = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", String(page));
+    return `${basePath}?${params.toString()}`;
+  };
+
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  return (
+    <nav className="flex items-center justify-center gap-1.5 pt-4" aria-label="페이지네이션">
+      <Link
+        href={hrefFor(Math.max(1, currentPage - 1))}
+        aria-disabled={currentPage === 1}
+        className={clsx(
+          "flex h-8 w-8 items-center justify-center rounded-full text-neutral-400 transition-colors",
+          currentPage === 1
+            ? "pointer-events-none opacity-30"
+            : "hover:bg-neutral-100 hover:text-ink"
+        )}
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </Link>
+
+      {pages.map((page) => (
+        <Link
+          key={page}
+          href={hrefFor(page)}
+          aria-current={page === currentPage ? "page" : undefined}
+          className={clsx(
+            "flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors",
+            page === currentPage
+              ? "bg-ink text-white"
+              : "text-neutral-500 hover:bg-neutral-100 hover:text-ink"
+          )}
+        >
+          {page}
+        </Link>
+      ))}
+
+      <Link
+        href={hrefFor(Math.min(totalPages, currentPage + 1))}
+        aria-disabled={currentPage === totalPages}
+        className={clsx(
+          "flex h-8 w-8 items-center justify-center rounded-full text-neutral-400 transition-colors",
+          currentPage === totalPages
+            ? "pointer-events-none opacity-30"
+            : "hover:bg-neutral-100 hover:text-ink"
+        )}
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </Link>
+    </nav>
+  );
+}

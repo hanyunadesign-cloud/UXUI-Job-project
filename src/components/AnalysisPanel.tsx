@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { Badge } from "@/components/Badge";
+import { FeedbackWidget } from "@/components/FeedbackWidget";
 
 type Analysis = {
   coreKeywords: string[];
@@ -13,9 +14,11 @@ type Status = "loading" | "success" | "error";
 export function AnalysisPanel({
   jobId,
   initialAnalysis,
+  isLoggedIn,
 }: {
   jobId: string;
   initialAnalysis: Analysis | null;
+  isLoggedIn: boolean;
 }) {
   const [status, setStatus] = useState<Status>(initialAnalysis ? "success" : "loading");
   const [analysis, setAnalysis] = useState<Analysis | null>(initialAnalysis);
@@ -66,7 +69,7 @@ export function AnalysisPanel({
       )}
 
       {status === "success" && analysis && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-8">
           <div>
             <p className="mb-2 text-xs font-medium text-neutral-400">핵심 역량 키워드</p>
             <div className="flex flex-wrap gap-1.5">
@@ -80,6 +83,10 @@ export function AnalysisPanel({
             <p className="text-sm leading-relaxed text-ink">{analysis.resumeTip}</p>
           </div>
         </div>
+      )}
+
+      {status === "success" && analysis && (
+        <FeedbackWidget jobId={jobId} isLoggedIn={isLoggedIn} />
       )}
     </div>
   );

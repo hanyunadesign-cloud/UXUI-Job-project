@@ -1,6 +1,8 @@
 import * as cheerio from "cheerio";
 import { prisma } from "./prisma";
 import { analyzeJobDescription } from "./gemini";
+import { findOrCreateCompanyId } from "./company";
+import { notifyFollowersOfNewJobs } from "./notifications";
 
 // Gemini 무료 티어 분당 요청 한도를 여유 있게 지키기 위한 간격 (새로 분석을 호출했을 때만 대기)
 function sleep(ms: number) {
@@ -34,7 +36,7 @@ const SOURCES: Source[] = [
   {
     provider: "greenhouse",
     board: "daangn",
-    companyName: "당근마켓",
+    companyName: "당근",
     companyLogo: faviconFor("daangn.com"),
     industry: "여행/로컬",
     stage: "유니콘",
@@ -77,16 +79,16 @@ const DESIGN_TITLE_PATTERN =
   /(product designer|ux researcher|ux writer|ux designer|ux engineer|ux\/ui|interaction designer|conversation designer|visual designer|motion designer|contents? designer|gui designer|brand designer|graphic designer|design engineer|디자이너|디자인)/i;
 
 function inferRole(title: string): string {
-  if (/ux researcher|리서처/i.test(title)) return "UX 리서처";
-  if (/ux writer|라이터/i.test(title)) return "UX 라이터";
-  if (/product designer|프로덕트 디자이너/i.test(title)) return "프로덕트 디자이너";
+  if (/ux researcher|리서처/i.test(title)) return "UX 리서치";
+  if (/ux writer|라이터/i.test(title)) return "UX 라이팅";
+  if (/product designer|프로덕트 디자이너/i.test(title)) return "프로덕트 디자인";
   if (
     /brand designer|graphic designer|design engineer|visual designer|motion designer|contents? designer|그래픽 디자이너/i.test(
       title
     )
   )
-    return "GUI 디자이너";
-  return "UXUI 디자이너";
+    return "GUI 디자인";
+  return "UXUI 디자인";
 }
 
 // 실제 HTML(엔티티 이중 인코딩 없는 경우)을 정리된 텍스트로 변환하는 공통 로직.
@@ -276,8 +278,24 @@ async function fetchSourceJobs(source: Source): Promise<NormalizedJob[]> {
     : fetchAshbyJobs(source);
 }
 
+// 마감된 지 1개월이 지난 공고는 목록에서 제거하되, 통계/복구를 위해 실제로 지우지는 않고
+// archivedAt만 채워서 소프트 삭제 처리한다(모든 목록 쿼리는 archivedAt: null 조건으로 걸러낸다).
+async function archiveStaleJobs(): Promise<number> {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+  const result = await prisma.job.updateMany({
+    where: {
+      archivedAt: null,
+      applicationDeadline: { lt: oneMonthAgo },
+    },
+    data: { archivedAt: new Date() },
+  });
+  return result.count;
+}
+
 // 스케줄러(Vercel Cron)와 로컬 CLI 스크립트가 함께 사용하는 수집 로직 본체.
-export async function ingestJobs(): Promise<{ count: number }> {
+export async function ingestJobs(): Promise<{ count: number; archived: number }> {
   let count = 0;
 
   for (const source of SOURCES) {
@@ -291,11 +309,17 @@ export async function ingestJobs(): Promise<{ count: number }> {
       return true;
     });
 
+    const companyId = await findOrCreateCompanyId(source);
+    // 팔로워 알림은 진짜 신규 공고에만 보내야 하므로(기존 공고 정보 업데이트는 제외),
+    // upsert 전에 이미 존재하는지 먼저 확인해 이번 실행에서 새로 생긴 것만 따로 모아둔다.
+    const newlyCreated: { id: string; title: string }[] = [];
+
     for (const job of filtered) {
       const data = {
         title: job.title,
         companyName: source.companyName,
         companyLogo: source.companyLogo,
+        companyId,
         role: inferRole(job.title),
         platforms: source.platforms,
         industry: source.industry,
@@ -309,11 +333,20 @@ export async function ingestJobs(): Promise<{ count: number }> {
         experienceLevel: extractExperienceLevel(job.description),
       };
 
+      const existed = await prisma.job.findUnique({
+        where: { applyUrl: job.applyUrl },
+        select: { id: true },
+      });
+
       const savedJob = await prisma.job.upsert({
         where: { applyUrl: job.applyUrl },
         create: data,
         update: data,
       });
+
+      if (!existed) {
+        newlyCreated.push({ id: savedJob.id, title: savedJob.title });
+      }
 
       console.log(`✔ ${source.companyName} | ${job.title}`);
       count += 1;
@@ -343,7 +376,14 @@ export async function ingestJobs(): Promise<{ count: number }> {
         await sleep(3000);
       }
     }
+
+    await notifyFollowersOfNewJobs(companyId, source.companyName, newlyCreated);
   }
 
-  return { count };
+  const archived = await archiveStaleJobs();
+  if (archived > 0) {
+    console.log(`\n🗑  마감 1개월 경과 공고 ${archived}건 소프트 삭제(archivedAt 설정) 처리`);
+  }
+
+  return { count, archived };
 }

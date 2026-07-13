@@ -18,6 +18,9 @@ model User {
   sessions      Session[]
   preference    Preference?
   savedJobs     SavedJob[]
+  follows       Follow[]
+  notifications Notification[]
+  jobFeedback   JobFeedback[]
 }
 
 model Account {
@@ -67,11 +70,32 @@ model Preference {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// 기업 프로필 페이지(/companies/:id)의 정보 소스. Job.companyName은 카드 표시용으로 계속 남겨두되,
+// 기업 단위 정보(사원수/설립/본사 위치 등)는 여기서만 관리한다.
+model Company {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  logo          String?
+  // "산업" 필터와 동일한 값 집합을 재사용
+  industry      String
+  // "규모" 필터와 동일한 값 집합을 재사용 (스타트업/유니콘/중견 기업/대기업/에이전시)
+  stage         String
+  // 아래 세 항목은 자동 수집 소스가 없어 당장은 비어있을 수 있다. 값이 있을 때만 프로필에 노출.
+  employeeCount String?
+  founded       String?
+  headquarters  String?
+  createdAt     DateTime  @default(now())
+  jobs          Job[]
+  follows       Follow[]
+}
+
 model Job {
   id          String       @id @default(cuid())
   title       String
   companyName String
   companyLogo String?
+  companyId   String?
+  company     Company?     @relation(fields: [companyId], references: [id])
   role        String
   platforms   String[]
   industry    String
@@ -87,8 +111,11 @@ model Job {
   employmentType    String @default("정규직")
   experienceLevel   String @default("경력무관")
   postedAt    DateTime     @default(now())
+  // 마감 1개월 경과 시 자동 세팅되는 소프트 삭제 마커. null이면 노출 대상.
+  archivedAt  DateTime?
   savedBy     SavedJob[]
   analysis    JobAnalysis?
+  feedback    JobFeedback[]
 }
 
 // 공고 상세페이지 진입 시 실행되는 AI 분석 결과 캐시 (재실행 방지)
@@ -103,6 +130,21 @@ model JobAnalysis {
   job          Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
 }
 
+// "AI 분석" 섹션 하단 피드백 위젯 제출 기록. 유저당 공고 1건에 1개만 남길 수 있으며
+// (제출 후에는 위젯이 완료 상태로 고정되고 재제출 불가), 로그인 유저만 제출 가능하다.
+model JobFeedback {
+  id        String   @id @default(cuid())
+  userId    String
+  jobId     String
+  helpful   Boolean
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+}
+
 model SavedJob {
   id        String   @id @default(cuid())
   userId    String
@@ -112,4 +154,34 @@ model SavedJob {
   job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@unique([userId, jobId])
+}
+
+// 유저가 팔로우한 기업. 팔로우한 기업이 새 공고를 올리면 Notification이 생성된다.
+model Follow {
+  id        String   @id @default(cuid())
+  userId    String
+  companyId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, companyId])
+}
+
+// 팔로우한 기업의 신규 공고 알림. 기업명/공고 제목은 나중에 기업명이 바뀌거나 공고가
+// 소프트 삭제되어도 알림 히스토리 문구가 깨지지 않도록 발송 시점 값을 스냅샷으로 저장한다.
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  companyId   String
+  companyName String
+  // 공고 1건짜리 알림이면 그 공고 상세로, 여러 건을 묶은 알림이면 기업 프로필로 이동(jobId는 null).
+  jobId       String?
+  jobTitle    String?
+  count       Int      @default(1)
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
 }

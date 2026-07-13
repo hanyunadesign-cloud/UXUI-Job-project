@@ -6,6 +6,7 @@ import { JobCard } from "@/components/JobCard";
 import { EmptyState } from "@/components/EmptyState";
 import { OnboardingSuccessModal } from "./OnboardingSuccessModal";
 import { computeMatchScore } from "@/lib/matching";
+import { matchesExperienceLevel } from "@/lib/experience";
 
 export const dynamic = "force-dynamic";
 
@@ -26,10 +27,12 @@ export default async function JobsPage({
   const platforms = toArray(searchParams.platform);
   const industries = toArray(searchParams.industry);
   const stages = toArray(searchParams.stage);
+  const experienceLevels = toArray(searchParams.experience);
   const sort = searchParams.sort === "deadline" ? "deadline" : "match";
 
-  const jobs = await prisma.job.findMany({
+  const matchedJobs = await prisma.job.findMany({
     where: {
+      archivedAt: null,
       ...(roles.length && { role: { in: roles } }),
       ...(platforms.length && { platforms: { hasSome: platforms } }),
       ...(industries.length && { industry: { in: industries } }),
@@ -38,6 +41,16 @@ export default async function JobsPage({
     include: { analysis: { select: { taskKeywords: true } } },
     orderBy: { postedAt: "desc" },
   });
+
+  // experienceLevel은 "3~10년" 같은 자유 형식 텍스트라 Prisma where로 바로 못 걸러서,
+  // 조회 후 구간 매칭(matchesExperienceLevel)으로 한 번 더 필터링한다.
+  const jobs = experienceLevels.length
+    ? matchedJobs.filter((job) =>
+        experienceLevels.some((level) =>
+          matchesExperienceLevel(job.experienceLevel, level)
+        )
+      )
+    : matchedJobs;
 
   let sortedJobs = jobs;
 

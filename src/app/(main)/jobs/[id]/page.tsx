@@ -8,6 +8,7 @@ import { Button } from "@/components/Button";
 import { SaveButton } from "@/components/SaveButton";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { AnalysisPanel } from "@/components/AnalysisPanel";
+import { BackButton } from "@/components/BackButton";
 
 export const dynamic = "force-dynamic";
 
@@ -32,9 +33,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
 
   return (
     <div className="flex flex-col gap-8">
-      <Link href="/jobs" className="w-fit text-sm text-neutral-400 hover:text-ink">
-        ← 홈으로
-      </Link>
+      <BackButton />
 
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-4">
@@ -45,7 +44,16 @@ export default async function JobDetailPage({ params }: { params: { id: string }
             size={56}
           />
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-neutral-500">{job.companyName}</p>
+            {job.companyId ? (
+              <Link
+                href={`/companies/${job.companyId}`}
+                className="w-fit text-sm text-neutral-500 hover:text-ink hover:underline"
+              >
+                {job.companyName}
+              </Link>
+            ) : (
+              <p className="text-sm text-neutral-500">{job.companyName}</p>
+            )}
             <h1 className="text-2xl font-bold text-ink">{job.title}</h1>
             <div className="flex flex-wrap gap-1.5">
               <Badge>{job.role}</Badge>
@@ -80,6 +88,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
               ? { coreKeywords: job.analysis.coreKeywords, resumeTip: job.analysis.resumeTip }
               : null
           }
+          isLoggedIn={Boolean(userId)}
         />
       </div>
     </div>

@@ -3,14 +3,44 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { ROLES, PLATFORMS, INDUSTRIES, STAGES } from "@/lib/constants";
+import {
+  ROLES,
+  PLATFORMS,
+  INDUSTRIES,
+  STAGES,
+  EXPERIENCE_LEVELS,
+} from "@/lib/constants";
 import { SortDropdown } from "@/components/SortDropdown";
 
 const FILTER_GROUPS = [
-  { key: "role", label: "직무", options: ROLES },
-  { key: "platform", label: "플랫폼", options: PLATFORMS },
-  { key: "industry", label: "도메인", options: INDUSTRIES },
-  { key: "stage", label: "스테이지", options: STAGES },
+  {
+    key: "experience",
+    label: "경력",
+    options: EXPERIENCE_LEVELS.map((e) => ({
+      value: e.value as string,
+      description: e.description as string | undefined,
+    })),
+  },
+  {
+    key: "role",
+    label: "업무",
+    options: ROLES.map((v) => ({ value: v as string, description: undefined })),
+  },
+  {
+    key: "platform",
+    label: "매체",
+    options: PLATFORMS.map((v) => ({ value: v as string, description: undefined })),
+  },
+  {
+    key: "industry",
+    label: "산업",
+    options: INDUSTRIES.map((v) => ({ value: v as string, description: undefined })),
+  },
+  {
+    key: "stage",
+    label: "규모",
+    options: STAGES.map((v) => ({ value: v as string, description: undefined })),
+  },
 ] as const;
 
 export function FilterBar() {
@@ -84,23 +114,34 @@ export function FilterBar() {
             </button>
 
             {isOpen && (
-              <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-56 max-w-[calc(100vw-2rem)] flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg">
+              <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-64 max-w-[calc(100vw-2rem)] flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg">
                 {group.options.map((option) => {
-                  const isSelected = active.includes(option);
+                  const isSelected = active.includes(option.value);
                   return (
                     <button
-                      key={option}
+                      key={option.value}
                       type="button"
-                      onClick={() => toggle(group.key, option)}
+                      onClick={() => toggle(group.key, option.value)}
                       className={clsx(
-                        "flex items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition-colors",
+                        "flex items-start justify-between gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors",
                         isSelected
                           ? "bg-neutral-100 font-medium text-ink"
                           : "text-neutral-600 hover:bg-neutral-50"
                       )}
                     >
-                      {option}
-                      {isSelected && <span aria-hidden>✓</span>}
+                      <span className="flex flex-col gap-0.5">
+                        <span>{option.value}</span>
+                        {option.description && (
+                          <span className="whitespace-pre-line text-xs font-normal text-neutral-400">
+                            {option.description}
+                          </span>
+                        )}
+                      </span>
+                      {isSelected && (
+                        <span aria-hidden className="shrink-0 pt-0.5">
+                          ✓
+                        </span>
+                      )}
                     </button>
                   );
                 })}

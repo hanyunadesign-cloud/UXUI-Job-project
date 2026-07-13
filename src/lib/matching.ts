@@ -40,3 +40,23 @@ export function computeMatchScore(
 
   return score;
 }
+
+export type MatchableCompany = {
+  industry: string;
+  stage: string;
+};
+
+// "추천 기업" 정렬용. Company는 role/platform 정보가 없어 job 매칭과 같은 가중치 중
+// industry/stage만 재사용한다.
+export function computeCompanyMatchScore(
+  company: MatchableCompany,
+  preference: MatchPreference | null
+): number {
+  if (!preference) return 0;
+
+  let score = 0;
+  if (preference.industries.includes(company.industry)) score += WEIGHTS.industry;
+  if (preference.stages.includes(company.stage)) score += WEIGHTS.stage;
+
+  return score;
+}
