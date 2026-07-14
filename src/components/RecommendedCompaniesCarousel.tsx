@@ -4,7 +4,10 @@ import { useRef } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { CompanyCard, type CompanyCardData } from "@/components/CompanyCard";
 
-const CARD_WIDTH_CLASS = "w-[220px] shrink-0";
+// 기존 그리드(2열 → sm 3열 → lg 4열)와 같은 개수가 한 화면에 딱 맞게 보이도록,
+// 카드 너비를 "(100% - 그 개수만큼의 gap) / 개수"로 계산해 잘린 카드가 안 보이게 한다.
+const CARD_WIDTH_CLASS =
+  "w-[calc((100%-1rem)/2)] shrink-0 snap-start sm:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-3rem)/4)]";
 
 export function RecommendedCompaniesCarousel({
   companies,
@@ -52,7 +55,10 @@ export function RecommendedCompaniesCarousel({
         </div>
       </div>
 
-      <div ref={scrollRef} className="scrollbar-visible flex gap-4 overflow-x-auto pb-3">
+      <div
+        ref={scrollRef}
+        className="scrollbar-visible flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3"
+      >
         {companies.map((company) => (
           <div key={company.id} className={CARD_WIDTH_CLASS}>
             <CompanyCard
