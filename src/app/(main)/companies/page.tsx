@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyFilterBar } from "@/components/CompanyFilterBar";
 import { ActiveOnlyCheckbox } from "@/components/ActiveOnlyCheckbox";
+import { FollowingOnlyCheckbox } from "@/components/FollowingOnlyCheckbox";
 import { Pagination } from "@/components/Pagination";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewFollowingLink } from "@/components/ViewFollowingLink";
@@ -32,6 +33,7 @@ export default async function CompaniesPage({
   const industries = toArray(searchParams.industry);
   const q = typeof searchParams.q === "string" ? searchParams.q.trim() : "";
   const activeOnly = searchParams.activeOnly === "1";
+  const followingOnly = searchParams.followingOnly === "1";
   const page = Math.max(1, Number(searchParams.page) || 1);
 
   const [companies, preference, followsList] = await Promise.all([
@@ -64,10 +66,13 @@ export default async function CompaniesPage({
     })
     .slice(0, RECOMMENDED_COUNT);
 
+  const followedIds = new Set(followsList.map((f) => f.companyId));
+
   const filtered = withOpenJobs.filter((company) => {
     if (stages.length && !stages.includes(company.stage)) return false;
     if (industries.length && !industries.includes(company.industry)) return false;
     if (activeOnly && !company.hasOpenJobs) return false;
+    if (followingOnly && !followedIds.has(company.id)) return false;
     if (q && !company.name.toLowerCase().includes(q.toLowerCase())) return false;
     return true;
   });
@@ -76,13 +81,12 @@ export default async function CompaniesPage({
   const currentPage = Math.min(page, totalPages);
   const pageItems = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
-  const followedIds = new Set(followsList.map((f) => f.companyId));
-
   const currentSearchParams = new URLSearchParams();
   stages.forEach((s) => currentSearchParams.append("stage", s));
   industries.forEach((i) => currentSearchParams.append("industry", i));
   if (q) currentSearchParams.set("q", q);
   if (activeOnly) currentSearchParams.set("activeOnly", "1");
+  if (followingOnly) currentSearchParams.set("followingOnly", "1");
 
   return (
     <div className="flex flex-col gap-8">
@@ -124,7 +128,10 @@ export default async function CompaniesPage({
         <p className="text-sm text-neutral-500">
           검색 결과 <span className="font-semibold text-ink">{filtered.length}</span>건
         </p>
-        <ActiveOnlyCheckbox />
+        <div className="flex items-center gap-4">
+          <ActiveOnlyCheckbox />
+          <FollowingOnlyCheckbox isLoggedIn={Boolean(userId)} />
+        </div>
       </div>
 
       {pageItems.length === 0 ? (
