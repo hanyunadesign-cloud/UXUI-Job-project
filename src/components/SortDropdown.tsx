@@ -7,6 +7,7 @@ import { ArrowsUpDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 const SORT_OPTIONS = [
   { value: "match", label: "매칭순" },
+  { value: "latest", label: "최신순" },
   { value: "deadline", label: "마감임박순" },
 ] as const;
 
@@ -17,7 +18,9 @@ export function SortDropdown() {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const current = searchParams.get("sort") === "deadline" ? "deadline" : "match";
+  const sortParam = searchParams.get("sort");
+  const current =
+    sortParam === "deadline" ? "deadline" : sortParam === "latest" ? "latest" : "match";
   const currentOption = SORT_OPTIONS.find((o) => o.value === current) ?? SORT_OPTIONS[0];
 
   useEffect(() => {

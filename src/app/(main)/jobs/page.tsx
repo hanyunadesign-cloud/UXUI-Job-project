@@ -28,7 +28,12 @@ export default async function JobsPage({
   const industries = toArray(searchParams.industry);
   const stages = toArray(searchParams.stage);
   const experienceLevels = toArray(searchParams.experience);
-  const sort = searchParams.sort === "deadline" ? "deadline" : "match";
+  const sort =
+    searchParams.sort === "deadline"
+      ? "deadline"
+      : searchParams.sort === "latest"
+        ? "latest"
+        : "match";
 
   const matchedJobs = await prisma.job.findMany({
     where: {
@@ -62,7 +67,7 @@ export default async function JobsPage({
       if (!b.applicationDeadline) return -1;
       return a.applicationDeadline.getTime() - b.applicationDeadline.getTime();
     });
-  } else if (userId) {
+  } else if (sort === "match" && userId) {
     // 매칭순: 온보딩 선호도와 겹치는 정도로 점수를 매겨 내림차순. 동점은 안정 정렬로 최신 등록순 유지.
     // 선호도가 없으면(비로그인·온보딩 미완료) 모든 점수가 0이 되어 자연스럽게 최신순으로 대체된다.
     const preference = await prisma.preference.findUnique({ where: { userId } });
@@ -70,6 +75,8 @@ export default async function JobsPage({
       (a, b) => computeMatchScore(b, preference) - computeMatchScore(a, preference)
     );
   }
+  // sort === "latest"이거나 비로그인 상태의 "match"는 위 매칭순 로직을 타지 않고, jobs가
+  // 이미 postedAt desc로 조회돼 있어 sortedJobs = jobs 그대로가 곧 최신순이 된다.
 
   const savedJobIds = userId
     ? new Set(
