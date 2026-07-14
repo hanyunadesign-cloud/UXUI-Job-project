@@ -66,7 +66,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-4">
-          <SaveButton jobId={job.id} initialSaved={saved} />
+          <SaveButton jobId={job.id} initialSaved={saved} isLoggedIn={Boolean(userId)} />
           <ApplyButton jobId={job.id} applyUrl={job.applyUrl} companyName={job.companyName} />
         </div>
       </div>

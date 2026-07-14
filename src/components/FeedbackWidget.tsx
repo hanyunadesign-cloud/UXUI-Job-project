@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
 import {
   HandThumbUpIcon as ThumbUpOutline,
@@ -13,6 +12,7 @@ import {
   HandThumbDownIcon as ThumbDownSolid,
 } from "@heroicons/react/24/solid";
 import { trackEvent } from "@/lib/analytics";
+import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 
 type Choice = "helpful" | "unhelpful";
 
@@ -23,8 +23,8 @@ export function FeedbackWidget({
   jobId: string;
   isLoggedIn: boolean;
 }) {
-  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
+  const { requireLogin, modal } = useLoginPrompt();
   // 페이지를 새로고침/재방문하면 항상 위젯이 다시 뜨도록, 제출 여부는 서버에서 초기값을 받지 않고
   // 이번 세션에서 실제로 제출했을 때만 true가 되는 순수 클라이언트 상태로 관리한다.
   const [submitted, setSubmitted] = useState(false);
@@ -37,19 +37,16 @@ export function FeedbackWidget({
     setComment("");
   };
 
-  const selectChoice = (next: Choice) => {
-    if (!isLoggedIn) {
-      router.push("/login");
-      return;
-    }
-    // 같은 버튼을 다시 누르면 토글로 선택 해제, 다른 버튼을 누르면 전환하며 입력 중이던 내용은 비운다.
-    if (choice === next) {
-      reset();
-    } else {
-      setChoice(next);
-      setComment("");
-    }
-  };
+  const selectChoice = (next: Choice) =>
+    requireLogin(isLoggedIn, () => {
+      // 같은 버튼을 다시 누르면 토글로 선택 해제, 다른 버튼을 누르면 전환하며 입력 중이던 내용은 비운다.
+      if (choice === next) {
+        reset();
+      } else {
+        setChoice(next);
+        setComment("");
+      }
+    });
 
   // 선택된 상태(choice가 있고 아직 제출 전)에서 위젯 바깥을 클릭하면 선택을 초기화한다.
   useEffect(() => {
@@ -159,6 +156,7 @@ export function FeedbackWidget({
           </button>
         </div>
       )}
+      {modal}
     </div>
   );
 }

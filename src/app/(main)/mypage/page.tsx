@@ -104,6 +104,7 @@ export default async function MyPage({
                       key={`saved-${item.data.id}`}
                       job={{ ...item.data, taskKeywords: item.data.analysis?.taskKeywords ?? [] }}
                       saved
+                      isLoggedIn
                     />
                   ) : (
                     <ExternalJobCard key={`external-${item.data.id}`} job={item.data} />

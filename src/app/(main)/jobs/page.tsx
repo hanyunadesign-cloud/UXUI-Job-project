@@ -105,6 +105,7 @@ export default async function JobsPage({
               key={job.id}
               job={{ ...job, taskKeywords: job.analysis?.taskKeywords ?? [] }}
               saved={savedJobIds.has(job.id)}
+              isLoggedIn={Boolean(userId)}
             />
           ))}
         </div>

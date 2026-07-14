@@ -6,21 +6,25 @@ import { BookmarkIcon as BookmarkOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkSolid } from "@heroicons/react/24/solid";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
+import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 
 export function SaveButton({
   jobId,
   initialSaved,
+  isLoggedIn,
   size = "md",
 }: {
   jobId: string;
   initialSaved: boolean;
+  isLoggedIn: boolean;
   size?: "sm" | "md";
 }) {
   const [saved, setSaved] = useState(initialSaved);
   const [isPending, startTransition] = useTransition();
   const showToast = useToast();
+  const { requireLogin, modal } = useLoginPrompt();
 
-  const toggle = () => {
+  const toggle = () => requireLogin(isLoggedIn, () => {
     const next = !saved;
     setSaved(next);
     trackEvent(next ? "Job Saved" : "Job Unsaved", { jobId });
@@ -40,7 +44,7 @@ export function SaveButton({
         setSaved(!next);
       }
     });
-  };
+  });
 
   // 아이콘(24px, h-6 w-6 고정)을 사방 동일한 패딩으로 감싸 터치 영역을 확보한다.
   // 기존에는 아이콘을 오버사이즈 박스 오른쪽에 justify-end로 붙이는 방식이라 아이콘의
@@ -50,19 +54,22 @@ export function SaveButton({
   const Icon = saved ? BookmarkSolid : BookmarkOutline;
 
   return (
-    <button
-      type="button"
-      onClick={toggle}
-      disabled={isPending}
-      aria-pressed={saved}
-      aria-label={saved ? "저장 취소" : "저장하기"}
-      className={clsx(
-        "flex shrink-0 items-center justify-center rounded-full transition-colors active:scale-[0.92] disabled:opacity-60",
-        size === "md" ? "p-2" : "p-1.5",
-        saved ? "text-primary" : "text-neutral-300 hover:text-neutral-500"
-      )}
-    >
-      <Icon className="h-6 w-6" aria-hidden />
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={toggle}
+        disabled={isPending}
+        aria-pressed={saved}
+        aria-label={saved ? "저장 취소" : "저장하기"}
+        className={clsx(
+          "flex shrink-0 items-center justify-center rounded-full transition-colors active:scale-[0.92] disabled:opacity-60",
+          size === "md" ? "p-2" : "p-1.5",
+          saved ? "text-primary" : "text-neutral-300 hover:text-neutral-500"
+        )}
+      >
+        <Icon className="h-6 w-6" aria-hidden />
+      </button>
+      {modal}
+    </>
   );
 }

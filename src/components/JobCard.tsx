@@ -24,7 +24,15 @@ export type JobCardData = {
 // 뱃지 영역을 2줄로 고정하기 위한 최대 노출 개수. 넘치면 "+N"으로 표시한다.
 const MAX_VISIBLE_BADGES = 4;
 
-export function JobCard({ job, saved }: { job: JobCardData; saved: boolean }) {
+export function JobCard({
+  job,
+  saved,
+  isLoggedIn,
+}: {
+  job: JobCardData;
+  saved: boolean;
+  isLoggedIn: boolean;
+}) {
   const initial = job.companyName.slice(0, 1);
 
   const allBadges = [...job.platforms, job.industry, job.stage];
@@ -45,7 +53,7 @@ export function JobCard({ job, saved }: { job: JobCardData; saved: boolean }) {
       {/* SaveButton의 p-1.5(6px) 내부 패딩을 미리 빼서, 아이콘 실제 가장자리가
           카드의 다른 콘텐츠와 동일한 16px 인셋에 오도록 한다 (16 - 6 = 10px). */}
       <div className="absolute right-2.5 top-2.5">
-        <SaveButton jobId={job.id} initialSaved={saved} size="sm" />
+        <SaveButton jobId={job.id} initialSaved={saved} isLoggedIn={isLoggedIn} size="sm" />
       </div>
 
       {/* 프로필 행: 기업 로고/기업명은 카드 나머지 부분과 별도로 기업 프로필로 연결된다 */}
