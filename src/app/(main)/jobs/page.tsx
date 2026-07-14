@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { FilterBar } from "@/components/FilterBar";
 import { JobCard } from "@/components/JobCard";
 import { EmptyState } from "@/components/EmptyState";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { OnboardingSuccessModal } from "./OnboardingSuccessModal";
 import { computeMatchScore } from "@/lib/matching";
 import { matchesExperienceLevel } from "@/lib/experience";
@@ -117,6 +118,8 @@ export default async function JobsPage({
           ))}
         </div>
       )}
+
+      <ScrollToTopButton />
     </div>
   );
 }
