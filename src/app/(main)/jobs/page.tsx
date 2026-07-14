@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { OnboardingSuccessModal } from "./OnboardingSuccessModal";
 import { matchesExperienceLevel } from "@/lib/experience";
+import { getApplicationStatus } from "@/lib/dday";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +71,12 @@ export default async function JobsPage({
     });
   }
   // sort === "latest"는 jobs가 이미 postedAt desc로 조회돼 있어 별도 재정렬 없이 그대로 쓴다.
+
+  // 정렬 기준(최신순/마감임박순)과 무관하게, 지원마감된 공고는 항상 맨 뒤로 보낸다.
+  // 각 그룹 안에서는 위에서 이미 적용한 정렬 순서를 그대로 유지한다(stable sort).
+  const openJobs = sortedJobs.filter((job) => !getApplicationStatus(job.applicationDeadline).closed);
+  const closedJobs = sortedJobs.filter((job) => getApplicationStatus(job.applicationDeadline).closed);
+  sortedJobs = [...openJobs, ...closedJobs];
 
   const savedJobIds = new Set(savedJobsList.map((s) => s.jobId));
 
