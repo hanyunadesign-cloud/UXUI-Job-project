@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ingestJobs } from "@/lib/ingest-jobs";
+import { sendMatchingJobEmailDigests } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 // 신규 공고가 여러 건일 경우 Gemini 호출 사이 3초 대기가 누적되어 오래 걸릴 수 있어 넉넉히 잡는다.
@@ -16,7 +17,12 @@ export async function GET(req: Request) {
 
   try {
     const result = await ingestJobs();
-    return NextResponse.json({ ok: true, ...result });
+    // 실제 유저에게 메일이 나가는 부분은 프로덕션 크론 경로에서만 실행되게 여기서 호출한다
+    // (ingestJobs 자체에 넣으면 로컬 수동 테스트 스크립트를 돌릴 때도 실제 유저에게 메일이 갈 수 있음).
+    await sendMatchingJobEmailDigests(result.newJobs).catch((error) =>
+      console.error("관심 공고 다이제스트 메일 발송 중 오류", error)
+    );
+    return NextResponse.json({ ok: true, count: result.count, archived: result.archived });
   } catch (error) {
     console.error("Cron job ingestion failed", error);
     return NextResponse.json(

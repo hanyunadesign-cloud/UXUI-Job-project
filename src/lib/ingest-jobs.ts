@@ -294,9 +294,26 @@ async function archiveStaleJobs(): Promise<number> {
   return result.count;
 }
 
+export type NewlyIngestedJob = {
+  id: string;
+  title: string;
+  companyName: string;
+  role: string;
+  industry: string;
+  stage: string;
+  platforms: string[];
+};
+
 // 스케줄러(Vercel Cron)와 로컬 CLI 스크립트가 함께 사용하는 수집 로직 본체.
-export async function ingestJobs(): Promise<{ count: number; archived: number }> {
+export async function ingestJobs(): Promise<{
+  count: number;
+  archived: number;
+  newJobs: NewlyIngestedJob[];
+}> {
   let count = 0;
+  // 팔로워 알림(기업 단위)과 별개로, 실행 전체에서 새로 생긴 공고를 모아 관심 조건 이메일
+  // 다이제스트 발송에 쓴다.
+  const allNewJobs: NewlyIngestedJob[] = [];
 
   for (const source of SOURCES) {
     const jobs = await fetchSourceJobs(source);
@@ -346,6 +363,15 @@ export async function ingestJobs(): Promise<{ count: number; archived: number }>
 
       if (!existed) {
         newlyCreated.push({ id: savedJob.id, title: savedJob.title });
+        allNewJobs.push({
+          id: savedJob.id,
+          title: savedJob.title,
+          companyName: source.companyName,
+          role: savedJob.role,
+          industry: savedJob.industry,
+          stage: savedJob.stage,
+          platforms: savedJob.platforms,
+        });
       }
 
       console.log(`✔ ${source.companyName} | ${job.title}`);
@@ -385,5 +411,5 @@ export async function ingestJobs(): Promise<{ count: number; archived: number }>
     console.log(`\n🗑  마감 1개월 경과 공고 ${archived}건 소프트 삭제(archivedAt 설정) 처리`);
   }
 
-  return { count, archived };
+  return { count, archived, newJobs: allNewJobs };
 }
