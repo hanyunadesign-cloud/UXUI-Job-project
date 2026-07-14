@@ -1,12 +1,10 @@
-import { Badge } from "@/components/Badge";
-import { CompanyLogo } from "@/components/CompanyLogo";
+import { ClubCard } from "@/components/ClubCard";
 
 function faviconFor(domain: string): string {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 }
 
-// 참고용 로컬 목업 데이터. 기수마다 모집 일정이 바뀌므로 정확한 날짜 대신 매년 반복되는
-// 대략적인 시기만 안내한다 — 실제 오픈 시엔 각 동아리 공식 채널에서 최신 일정을 확인해야 한다.
+// 기수마다 모집 일정이 바뀌므로 정확한 날짜 대신 매년 반복되는 대략적인 시기만 안내한다.
 const CLUBS = [
   {
     name: "디프만 (DEPROMEET)",
@@ -41,16 +39,6 @@ const CLUBS = [
 ];
 
 export default function ClubsPage() {
-  // 로컬 목업 화면이라 프로덕션(Vercel)에서는 항상 "곧 출시 예정" 안내만 보여준다.
-  if (process.env.VERCEL) {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-2 text-center">
-        <h1 className="text-3xl font-bold text-ink">곧 출시 예정</h1>
-        <p className="text-sm text-neutral-500">국내 주요 IT 동아리 소식을 알려드릴게요!</p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -62,24 +50,13 @@ export default function ClubsPage() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {CLUBS.map((club) => (
-          <div
+          <ClubCard
             key={club.name}
-            className="flex flex-col gap-3 rounded-2xl border border-neutral-200 bg-white p-5"
-          >
-            <div className="flex items-center gap-3">
-              <CompanyLogo
-                src={faviconFor(club.domain)}
-                alt={club.name}
-                initial={club.name.slice(0, 1)}
-                size={44}
-              />
-              <p className="text-base font-semibold text-ink">{club.name}</p>
-            </div>
-            <p className="text-sm leading-relaxed text-neutral-500">{club.description}</p>
-            <div>
-              <Badge tone="ink">다음 모집 {club.recruitSeason}</Badge>
-            </div>
-          </div>
+            name={club.name}
+            logoSrc={faviconFor(club.domain)}
+            description={club.description}
+            recruitSeason={club.recruitSeason}
+          />
         ))}
       </div>
 
