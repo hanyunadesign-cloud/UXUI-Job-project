@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 
 // GNB 우측의 마이페이지 진입점. 로그인 상태에서는 구글 프로필 사진을 트리거로 하는
-// 드롭다운(마이페이지/로그아웃)으로 동작하고, 비로그인 상태에서는 기존처럼 텍스트 링크로
-// /mypage로 보내 미들웨어가 /login으로 리다이렉트하도록 둔다.
+// 드롭다운(마이페이지/로그아웃)으로 동작하고, 비로그인 상태(게스트 둘러보기 포함)에서는
+// "로그인"으로 표시해 /login으로 바로 보낸다.
 export function ProfileMenu() {
   const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
@@ -26,8 +26,8 @@ export function ProfileMenu() {
 
   if (status !== "authenticated") {
     return (
-      <Link href="/mypage" className="text-sm font-medium text-neutral-400 hover:text-ink">
-        마이페이지
+      <Link href="/login" className="text-sm font-medium text-neutral-400 hover:text-ink">
+        로그인
       </Link>
     );
   }

@@ -6,11 +6,9 @@ import { prisma } from "@/lib/prisma";
 const CATEGORIES = ["불편했어요", "이런 기능이 있으면 좋겠어요", "기타"];
 
 export async function POST(req: Request) {
+  // 로그인 없이도 제출 가능 — 세션이 있으면 작성자로 연결하고, 없으면 익명으로 저장한다.
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-  const userId = (session.user as { id: string }).id;
+  const userId = (session?.user as { id?: string } | undefined)?.id ?? null;
   const { category, content } = await req.json();
 
   const trimmed = typeof content === "string" ? content.trim() : "";

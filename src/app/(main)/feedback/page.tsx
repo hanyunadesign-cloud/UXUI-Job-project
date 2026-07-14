@@ -1,12 +1,6 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { ServiceFeedbackForm } from "@/components/ServiceFeedbackForm";
 
-export default async function FeedbackPage() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/login");
-
+export default function FeedbackPage() {
   return (
     <div className="mx-auto flex w-full max-w-content flex-col gap-8">
       <div className="flex flex-col gap-1">

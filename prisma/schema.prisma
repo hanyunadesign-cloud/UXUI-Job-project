@@ -185,11 +185,12 @@ model ExternalJobSave {
 // 유저당 여러 건 남길 수 있다. 별도 조회 UI 없이 관리자가 DB에서 직접 확인하는 용도.
 model ServiceFeedback {
   id        String   @id @default(cuid())
-  userId    String
+  // 로그인 없이도 남길 수 있어 null 허용 (비로그인 제출은 작성자 없이 저장됨).
+  userId    String?
   category  String?
   content   String   @db.Text
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
 }
