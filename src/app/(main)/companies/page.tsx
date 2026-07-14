@@ -7,7 +7,6 @@ import { ActiveOnlyCheckbox } from "@/components/ActiveOnlyCheckbox";
 import { FollowingOnlyCheckbox } from "@/components/FollowingOnlyCheckbox";
 import { Pagination } from "@/components/Pagination";
 import { EmptyState } from "@/components/EmptyState";
-import { ViewFollowingLink } from "@/components/ViewFollowingLink";
 import { getApplicationStatus } from "@/lib/dday";
 import { computeCompanyMatchScore } from "@/lib/matching";
 
@@ -90,14 +89,11 @@ export default async function CompaniesPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-ink">기업 정보</h1>
-          <p className="mt-1 text-sm text-neutral-500">
-            관심 기업을 팔로우하고, 주요 IT 업계 현황을 한눈에 파악하세요.
-          </p>
-        </div>
-        <ViewFollowingLink isLoggedIn={Boolean(userId)} />
+      <div>
+        <h1 className="text-xl font-bold text-ink">기업 정보</h1>
+        <p className="mt-1 text-sm text-neutral-500">
+          관심 기업을 팔로우하고, 주요 IT 업계 현황을 한눈에 파악하세요.
+        </p>
       </div>
 
       {recommended.length > 0 && (
