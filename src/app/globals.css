@@ -22,3 +22,20 @@ body {
 * {
   border-color: oklch(0.927 0.009 264);
 }
+
+/* 추천 기업 캐러셀처럼 가로 스크롤 영역에서, OS 기본값(자동 숨김)과 달리
+   스크롤 가능하다는 걸 항상 드러내고 싶을 때 쓰는 얇은 스크롤바. */
+.scrollbar-visible {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.851 0.018 264) transparent;
+}
+.scrollbar-visible::-webkit-scrollbar {
+  height: 6px;
+}
+.scrollbar-visible::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background-color: oklch(0.851 0.018 264);
+  border-radius: 9999px;
+}

@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { CompanyCard } from "@/components/CompanyCard";
+import { RecommendedCompaniesCarousel } from "@/components/RecommendedCompaniesCarousel";
 import { CompanyFilterBar } from "@/components/CompanyFilterBar";
 import { ActiveOnlyCheckbox } from "@/components/ActiveOnlyCheckbox";
 import { FollowingOnlyCheckbox } from "@/components/FollowingOnlyCheckbox";
@@ -13,7 +14,8 @@ import { computeCompanyMatchScore } from "@/lib/matching";
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 16;
-const RECOMMENDED_COUNT = 4;
+// 가로 스크롤 캐러셀이라 한 화면에 다 안 들어올 만큼 넉넉히 보여준다.
+const RECOMMENDED_COUNT = 8;
 
 function toArray(value: string | string[] | undefined): string[] {
   if (!value) return [];
@@ -97,23 +99,11 @@ export default async function CompaniesPage({
       </div>
 
       {recommended.length > 0 && (
-        <div className="flex flex-col gap-3">
-          <h2 className="flex items-center gap-1.5 text-lg font-bold text-ink">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/icons/gift.svg" alt="" className="h-6 w-6" aria-hidden />
-            추천 기업
-          </h2>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {recommended.map((company) => (
-              <CompanyCard
-                key={company.id}
-                company={company}
-                following={followedIds.has(company.id)}
-                isLoggedIn={Boolean(userId)}
-              />
-            ))}
-          </div>
-        </div>
+        <RecommendedCompaniesCarousel
+          companies={recommended}
+          followedIds={followedIds}
+          isLoggedIn={Boolean(userId)}
+        />
       )}
 
       <div className="my-2 border-t border-neutral-200" />
