@@ -6,7 +6,6 @@ import { JobCard } from "@/components/JobCard";
 import { EmptyState } from "@/components/EmptyState";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { OnboardingSuccessModal } from "./OnboardingSuccessModal";
-import { computeMatchScore } from "@/lib/matching";
 import { matchesExperienceLevel } from "@/lib/experience";
 
 export const dynamic = "force-dynamic";
@@ -29,15 +28,10 @@ export default async function JobsPage({
   const industries = toArray(searchParams.industry);
   const stages = toArray(searchParams.stage);
   const experienceLevels = toArray(searchParams.experience);
-  const sort =
-    searchParams.sort === "deadline"
-      ? "deadline"
-      : searchParams.sort === "latest"
-        ? "latest"
-        : "match";
+  const sort = searchParams.sort === "deadline" ? "deadline" : "latest";
 
   // DB가 원격(서울) 리전에 있어 왕복 지연이 크므로, 서로 의존하지 않는 조회는 병렬로 묶는다.
-  const [matchedJobs, preference, savedJobsList] = await Promise.all([
+  const [matchedJobs, savedJobsList] = await Promise.all([
     prisma.job.findMany({
       where: {
         archivedAt: null,
@@ -49,9 +43,6 @@ export default async function JobsPage({
       include: { analysis: { select: { taskKeywords: true } } },
       orderBy: { postedAt: "desc" },
     }),
-    sort === "match" && userId
-      ? prisma.preference.findUnique({ where: { userId } })
-      : Promise.resolve(null),
     userId
       ? prisma.savedJob.findMany({ where: { userId }, select: { jobId: true } })
       : Promise.resolve([]),
@@ -77,15 +68,8 @@ export default async function JobsPage({
       if (!b.applicationDeadline) return -1;
       return a.applicationDeadline.getTime() - b.applicationDeadline.getTime();
     });
-  } else if (sort === "match" && userId) {
-    // 매칭순: 온보딩 선호도와 겹치는 정도로 점수를 매겨 내림차순. 동점은 안정 정렬로 최신 등록순 유지.
-    // 선호도가 없으면(비로그인·온보딩 미완료) 모든 점수가 0이 되어 자연스럽게 최신순으로 대체된다.
-    sortedJobs = [...jobs].sort(
-      (a, b) => computeMatchScore(b, preference) - computeMatchScore(a, preference)
-    );
   }
-  // sort === "latest"이거나 비로그인 상태의 "match"는 위 매칭순 로직을 타지 않고, jobs가
-  // 이미 postedAt desc로 조회돼 있어 sortedJobs = jobs 그대로가 곧 최신순이 된다.
+  // sort === "latest"(기본값)는 jobs가 이미 postedAt desc로 조회돼 있어 별도 재정렬 없이 그대로 쓴다.
 
   const savedJobIds = new Set(savedJobsList.map((s) => s.jobId));
 
