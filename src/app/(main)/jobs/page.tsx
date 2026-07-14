@@ -28,7 +28,7 @@ export default async function JobsPage({
   const industries = toArray(searchParams.industry);
   const stages = toArray(searchParams.stage);
   const experienceLevels = toArray(searchParams.experience);
-  const sort = searchParams.sort === "deadline" ? "deadline" : "latest";
+  const sort = searchParams.sort === "latest" ? "latest" : "deadline";
 
   // DB가 원격(서울) 리전에 있어 왕복 지연이 크므로, 서로 의존하지 않는 조회는 병렬로 묶는다.
   const [matchedJobs, savedJobsList] = await Promise.all([
@@ -69,7 +69,7 @@ export default async function JobsPage({
       return a.applicationDeadline.getTime() - b.applicationDeadline.getTime();
     });
   }
-  // sort === "latest"(기본값)는 jobs가 이미 postedAt desc로 조회돼 있어 별도 재정렬 없이 그대로 쓴다.
+  // sort === "latest"는 jobs가 이미 postedAt desc로 조회돼 있어 별도 재정렬 없이 그대로 쓴다.
 
   const savedJobIds = new Set(savedJobsList.map((s) => s.jobId));
 
