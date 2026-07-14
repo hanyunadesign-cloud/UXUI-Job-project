@@ -9,7 +9,7 @@ import { trackEvent } from "@/lib/analytics";
 
 const CATEGORIES = ["불편했어요", "이런 기능이 있으면 좋겠어요", "기타"] as const;
 
-const PLACEHOLDER = "예) 관심 기업 알림을 카카오톡으로도 받고 싶어요";
+const PLACEHOLDER = "의견을 남겨주세요";
 
 export function ServiceFeedbackForm() {
   const [category, setCategory] = useState<(typeof CATEGORIES)[number] | null>(null);
