@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -8,6 +6,7 @@ import { CompanyFilterBar } from "@/components/CompanyFilterBar";
 import { ActiveOnlyCheckbox } from "@/components/ActiveOnlyCheckbox";
 import { Pagination } from "@/components/Pagination";
 import { EmptyState } from "@/components/EmptyState";
+import { ViewFollowingLink } from "@/components/ViewFollowingLink";
 import { getApplicationStatus } from "@/lib/dday";
 import { computeCompanyMatchScore } from "@/lib/matching";
 
@@ -100,13 +99,7 @@ export default async function CompaniesPage({
             관심 기업을 팔로우하고, 주요 IT 업계 현황을 한눈에 파악하세요.
           </p>
         </div>
-        <Link
-          href="/mypage?tab=following"
-          className="inline-flex shrink-0 items-center gap-1 rounded-[14px] bg-white px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-neutral-200 active:scale-[0.95]"
-        >
-          나의 관심기업 보기
-          <ChevronRightIcon className="h-4 w-4" aria-hidden />
-        </Link>
+        <ViewFollowingLink isLoggedIn={Boolean(userId)} />
       </div>
 
       {recommended.length > 0 && (
