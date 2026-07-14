@@ -116,7 +116,7 @@ export default async function CompaniesPage({
         </div>
       )}
 
-      <div className="border-t border-neutral-200 pt-10" />
+      <div className="my-2 border-t border-neutral-200" />
 
       <CompanyFilterBar />
 
