@@ -30,6 +30,15 @@ function stageRank(stage: string): number {
   return STAGE_PRIORITY[stage] ?? 5;
 }
 
+// 이 회사들은 규모 등급과 무관하게 지정된 순서 그대로 맨 위에 고정 노출한다.
+const PINNED_TOP_COMPANIES = ["네이버", "카카오", "현대자동차", "크래프톤", "쿠팡"];
+
+function companyRank(company: { name: string; stage: string }): number {
+  const pinnedIndex = PINNED_TOP_COMPANIES.indexOf(company.name);
+  if (pinnedIndex !== -1) return pinnedIndex - PINNED_TOP_COMPANIES.length;
+  return stageRank(company.stage);
+}
+
 function toArray(value: string | string[] | undefined): string[] {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
@@ -91,7 +100,7 @@ export default async function CompaniesPage({
       if (q && !company.name.toLowerCase().includes(q.toLowerCase())) return false;
       return true;
     })
-    .sort((a, b) => stageRank(a.stage) - stageRank(b.stage));
+    .sort((a, b) => companyRank(a) - companyRank(b));
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
