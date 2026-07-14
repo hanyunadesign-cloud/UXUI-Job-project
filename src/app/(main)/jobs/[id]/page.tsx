@@ -13,23 +13,26 @@ import { BackButton } from "@/components/BackButton";
 export const dynamic = "force-dynamic";
 
 export default async function JobDetailPage({ params }: { params: { id: string } }) {
-  const job = await prisma.job.findUnique({
-    where: { id: params.id },
-    include: { analysis: true },
-  });
-
-  if (!job) notFound();
-
+  // getServerSession은 JWT를 로컬에서 검증할 뿐 DB를 안 타서 사실상 즉시 끝난다. 먼저
+  // 받아두면, DB가 원격(서울) 리전이라 왕복이 느린 job/saved 조회 두 개를 병렬로 묶을 수 있다.
   const session = await getServerSession(authOptions);
   const userId = (session?.user as { id?: string } | undefined)?.id;
 
-  const saved = userId
-    ? Boolean(
-        await prisma.savedJob.findUnique({
-          where: { userId_jobId: { userId, jobId: job.id } },
+  const [job, savedRecord] = await Promise.all([
+    prisma.job.findUnique({
+      where: { id: params.id },
+      include: { analysis: true },
+    }),
+    userId
+      ? prisma.savedJob.findUnique({
+          where: { userId_jobId: { userId, jobId: params.id } },
         })
-      )
-    : false;
+      : Promise.resolve(null),
+  ]);
+
+  if (!job) notFound();
+
+  const saved = Boolean(savedRecord);
 
   return (
     <div className="flex flex-col gap-8">

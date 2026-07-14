@@ -17,17 +17,31 @@ export default async function CompanyProfilePage({
 }: {
   params: { id: string };
 }) {
-  const company = await prisma.company.findUnique({ where: { id: params.id } });
+  // getServerSession은 DB를 안 타는 로컬 JWT 검증이라 사실상 즉시 끝난다. 먼저 받아두면,
+  // DB가 원격(서울) 리전이라 왕복이 느린 company 조회와 병렬로 묶을 수 있다.
+  const [company, session] = await Promise.all([
+    prisma.company.findUnique({ where: { id: params.id } }),
+    getServerSession(authOptions),
+  ]);
   if (!company) notFound();
 
-  const session = await getServerSession(authOptions);
   const userId = (session?.user as { id?: string } | undefined)?.id;
 
-  const jobs = await prisma.job.findMany({
-    where: { companyId: company.id, archivedAt: null },
-    include: { analysis: { select: { taskKeywords: true } } },
-    orderBy: { postedAt: "desc" },
-  });
+  const [jobs, savedJobsList, followRecord] = await Promise.all([
+    prisma.job.findMany({
+      where: { companyId: company.id, archivedAt: null },
+      include: { analysis: { select: { taskKeywords: true } } },
+      orderBy: { postedAt: "desc" },
+    }),
+    userId
+      ? prisma.savedJob.findMany({ where: { userId }, select: { jobId: true } })
+      : Promise.resolve([]),
+    userId
+      ? prisma.follow.findUnique({
+          where: { userId_companyId: { userId, companyId: params.id } },
+        })
+      : Promise.resolve(null),
+  ]);
 
   // 진행 중(상시채용 포함) 공고는 마감 임박 순으로 위에, 지원마감된 공고는 맨 아래로.
   const openJobs = jobs.filter((job) => !getApplicationStatus(job.applicationDeadline).closed);
@@ -44,24 +58,8 @@ export default async function CompanyProfilePage({
   );
   const sortedJobs = [...openJobs, ...closedJobs];
 
-  const savedJobIds = userId
-    ? new Set(
-        (
-          await prisma.savedJob.findMany({
-            where: { userId },
-            select: { jobId: true },
-          })
-        ).map((s) => s.jobId)
-      )
-    : new Set<string>();
-
-  const isFollowing = userId
-    ? Boolean(
-        await prisma.follow.findUnique({
-          where: { userId_companyId: { userId, companyId: company.id } },
-        })
-      )
-    : false;
+  const savedJobIds = new Set(savedJobsList.map((s) => s.jobId));
+  const isFollowing = Boolean(followRecord);
 
   // 조사했는데도 값을 찾지 못한 경우를 "정보 없음"과 구분하기 위해, 행 자체를 숨기지 않고
   // 항상 3개 항목을 노출하되 값이 없으면 "-"로 표시한다.

@@ -34,12 +34,15 @@ export default async function CompaniesPage({
   const activeOnly = searchParams.activeOnly === "1";
   const page = Math.max(1, Number(searchParams.page) || 1);
 
-  const [companies, preference] = await Promise.all([
+  const [companies, preference, followsList] = await Promise.all([
     prisma.company.findMany({
       include: { jobs: { select: { archivedAt: true, applicationDeadline: true } } },
       orderBy: { createdAt: "asc" },
     }),
     userId ? prisma.preference.findUnique({ where: { userId } }) : Promise.resolve(null),
+    userId
+      ? prisma.follow.findMany({ where: { userId }, select: { companyId: true } })
+      : Promise.resolve([]),
   ]);
 
   const withOpenJobs = companies.map((company) => {
@@ -73,16 +76,7 @@ export default async function CompaniesPage({
   const currentPage = Math.min(page, totalPages);
   const pageItems = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
-  const followedIds = userId
-    ? new Set(
-        (
-          await prisma.follow.findMany({
-            where: { userId },
-            select: { companyId: true },
-          })
-        ).map((f) => f.companyId)
-      )
-    : new Set<string>();
+  const followedIds = new Set(followsList.map((f) => f.companyId));
 
   const currentSearchParams = new URLSearchParams();
   stages.forEach((s) => currentSearchParams.append("stage", s));

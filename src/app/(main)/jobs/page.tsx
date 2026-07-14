@@ -36,17 +36,26 @@ export default async function JobsPage({
         ? "latest"
         : "match";
 
-  const matchedJobs = await prisma.job.findMany({
-    where: {
-      archivedAt: null,
-      ...(roles.length && { role: { in: roles } }),
-      ...(platforms.length && { platforms: { hasSome: platforms } }),
-      ...(industries.length && { industry: { in: industries } }),
-      ...(stages.length && { stage: { in: stages } }),
-    },
-    include: { analysis: { select: { taskKeywords: true } } },
-    orderBy: { postedAt: "desc" },
-  });
+  // DB가 원격(서울) 리전에 있어 왕복 지연이 크므로, 서로 의존하지 않는 조회는 병렬로 묶는다.
+  const [matchedJobs, preference, savedJobsList] = await Promise.all([
+    prisma.job.findMany({
+      where: {
+        archivedAt: null,
+        ...(roles.length && { role: { in: roles } }),
+        ...(platforms.length && { platforms: { hasSome: platforms } }),
+        ...(industries.length && { industry: { in: industries } }),
+        ...(stages.length && { stage: { in: stages } }),
+      },
+      include: { analysis: { select: { taskKeywords: true } } },
+      orderBy: { postedAt: "desc" },
+    }),
+    sort === "match" && userId
+      ? prisma.preference.findUnique({ where: { userId } })
+      : Promise.resolve(null),
+    userId
+      ? prisma.savedJob.findMany({ where: { userId }, select: { jobId: true } })
+      : Promise.resolve([]),
+  ]);
 
   // experienceLevel은 "3~10년" 같은 자유 형식 텍스트라 Prisma where로 바로 못 걸러서,
   // 조회 후 구간 매칭(matchesExperienceLevel)으로 한 번 더 필터링한다.
@@ -71,7 +80,6 @@ export default async function JobsPage({
   } else if (sort === "match" && userId) {
     // 매칭순: 온보딩 선호도와 겹치는 정도로 점수를 매겨 내림차순. 동점은 안정 정렬로 최신 등록순 유지.
     // 선호도가 없으면(비로그인·온보딩 미완료) 모든 점수가 0이 되어 자연스럽게 최신순으로 대체된다.
-    const preference = await prisma.preference.findUnique({ where: { userId } });
     sortedJobs = [...jobs].sort(
       (a, b) => computeMatchScore(b, preference) - computeMatchScore(a, preference)
     );
@@ -79,16 +87,7 @@ export default async function JobsPage({
   // sort === "latest"이거나 비로그인 상태의 "match"는 위 매칭순 로직을 타지 않고, jobs가
   // 이미 postedAt desc로 조회돼 있어 sortedJobs = jobs 그대로가 곧 최신순이 된다.
 
-  const savedJobIds = userId
-    ? new Set(
-        (
-          await prisma.savedJob.findMany({
-            where: { userId },
-            select: { jobId: true },
-          })
-        ).map((s) => s.jobId)
-      )
-    : new Set<string>();
+  const savedJobIds = new Set(savedJobsList.map((s) => s.jobId));
 
   return (
     <div className="flex flex-col gap-8">
