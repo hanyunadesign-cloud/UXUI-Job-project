@@ -116,6 +116,8 @@ export default async function CompaniesPage({
         </div>
       )}
 
+      <div className="border-t border-neutral-200 pt-10" />
+
       <CompanyFilterBar />
 
       <div className="flex items-center justify-between gap-4">
