@@ -3,12 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import {
-  ChevronDownIcon,
-  CheckIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { INDUSTRIES, STAGES } from "@/lib/constants";
+import { SearchBar } from "@/components/SearchBar";
 
 const DROPDOWNS = [
   { key: "stage", label: "규모", options: STAGES as readonly string[] },
@@ -20,12 +17,7 @@ export function CompanyFilterBar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setQuery(searchParams.get("q") ?? "");
-  }, [searchParams]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -57,16 +49,6 @@ export function CompanyFilterBar() {
   };
 
   const hasFilters = DROPDOWNS.some((g) => searchParams.getAll(g.key).length > 0);
-
-  const submitSearch = () => {
-    updateParams((params) => {
-      if (query.trim()) {
-        params.set("q", query.trim());
-      } else {
-        params.delete("q");
-      }
-    });
-  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -140,28 +122,7 @@ export function CompanyFilterBar() {
           </button>
         )}
 
-        <div className="ml-auto flex w-full items-center gap-2 sm:w-auto">
-          <div className="flex h-[47px] flex-1 items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 sm:w-72 sm:flex-none">
-            <MagnifyingGlassIcon className="h-4 w-4 shrink-0 text-neutral-400" aria-hidden />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") submitSearch();
-              }}
-              placeholder="기업명 검색"
-              className="flex-1 bg-transparent text-sm font-medium text-ink placeholder:text-neutral-400 focus:outline-none"
-            />
-          </div>
-          <button
-            type="button"
-            onClick={submitSearch}
-            className="flex h-[47px] shrink-0 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-white transition-colors hover:bg-primary-strong active:scale-[0.95]"
-          >
-            검색
-          </button>
-        </div>
+        <SearchBar paramKey="jobQuery" placeholder="공고 검색" className="ml-auto" />
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ export function SortDropdown() {
   };
 
   return (
-    <div ref={containerRef} className="relative ml-auto">
+    <div ref={containerRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}

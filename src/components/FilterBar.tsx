@@ -12,6 +12,7 @@ import {
   EXPERIENCE_LEVELS,
 } from "@/lib/constants";
 import { SortDropdown } from "@/components/SortDropdown";
+import { SearchBar } from "@/components/SearchBar";
 
 const FILTER_GROUPS = [
   {
@@ -153,7 +154,10 @@ export function FilterBar() {
         </button>
       )}
 
-      <SortDropdown />
+      <div className="ml-auto flex items-center gap-2">
+        <SearchBar paramKey="companyQuery" placeholder="기업 검색" />
+        <SortDropdown />
+      </div>
     </div>
   );
 }

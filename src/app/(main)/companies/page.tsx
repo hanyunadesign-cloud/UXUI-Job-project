@@ -54,14 +54,15 @@ export default async function CompaniesPage({
 
   const stages = toArray(searchParams.stage);
   const industries = toArray(searchParams.industry);
-  const q = typeof searchParams.q === "string" ? searchParams.q.trim() : "";
+  const jobQuery =
+    typeof searchParams.jobQuery === "string" ? searchParams.jobQuery.trim() : "";
   const activeOnly = searchParams.activeOnly === "1";
   const followingOnly = searchParams.followingOnly === "1";
   const page = Math.max(1, Number(searchParams.page) || 1);
 
   const [companies, preference, followsList] = await Promise.all([
     prisma.company.findMany({
-      include: { jobs: { select: { archivedAt: true, applicationDeadline: true } } },
+      include: { jobs: { select: { title: true, archivedAt: true, applicationDeadline: true } } },
       orderBy: { createdAt: "asc" },
     }),
     userId ? prisma.preference.findUnique({ where: { userId } }) : Promise.resolve(null),
@@ -97,7 +98,11 @@ export default async function CompaniesPage({
       if (industries.length && !industries.includes(company.industry)) return false;
       if (activeOnly && !company.hasOpenJobs) return false;
       if (followingOnly && !followedIds.has(company.id)) return false;
-      if (q && !company.name.toLowerCase().includes(q.toLowerCase())) return false;
+      if (
+        jobQuery &&
+        !company.jobs.some((job) => job.title.toLowerCase().includes(jobQuery.toLowerCase()))
+      )
+        return false;
       return true;
     })
     .sort((a, b) => companyRank(a) - companyRank(b));
@@ -109,7 +114,7 @@ export default async function CompaniesPage({
   const currentSearchParams = new URLSearchParams();
   stages.forEach((s) => currentSearchParams.append("stage", s));
   industries.forEach((i) => currentSearchParams.append("industry", i));
-  if (q) currentSearchParams.set("q", q);
+  if (jobQuery) currentSearchParams.set("jobQuery", jobQuery);
   if (activeOnly) currentSearchParams.set("activeOnly", "1");
   if (followingOnly) currentSearchParams.set("followingOnly", "1");
 

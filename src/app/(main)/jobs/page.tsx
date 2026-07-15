@@ -29,6 +29,8 @@ export default async function JobsPage({
   const industries = toArray(searchParams.industry);
   const stages = toArray(searchParams.stage);
   const experienceLevels = toArray(searchParams.experience);
+  const companyQuery =
+    typeof searchParams.companyQuery === "string" ? searchParams.companyQuery.trim() : "";
   const sort = searchParams.sort === "latest" ? "latest" : "deadline";
 
   // DB가 원격(서울) 리전에 있어 왕복 지연이 크므로, 서로 의존하지 않는 조회는 병렬로 묶는다.
@@ -40,6 +42,7 @@ export default async function JobsPage({
         ...(platforms.length && { platforms: { hasSome: platforms } }),
         ...(industries.length && { industry: { in: industries } }),
         ...(stages.length && { stage: { in: stages } }),
+        ...(companyQuery && { companyName: { contains: companyQuery, mode: "insensitive" } }),
       },
       include: { analysis: { select: { taskKeywords: true } } },
       orderBy: { postedAt: "desc" },
