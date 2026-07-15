@@ -15,9 +15,29 @@ const notoSansKr = Noto_Sans_KR({
   variable: "--font-sans",
 });
 
+const SITE_URL = "https://uxui-job.vercel.app";
+const SITE_TITLE = "UXUI Job";
+const SITE_DESCRIPTION = "흩어진 UXUI 채용공고를 한 곳에서, 나에게 맞는 공고만 놓치지 않게";
+
 export const metadata: Metadata = {
-  title: "UXUI Job",
-  description: "흩어진 UXUI 채용공고를 한 곳에서, 나에게 맞는 공고만 놓치지 않게",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_TITLE,
+    locale: "ko_KR",
+    type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: SITE_TITLE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
