@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LinkIcon } from "@heroicons/react/24/outline";
 import { useToast } from "@/components/ToastProvider";
+import { trackEvent } from "@/lib/analytics";
 
 export function ExternalJobAddRow() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export function ExternalJobAddRow() {
 
       setUrl("");
       showToast("공고를 분석해서 저장했어요");
+      trackEvent("External Job Link Saved");
       router.refresh();
     } catch (error) {
       showToast(error instanceof Error ? error.message : "링크를 분석하지 못했어요.");
