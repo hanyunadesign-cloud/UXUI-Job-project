@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/Button";
+import { trackEvent } from "@/lib/analytics";
 
 export function OnboardingSuccessModal({ initialOpen }: { initialOpen: boolean }) {
   const [open, setOpen] = useState(initialOpen);
@@ -23,6 +24,7 @@ export function OnboardingSuccessModal({ initialOpen }: { initialOpen: boolean }
   };
 
   const choose = async (emailOptIn: boolean) => {
+    trackEvent("Onboarding Email Opt-in Chosen", { emailOptIn });
     setSubmitting(true);
     try {
       await fetch("/api/onboarding", {

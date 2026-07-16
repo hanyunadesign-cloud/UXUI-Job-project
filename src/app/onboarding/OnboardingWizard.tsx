@@ -53,6 +53,11 @@ export function OnboardingWizard() {
 
   const handleNext = async () => {
     if (!isLastStep) {
+      trackEvent("Onboarding Step Completed", {
+        step: step.key,
+        stepIndex,
+        selectedCount: selected.length,
+      });
       setStepIndex((i) => i + 1);
       return;
     }
@@ -72,6 +77,7 @@ export function OnboardingWizard() {
   };
 
   const handlePrev = () => {
+    trackEvent("Onboarding Step Back", { fromStep: step.key, stepIndex });
     setStepIndex((i) => Math.max(0, i - 1));
   };
 

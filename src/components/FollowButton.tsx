@@ -37,6 +37,7 @@ export function FollowButton({
         if (!res.ok) throw new Error("failed");
       } catch {
         setFollowing(!next);
+        trackEvent("Company Follow Failed", { companyId, action: next ? "follow" : "unfollow" });
       }
     });
   });

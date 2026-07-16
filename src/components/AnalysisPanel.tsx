@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Badge } from "@/components/Badge";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
+import { trackEvent } from "@/lib/analytics";
 
 type Analysis = {
   coreKeywords: string[];
@@ -23,7 +24,8 @@ export function AnalysisPanel({
   const [status, setStatus] = useState<Status>(initialAnalysis ? "success" : "loading");
   const [analysis, setAnalysis] = useState<Analysis | null>(initialAnalysis);
 
-  const runAnalysis = useCallback(async () => {
+  const runAnalysis = useCallback(async (isRetry = false) => {
+    if (isRetry) trackEvent("AI Analysis Retried", { jobId });
     setStatus("loading");
     try {
       const res = await fetch(`/api/jobs/${jobId}/analyze`, { method: "POST" });
@@ -33,6 +35,7 @@ export function AnalysisPanel({
       setStatus("success");
     } catch {
       setStatus("error");
+      trackEvent("AI Analysis Failed", { jobId, isRetry });
     }
   }, [jobId]);
 
@@ -60,7 +63,7 @@ export function AnalysisPanel({
           <p className="text-sm text-neutral-500">지금은 분석이 어려워요</p>
           <button
             type="button"
-            onClick={runAnalysis}
+            onClick={() => runAnalysis(true)}
             className="rounded-full border border-neutral-300 px-4 py-1.5 text-xs font-medium text-ink hover:bg-neutral-50"
           >
             다시 시도

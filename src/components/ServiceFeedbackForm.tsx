@@ -36,6 +36,7 @@ export function ServiceFeedbackForm() {
       setCategory(null);
       setContent("");
     } catch {
+      trackEvent("Service Feedback Submission Failed", { category });
       showToast("전송에 실패했어요. 다시 시도해주세요");
     } finally {
       setIsSubmitting(false);

@@ -42,6 +42,7 @@ export function SaveButton({
         if (!res.ok) throw new Error("failed");
       } catch {
         setSaved(!next);
+        trackEvent("Job Save Failed", { jobId, action: next ? "save" : "unsave" });
       }
     });
   });

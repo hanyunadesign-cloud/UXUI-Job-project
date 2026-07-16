@@ -7,6 +7,7 @@ import { BookmarkIcon as BookmarkSolid } from "@heroicons/react/24/solid";
 import { Badge } from "@/components/Badge";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { useToast } from "@/components/ToastProvider";
+import { trackEvent } from "@/lib/analytics";
 
 export type ExternalJobCardData = {
   id: string;
@@ -40,6 +41,7 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
 
   const remove = () => {
     setRemoved(true);
+    trackEvent("External Job Removed", { jobId: job.id });
     showToast("저장한 링크를 삭제했어요");
     startTransition(async () => {
       try {
@@ -48,6 +50,7 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
         router.refresh();
       } catch {
         setRemoved(false);
+        trackEvent("External Job Remove Failed", { jobId: job.id });
         showToast("삭제하지 못했어요. 다시 시도해주세요.");
       }
     });

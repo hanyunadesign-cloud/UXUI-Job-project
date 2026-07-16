@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { trackEvent } from "@/lib/analytics";
 
 // GNB 우측의 마이페이지 진입점. 로그인 상태에서는 구글 프로필 사진을 트리거로 하는
 // 드롭다운(마이페이지/로그아웃)으로 동작하고, 비로그인 상태(게스트 둘러보기 포함)에서는
@@ -63,7 +64,10 @@ export function ProfileMenu() {
           </Link>
           <button
             type="button"
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() => {
+              trackEvent("Logout Clicked");
+              signOut({ callbackUrl: "/" });
+            }}
             className="rounded-xl px-3 py-2 text-left text-sm text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-ink"
           >
             로그아웃

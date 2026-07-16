@@ -29,7 +29,9 @@ export function ExternalJobAddRow() {
       trackEvent("External Job Link Saved");
       router.refresh();
     } catch (error) {
-      showToast(error instanceof Error ? error.message : "링크를 분석하지 못했어요.");
+      const message = error instanceof Error ? error.message : "링크를 분석하지 못했어요.";
+      trackEvent("External Job Link Save Failed", { reason: message });
+      showToast(message);
     } finally {
       setIsSubmitting(false);
     }
