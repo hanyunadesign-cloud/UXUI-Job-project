@@ -3,6 +3,7 @@
 import { Badge } from "@/components/Badge";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { useToast } from "@/components/ToastProvider";
+import { trackEvent } from "@/lib/analytics";
 
 export function ClubCard({
   name,
@@ -20,7 +21,10 @@ export function ClubCard({
   return (
     <button
       type="button"
-      onClick={() => showToast("아직 준비 중인 기능이에요!")}
+      onClick={() => {
+        trackEvent("Club Card Clicked", { clubName: name });
+        showToast("아직 준비 중인 기능이에요!");
+      }}
       className="flex flex-col gap-3 rounded-2xl border border-neutral-200 bg-white p-5 text-left transition-colors hover:border-neutral-300"
     >
       <div className="flex items-center gap-3">

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { clsx } from "clsx";
 import { ArrowsUpDownIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { trackEvent } from "@/lib/analytics";
 
 const SORT_OPTIONS = [
   { value: "latest", label: "최신순" },
@@ -31,6 +32,7 @@ export function SortDropdown() {
   }, []);
 
   const select = (value: string) => {
+    trackEvent("Sort Changed", { sort: value });
     const params = new URLSearchParams(searchParams.toString());
     params.set("sort", value);
     router.push(`${pathname}?${params.toString()}`);

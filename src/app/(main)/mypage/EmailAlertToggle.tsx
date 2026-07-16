@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { clsx } from "clsx";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { trackEvent } from "@/lib/analytics";
 
 export function EmailAlertToggle({ initialEnabled }: { initialEnabled: boolean }) {
   const [enabled, setEnabled] = useState(initialEnabled);
@@ -10,6 +11,7 @@ export function EmailAlertToggle({ initialEnabled }: { initialEnabled: boolean }
 
   const toggle = () => {
     const next = !enabled;
+    trackEvent("Email Alert Toggled", { enabled: next });
     setEnabled(next);
     startTransition(async () => {
       try {

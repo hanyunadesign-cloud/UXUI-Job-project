@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useLoginPrompt } from "@/hooks/useLoginPrompt";
+import { trackEvent } from "@/lib/analytics";
 
 // ActiveOnlyCheckbox와 같은 자리·스타일을 쓰는 "나의 관심기업" 필터. 비로그인 상태에서
 // 누르면 팔로우 목록 자체가 없으니, 토글 대신 로그인 확인 모달을 띄운다.
@@ -15,6 +16,7 @@ export function FollowingOnlyCheckbox({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   const toggle = () =>
     requireLogin(isLoggedIn, () => {
+      trackEvent("Following Only Toggled", { enabled: !followingOnly });
       const params = new URLSearchParams(searchParams.toString());
       if (followingOnly) {
         params.delete("followingOnly");

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { trackEvent } from "@/lib/analytics";
 
 // CompanyFilterBar와 별도 컴포넌트로 분리한 이유: "채용중인 기업"은
 // 검색 결과 개수 텍스트(서버 컴포넌트인 page.tsx에서 렌더)와 같은 줄에 위치해야 해서,
@@ -13,6 +14,7 @@ export function ActiveOnlyCheckbox() {
   const activeOnly = searchParams.get("activeOnly") === "1";
 
   const toggle = () => {
+    trackEvent("Active Only Toggled", { enabled: !activeOnly });
     const params = new URLSearchParams(searchParams.toString());
     if (activeOnly) {
       params.delete("activeOnly");

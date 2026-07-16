@@ -13,6 +13,7 @@ import {
 } from "@/lib/constants";
 import { SortDropdown } from "@/components/SortDropdown";
 import { SearchBar } from "@/components/SearchBar";
+import { trackEvent } from "@/lib/analytics";
 
 const FILTER_GROUPS = [
   {
@@ -66,11 +67,13 @@ export function FilterBar() {
     const params = new URLSearchParams(searchParams.toString());
     const current = params.getAll(key);
     params.delete(key);
+    const nowActive = !current.includes(value);
     if (current.includes(value)) {
       current.filter((v) => v !== value).forEach((v) => params.append(key, v));
     } else {
       [...current, value].forEach((v) => params.append(key, v));
     }
+    trackEvent("Job Filter Changed", { key, value, active: nowActive });
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -145,6 +148,7 @@ export function FilterBar() {
         <button
           type="button"
           onClick={() => {
+            trackEvent("Job Filters Reset");
             setOpenGroup(null);
             router.push(pathname);
           }}

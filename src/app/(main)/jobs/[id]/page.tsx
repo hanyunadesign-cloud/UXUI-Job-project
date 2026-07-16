@@ -9,6 +9,7 @@ import { SaveButton } from "@/components/SaveButton";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { AnalysisPanel } from "@/components/AnalysisPanel";
 import { BackButton } from "@/components/BackButton";
+import { TrackPageView } from "@/components/TrackPageView";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +37,10 @@ export default async function JobDetailPage({ params }: { params: { id: string }
 
   return (
     <div className="flex flex-col gap-8">
+      <TrackPageView
+        name="Job Detail Viewed"
+        props={{ jobId: job.id, companyName: job.companyName }}
+      />
       <BackButton />
 
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">

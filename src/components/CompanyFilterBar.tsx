@@ -6,6 +6,7 @@ import { clsx } from "clsx";
 import { ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { INDUSTRIES, STAGES } from "@/lib/constants";
 import { SearchBar } from "@/components/SearchBar";
+import { trackEvent } from "@/lib/analytics";
 
 const DROPDOWNS = [
   { key: "stage", label: "규모", options: STAGES as readonly string[] },
@@ -37,6 +38,8 @@ export function CompanyFilterBar() {
   };
 
   const toggleOption = (key: string, value: string) => {
+    const current = searchParams.getAll(key);
+    trackEvent("Company Filter Changed", { key, value, active: !current.includes(value) });
     updateParams((params) => {
       const current = params.getAll(key);
       params.delete(key);
@@ -110,6 +113,7 @@ export function CompanyFilterBar() {
           <button
             type="button"
             onClick={() => {
+              trackEvent("Company Filters Reset");
               setOpenGroup(null);
               const params = new URLSearchParams(searchParams.toString());
               DROPDOWNS.forEach((g) => params.delete(g.key));

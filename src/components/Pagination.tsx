@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { clsx } from "clsx";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { trackEvent } from "@/lib/analytics";
 
-// 서버 컴포넌트로 구현: 페이지 이동은 링크 클릭만으로 충분해 클라이언트 JS가 필요 없다.
+// 클릭 트래킹을 위해 클라이언트 컴포넌트로 전환했다. 페이지 이동 자체는 여전히
+// Link의 기본 네비게이션만으로 충분하다.
 export function Pagination({
   currentPage,
   totalPages,
@@ -29,6 +33,7 @@ export function Pagination({
       <Link
         href={hrefFor(Math.max(1, currentPage - 1))}
         aria-disabled={currentPage === 1}
+        onClick={() => trackEvent("Pagination Clicked", { direction: "prev", page: currentPage - 1 })}
         className={clsx(
           "flex h-8 w-8 items-center justify-center rounded-full text-neutral-400 transition-colors",
           currentPage === 1
@@ -44,6 +49,7 @@ export function Pagination({
           key={page}
           href={hrefFor(page)}
           aria-current={page === currentPage ? "page" : undefined}
+          onClick={() => trackEvent("Pagination Clicked", { direction: "number", page })}
           className={clsx(
             "flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors",
             page === currentPage
@@ -58,6 +64,7 @@ export function Pagination({
       <Link
         href={hrefFor(Math.min(totalPages, currentPage + 1))}
         aria-disabled={currentPage === totalPages}
+        onClick={() => trackEvent("Pagination Clicked", { direction: "next", page: currentPage + 1 })}
         className={clsx(
           "flex h-8 w-8 items-center justify-center rounded-full text-neutral-400 transition-colors",
           currentPage === totalPages

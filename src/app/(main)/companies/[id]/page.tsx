@@ -8,6 +8,7 @@ import { JobCard } from "@/components/JobCard";
 import { EmptyState } from "@/components/EmptyState";
 import { FollowButton } from "@/components/FollowButton";
 import { BackButton } from "@/components/BackButton";
+import { TrackPageView } from "@/components/TrackPageView";
 import { getApplicationStatus } from "@/lib/dday";
 
 export const dynamic = "force-dynamic";
@@ -71,6 +72,10 @@ export default async function CompanyProfilePage({
 
   return (
     <div className="flex flex-col gap-8">
+      <TrackPageView
+        name="Company Profile Viewed"
+        props={{ companyId: company.id, companyName: company.name }}
+      />
       <BackButton />
 
       <div className="flex flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-start">
