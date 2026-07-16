@@ -1,4 +1,5 @@
 import { ClubCard } from "@/components/ClubCard";
+import { TrackPageView } from "@/components/TrackPageView";
 
 function faviconFor(domain: string): string {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
@@ -41,6 +42,7 @@ const CLUBS = [
 export default function ClubsPage() {
   return (
     <div className="flex flex-col gap-8">
+      <TrackPageView name="Clubs Viewed" dwellEventName="Clubs Time Spent" />
       <div>
         <h1 className="text-xl font-bold text-ink">IT 동아리</h1>
         <p className="mt-1 text-sm text-neutral-500">

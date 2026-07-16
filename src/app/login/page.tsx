@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/Button";
 import { trackEvent } from "@/lib/analytics";
+import { TrackPageView } from "@/components/TrackPageView";
 
 export default function LoginPage() {
   const router = useRouter();
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-8 px-6 text-center">
+      <TrackPageView name="Login Page Viewed" dwellEventName="Login Page Time Spent" />
       <div className="flex flex-col gap-2">
         <p className="text-sm font-medium tracking-wide text-neutral-400">UXUI JOB</p>
         <h1 className="text-2xl font-bold text-ink">로그인하고 시작하기</h1>

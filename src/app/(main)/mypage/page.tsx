@@ -11,6 +11,7 @@ import { CompanyFollowCard } from "@/components/CompanyFollowCard";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
 import { EmailAlertToggle } from "./EmailAlertToggle";
+import { TrackPageView } from "@/components/TrackPageView";
 
 export const dynamic = "force-dynamic";
 
@@ -62,6 +63,11 @@ export default async function MyPage({
 
   return (
     <div className="flex flex-col gap-10">
+      <TrackPageView
+        name="Mypage Viewed"
+        props={{ tab: activeTab }}
+        dwellEventName="Mypage Time Spent"
+      />
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 border-b border-neutral-200">
           {TABS.map((tab) => (

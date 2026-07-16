@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/Badge";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { BackButton } from "@/components/BackButton";
+import { TrackPageView } from "@/components/TrackPageView";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,11 @@ export default async function ExternalJobDetailPage({
 
   return (
     <div className="flex flex-col gap-8">
+      <TrackPageView
+        name="External Job Detail Viewed"
+        props={{ externalJobId: job.id, companyName: job.companyName }}
+        dwellEventName="External Job Detail Time Spent"
+      />
       <BackButton />
 
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">

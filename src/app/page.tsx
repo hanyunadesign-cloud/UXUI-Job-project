@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/Button";
+import { TrackPageView } from "@/components/TrackPageView";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,7 @@ export default async function LandingPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">
+      <TrackPageView name="Landing Page Viewed" dwellEventName="Landing Page Time Spent" />
       <p className="text-sm font-medium tracking-wide text-neutral-400">UXUI JOB</p>
       <h1 className="max-w-md text-3xl font-bold leading-snug text-ink">
         흩어진 UXUI 채용공고를

@@ -8,6 +8,7 @@ import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { OnboardingSuccessModal } from "./OnboardingSuccessModal";
 import { matchesExperienceLevel } from "@/lib/experience";
 import { getApplicationStatus } from "@/lib/dday";
+import { TrackPageView } from "@/components/TrackPageView";
 
 export const dynamic = "force-dynamic";
 
@@ -86,6 +87,7 @@ export default async function JobsPage({
   return (
     <div className="flex flex-col gap-8">
       <OnboardingSuccessModal initialOpen={searchParams.onboarded === "1"} />
+      <TrackPageView name="Jobs List Viewed" dwellEventName="Jobs List Time Spent" />
 
       <div>
         <h1 className="text-xl font-bold text-ink">채용 공고</h1>

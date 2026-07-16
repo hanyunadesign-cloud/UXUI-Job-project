@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { OnboardingWizard } from "./OnboardingWizard";
+import { TrackPageView } from "@/components/TrackPageView";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,7 @@ export default async function OnboardingPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
+      <TrackPageView name="Onboarding Page Viewed" dwellEventName="Onboarding Page Time Spent" />
       <OnboardingWizard />
     </main>
   );
