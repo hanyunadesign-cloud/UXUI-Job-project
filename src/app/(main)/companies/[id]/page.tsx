@@ -75,6 +75,7 @@ export default async function CompanyProfilePage({
       <TrackPageView
         name="Company Profile Viewed"
         props={{ companyId: company.id, companyName: company.name }}
+        dwellEventName="Company Profile Time Spent"
       />
       <BackButton />
 

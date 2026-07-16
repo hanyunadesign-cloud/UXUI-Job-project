@@ -40,6 +40,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
       <TrackPageView
         name="Job Detail Viewed"
         props={{ jobId: job.id, companyName: job.companyName }}
+        dwellEventName="Job Detail Time Spent"
       />
       <BackButton />
 
