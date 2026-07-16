@@ -14,7 +14,12 @@ export default async function LandingPage() {
   if (session?.user) {
     const userId = (session.user as { id: string }).id;
     const preference = await prisma.preference.findUnique({ where: { userId } });
-    redirect(preference ? "/jobs" : "/onboarding");
+    // 이 분기는 사실상 구글 로그인 콜백(callbackUrl: "/")으로만 도달하므로, 로그인 성공을
+    // 확인하는 신호로 쓸 수 있게 쿼리 파라미터를 붙여 보낸다. 목적지 페이지에서
+    // LoginSuccessTracker가 이걸 읽고 이벤트를 보낸 뒤 URL에서 지운다.
+    redirect(
+      preference ? "/jobs?loginSuccess=1&isNewUser=0" : "/onboarding?loginSuccess=1&isNewUser=1"
+    );
   }
 
   return (

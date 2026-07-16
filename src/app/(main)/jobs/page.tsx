@@ -9,6 +9,7 @@ import { OnboardingSuccessModal } from "./OnboardingSuccessModal";
 import { matchesExperienceLevel } from "@/lib/experience";
 import { getApplicationStatus } from "@/lib/dday";
 import { TrackPageView } from "@/components/TrackPageView";
+import { LoginSuccessTracker } from "@/components/LoginSuccessTracker";
 
 export const dynamic = "force-dynamic";
 
@@ -87,6 +88,7 @@ export default async function JobsPage({
   return (
     <div className="flex flex-col gap-8">
       <OnboardingSuccessModal initialOpen={searchParams.onboarded === "1"} />
+      {searchParams.loginSuccess === "1" && <LoginSuccessTracker isNewUser={false} />}
       <TrackPageView name="Jobs List Viewed" dwellEventName="Jobs List Time Spent" />
 
       <div>

@@ -41,6 +41,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         name="Job Detail Viewed"
         props={{ jobId: job.id, companyName: job.companyName }}
         dwellEventName="Job Detail Time Spent"
+        scrollDepthEventName="Job Detail Scroll Depth"
       />
       <BackButton />
 
