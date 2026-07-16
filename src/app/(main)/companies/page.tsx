@@ -11,6 +11,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { getApplicationStatus } from "@/lib/dday";
 import { computeCompanyMatchScore } from "@/lib/matching";
 import { TrackPageView } from "@/components/TrackPageView";
+import { TrackSearchResultCount } from "@/components/TrackSearchResultCount";
 
 export const dynamic = "force-dynamic";
 
@@ -122,6 +123,11 @@ export default async function CompaniesPage({
   return (
     <div className="flex flex-col gap-8">
       <TrackPageView name="Companies List Viewed" dwellEventName="Companies List Time Spent" />
+      <TrackSearchResultCount
+        eventName="Company Search Result Count"
+        resultCount={filtered.length}
+        activeParamKeys={["jobQuery", "stage", "industry"]}
+      />
       <div>
         <h1 className="text-xl font-bold text-ink">기업 정보</h1>
         <p className="mt-1 text-sm text-neutral-500">

@@ -10,6 +10,7 @@ import { matchesExperienceLevel } from "@/lib/experience";
 import { getApplicationStatus } from "@/lib/dday";
 import { TrackPageView } from "@/components/TrackPageView";
 import { LoginSuccessTracker } from "@/components/LoginSuccessTracker";
+import { TrackSearchResultCount } from "@/components/TrackSearchResultCount";
 
 export const dynamic = "force-dynamic";
 
@@ -90,6 +91,18 @@ export default async function JobsPage({
       <OnboardingSuccessModal initialOpen={searchParams.onboarded === "1"} />
       {searchParams.loginSuccess === "1" && <LoginSuccessTracker isNewUser={false} />}
       <TrackPageView name="Jobs List Viewed" dwellEventName="Jobs List Time Spent" />
+      <TrackSearchResultCount
+        eventName="Job Search Result Count"
+        resultCount={jobs.length}
+        activeParamKeys={[
+          "companyQuery",
+          "role",
+          "platform",
+          "industry",
+          "stage",
+          "experience",
+        ]}
+      />
 
       <div>
         <h1 className="text-xl font-bold text-ink">채용 공고</h1>

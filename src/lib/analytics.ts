@@ -19,6 +19,27 @@ function ensureMixpanel() {
     persistence: "localStorage",
   });
   mixpanelReady = true;
+  registerVisitCount();
+}
+
+const VISIT_COUNT_KEY = "uxui_visit_count";
+const SESSION_COUNTED_KEY = "uxui_visit_counted";
+
+// "이번이 몇 번째 방문인지"를 신규 vs 재방문자 비교에 쓸 수 있도록 super property로
+// 등록해, 이후 이 세션에서 보내는 모든 이벤트에 visitCount가 자동으로 붙게 한다.
+// sessionStorage로 같은 세션(탭) 안에서는 페이지를 여러 번 이동해도 중복 카운트되지
+// 않게 막는다.
+function registerVisitCount() {
+  try {
+    if (sessionStorage.getItem(SESSION_COUNTED_KEY)) return;
+    const raw = localStorage.getItem(VISIT_COUNT_KEY);
+    const count = (raw ? parseInt(raw, 10) : 0) + 1;
+    localStorage.setItem(VISIT_COUNT_KEY, String(count));
+    sessionStorage.setItem(SESSION_COUNTED_KEY, "1");
+    mixpanel.register({ visitCount: count });
+  } catch {
+    // 시크릿 모드 등 storage 접근이 막힌 환경이면 건너뛴다.
+  }
 }
 
 // @next/third-parties의 <GoogleAnalytics>가 gtag.js를 로드하면 window.gtag가 생긴다.
