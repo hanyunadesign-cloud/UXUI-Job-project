@@ -13,6 +13,7 @@ export type ExternalJobCardData = {
   id: string;
   title: string;
   companyName: string;
+  companyLogo?: string | null;
   sourceUrl: string;
   coreKeywords: string[];
   createdAt: Date;
@@ -71,7 +72,12 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
       </button>
 
       <div className="flex items-center gap-3 pr-12">
-        <CompanyLogo src={null} alt={job.companyName} initial={job.companyName.slice(0, 1)} size={48} />
+        <CompanyLogo
+          src={job.companyLogo ?? null}
+          alt={job.companyName}
+          initial={job.companyName.slice(0, 1)}
+          size={48}
+        />
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-ink">{job.companyName}</p>
           <p className="truncate text-xs text-neutral-400">{hostnameOf(job.sourceUrl)}</p>

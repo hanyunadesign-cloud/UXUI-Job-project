@@ -22,6 +22,12 @@ export default async function ExternalJobDetailPage({
   // 다른 유저 소유의 링크는 id를 알아도 볼 수 없게 한다.
   if (!job || job.userId !== userId) notFound();
 
+  // 회사명이 우리 DB의 Company와 겹치면 그 로고를 빌려와 보여준다.
+  const matchedCompany = await prisma.company.findUnique({
+    where: { name: job.companyName },
+    select: { logo: true },
+  });
+
   return (
     <div className="flex flex-col gap-8">
       <TrackPageView
@@ -33,7 +39,12 @@ export default async function ExternalJobDetailPage({
 
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-4">
-          <CompanyLogo src={null} alt={job.companyName} initial={job.companyName.slice(0, 1)} size={56} />
+          <CompanyLogo
+            src={matchedCompany?.logo ?? null}
+            alt={job.companyName}
+            initial={job.companyName.slice(0, 1)}
+            size={56}
+          />
           <div className="flex flex-col items-start gap-2">
             <p className="text-sm text-neutral-500">{job.companyName}</p>
             <h1 className="text-2xl font-bold text-ink">{job.title}</h1>

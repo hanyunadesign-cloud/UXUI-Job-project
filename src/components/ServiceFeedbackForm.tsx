@@ -30,7 +30,7 @@ export function ServiceFeedbackForm() {
         body: JSON.stringify({ category, content: content.trim() }),
       });
       if (!res.ok) throw new Error("failed");
-      trackEvent("Service Feedback Submitted", { category });
+      trackEvent("Service Feedback Submitted", { category, content: content.trim() });
       showToast("의견이 전달됐어요. 감사해요!");
       setSubmitted(true);
       setCategory(null);

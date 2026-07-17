@@ -72,7 +72,11 @@ export function FeedbackWidget({
         body: JSON.stringify({ helpful: choice === "helpful", comment: comment.trim() }),
       });
       if (!res.ok) throw new Error("failed");
-      trackEvent("AI Analysis Feedback Submitted", { jobId, helpful: choice === "helpful" });
+      trackEvent("AI Analysis Feedback Submitted", {
+        jobId,
+        helpful: choice === "helpful",
+        comment: comment.trim() || undefined,
+      });
       setSubmitted(true);
     } catch {
       setIsSubmitting(false);

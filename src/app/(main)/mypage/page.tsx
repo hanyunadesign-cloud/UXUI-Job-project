@@ -55,10 +55,25 @@ export default async function MyPage({
       : Promise.resolve([]),
   ]);
 
+  // 링크로 추가한 공고는 회사 로고를 따로 안 갖고 있어서, 회사명이 우리 DB의 Company와
+  // 겹치면 그 로고를 빌려와 보여준다(안 겹치면 이니셜로 폴백).
+  const externalCompanyNames = [...new Set(externalJobs.map((ej) => ej.companyName))];
+  const matchedCompanies = externalCompanyNames.length
+    ? await prisma.company.findMany({
+        where: { name: { in: externalCompanyNames } },
+        select: { name: true, logo: true },
+      })
+    : [];
+  const logoByCompanyName = new Map(matchedCompanies.map((c) => [c.name, c.logo]));
+
   // 저장한 공고(우리 DB)와 링크로 추가한 공고(외부)를 최신순으로 한 그리드에 섞어서 보여준다.
   const combinedSaved = [
     ...savedJobs.map((sj) => ({ kind: "saved" as const, createdAt: sj.createdAt, data: sj.job })),
-    ...externalJobs.map((ej) => ({ kind: "external" as const, createdAt: ej.createdAt, data: ej })),
+    ...externalJobs.map((ej) => ({
+      kind: "external" as const,
+      createdAt: ej.createdAt,
+      data: { ...ej, companyLogo: logoByCompanyName.get(ej.companyName) ?? null },
+    })),
   ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
   return (
