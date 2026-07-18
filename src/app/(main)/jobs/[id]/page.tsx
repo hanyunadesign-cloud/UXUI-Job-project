@@ -39,7 +39,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
     <div className="flex flex-col gap-8">
       <TrackPageView
         name="Job Detail Viewed"
-        props={{ jobId: job.id, companyName: job.companyName }}
+        props={{ jobId: job.id, companyName: job.companyName, saved }}
         dwellEventName="Job Detail Time Spent"
         scrollDepthEventName="Job Detail Scroll Depth"
       />
