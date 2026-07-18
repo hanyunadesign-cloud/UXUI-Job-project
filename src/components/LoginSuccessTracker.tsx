@@ -14,10 +14,12 @@ export function LoginSuccessTracker({ isNewUser }: { isNewUser: boolean }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    trackEvent("Login Succeeded", { isNewUser });
+    const entrySource = searchParams.get("entrySource") ?? "unknown";
+    trackEvent("Login Succeeded", { isNewUser, entrySource });
     const params = new URLSearchParams(searchParams.toString());
     params.delete("loginSuccess");
     params.delete("isNewUser");
+    params.delete("entrySource");
     const query = params.toString();
     router.replace(query ? `${pathname}?${query}` : pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps

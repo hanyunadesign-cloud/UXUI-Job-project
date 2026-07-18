@@ -29,7 +29,7 @@ export function useLoginPrompt() {
       }}
       onConfirm={() => {
         trackEvent("Login Prompt Confirmed");
-        router.push("/login");
+        router.push("/login?source=gated_modal");
       }}
     />
   );

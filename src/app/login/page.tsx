@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/Button";
 import { trackEvent } from "@/lib/analytics";
@@ -8,6 +8,10 @@ import { TrackPageView } from "@/components/TrackPageView";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // 랜딩페이지에서 바로 왔는지("landing_direct") vs 게스트로 둘러보다 로그인 유도
+  // 모달을 거쳐 왔는지("gated_modal") 구분해서, 로그인 완료까지 이어붙여 분석한다.
+  const entrySource = searchParams.get("source") ?? "unknown";
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-8 px-6 text-center">
@@ -21,8 +25,8 @@ export default function LoginPage() {
           variant="secondary"
           className="px-6 py-3 text-sm"
           onClick={() => {
-            trackEvent("Login Button Clicked");
-            signIn("google", { callbackUrl: "/" });
+            trackEvent("Login Button Clicked", { entrySource });
+            signIn("google", { callbackUrl: `/?entrySource=${entrySource}` });
           }}
         >
           구글 계정으로 로그인
