@@ -143,7 +143,7 @@ model JobFeedback {
   id        String   @id @default(cuid())
   userId    String
   jobId     String
-  helpful   Boolean
+  score     Int
   comment   String?  @db.Text
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
