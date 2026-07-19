@@ -1,12 +1,23 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/Button";
 import { trackEvent } from "@/lib/analytics";
 import { TrackPageView } from "@/components/TrackPageView";
 
+// useSearchParams()를 쓰는 컴포넌트는 정적 렌더링 시 Suspense 경계 안에 있어야
+// 빌드가 통과한다(안 그러면 prerender 단계에서 에러남).
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   // 랜딩페이지에서 바로 왔는지("landing_direct") vs 게스트로 둘러보다 로그인 유도
