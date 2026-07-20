@@ -10,7 +10,7 @@ export type ApplicationStatus = {
 // deadline이 없으면 상시채용. 있으면 D-10 이내는 D-n으로 강조, 그보다 여유 있으면 ~M/D로 표기.
 export function getApplicationStatus(deadline: Date | null): ApplicationStatus {
   if (!deadline) {
-    return { label: "상시채용", urgent: false };
+    return { label: "채용 시 마감", urgent: false };
   }
 
   const now = new Date();
