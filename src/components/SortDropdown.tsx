@@ -18,7 +18,7 @@ export function SortDropdown() {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const current = searchParams.get("sort") === "latest" ? "latest" : "deadline";
+  const current = searchParams.get("sort") === "deadline" ? "deadline" : "latest";
   const currentOption = SORT_OPTIONS.find((o) => o.value === current) ?? SORT_OPTIONS[0];
 
   useEffect(() => {

@@ -34,7 +34,7 @@ export default async function JobsPage({
   const experienceLevels = toArray(searchParams.experience);
   const companyQuery =
     typeof searchParams.companyQuery === "string" ? searchParams.companyQuery.trim() : "";
-  const sort = searchParams.sort === "latest" ? "latest" : "deadline";
+  const sort = searchParams.sort === "deadline" ? "deadline" : "latest";
 
   // DB가 원격(서울) 리전에 있어 왕복 지연이 크므로, 서로 의존하지 않는 조회는 병렬로 묶는다.
   const [matchedJobs, savedJobsList] = await Promise.all([
