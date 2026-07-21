@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { clsx } from "clsx";
 import { BellIcon } from "@heroicons/react/24/outline";
+import { trackEvent } from "@/lib/analytics";
 
 type NotificationItem = {
   id: string;
@@ -68,11 +69,19 @@ export function NotificationBell() {
   const openDropdown = () => {
     const next = !isOpen;
     setIsOpen(next);
-    if (next) fetchNotifications();
+    if (next) {
+      trackEvent("Notification Bell Clicked", { unreadCount });
+      fetchNotifications();
+    }
   };
 
   const handleItemClick = async (item: NotificationItem) => {
     setIsOpen(false);
+    trackEvent("Notification Item Clicked", {
+      companyId: item.companyId,
+      jobId: item.jobId,
+      wasUnread: !item.read,
+    });
     if (!item.read) {
       setItems((prev) => prev.map((n) => (n.id === item.id ? { ...n, read: true } : n)));
       setUnreadCount((prev) => Math.max(0, prev - 1));
