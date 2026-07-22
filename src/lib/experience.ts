@@ -10,16 +10,35 @@ const BUCKET_RANGES: Record<ExperienceLevel, [number, number]> = {
 };
 
 // 공고 원문에서 추출한 experienceLevel은 "3~10년", "8년 이상", "신입", "경력무관" 등
-// 자유 형식 텍스트이므로, 최소~최대 연차 범위로 파싱한 뒤 각 구간과 겹치는지로 매칭한다.
+// 자유 형식 텍스트이거나, 필터 버킷 이름 자체("미들" 등)가 그대로 들어있는 경우도 있다.
+// 최소~최대 연차 범위로 파싱한 뒤 각 구간과 겹치는지로 매칭한다.
 function parseExperienceRange(text: string): [number, number] {
   if (!text) return [0, Infinity];
+
+  // 버킷 이름 그대로 저장된 경우(신입/주니어/미들/시니어/C레벨) 그 버킷 범위를 바로 쓴다.
+  // 이걸 먼저 체크하지 않으면 "미들"/"주니어"/"시니어" 같은 텍스트에는 숫자도 "경력"도
+  // 없어서 맨 아래 기본값([0, Infinity])으로 빠져, 모든 경력 필터에 다 걸리는 버그가 난다.
+  if (text in BUCKET_RANGES) return BUCKET_RANGES[text as ExperienceLevel];
+
   if (text.includes("경력무관")) return [0, Infinity];
+
+  // "2년 이상~4년 이하"처럼 상/하한이 각각 "이상"/"이하"로 명시된 범위.
+  const boundedRangeMatch = text.match(/(\d+)\s*년\s*이상\s*[~-]?\s*(\d+)\s*년\s*이하/);
+  if (boundedRangeMatch) return [Number(boundedRangeMatch[1]), Number(boundedRangeMatch[2])];
 
   const rangeMatch = text.match(/(\d+)\s*[~-]\s*(\d+)\s*년/);
   if (rangeMatch) return [Number(rangeMatch[1]), Number(rangeMatch[2])];
 
+  // "신입~2년"처럼 하한이 신입(0년)인 범위.
+  const newGradRangeMatch = text.match(/신입\s*[~-]\s*(\d+)\s*년/);
+  if (newGradRangeMatch) return [0, Number(newGradRangeMatch[1])];
+
   const aboveMatch = text.match(/(\d+)\s*년\s*이상/);
   if (aboveMatch) return [Number(aboveMatch[1]), Infinity];
+
+  // "2년 이하"처럼 상한만 명시된 경우 하한은 0(신입 포함)으로 본다.
+  const belowMatch = text.match(/(\d+)\s*년\s*이하/);
+  if (belowMatch) return [0, Number(belowMatch[1])];
 
   const exactMatch = text.match(/(\d+)\s*년/);
   if (exactMatch) return [Number(exactMatch[1]), Number(exactMatch[1])];
