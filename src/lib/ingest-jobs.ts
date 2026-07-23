@@ -190,24 +190,28 @@ function extractEmploymentType(title: string, description: string): string {
 // 실제 공고 원문은 "경력 5년 이상"이 아니라 "5년 이상의 디자인 경력", "8+ years of experience"처럼
 // 숫자가 "경력"이라는 단어보다 먼저 나오거나 아예 영문으로 적힌 경우가 대부분이라, "경력"이 숫자 앞에
 // 와야만 매칭되던 기존 정규식은 실제로는 거의 매칭되지 않았다. 숫자+년/years 패턴 자체를 기준으로 찾는다.
-function extractExperienceLevel(description: string): string {
+// 제목의 "(7년 이상)"처럼 본문에는 안 반복되고 제목에만 있는 경우가 많아 title도 같이 본다
+// (extractEmploymentType과 동일한 이유).
+function extractExperienceLevel(title: string, description: string): string {
+  const text = `${title} ${description}`;
+
   // 범위: "3~5년", "3-5 years"
-  let m = description.match(/(\d+)\s*[~\-]\s*(\d+)\s*년/);
+  let m = text.match(/(\d+)\s*[~\-]\s*(\d+)\s*년/);
   if (m) return `${m[1]}~${m[2]}년`;
-  m = description.match(/(\d+)\s*[~\-]\s*(\d+)\+?\s*years?/i);
+  m = text.match(/(\d+)\s*[~\-]\s*(\d+)\+?\s*years?/i);
   if (m) return `${m[1]}~${m[2]}년`;
 
   // 최소 연차: "5년 이상", "8+ years of experience", "at least 2 years"
-  m = description.match(/(\d+)\s*년\s*(이상|이하)/);
+  m = text.match(/(\d+)\s*년\s*(이상|이하)/);
   if (m) return `${m[1]}년 ${m[2]}`;
-  m = description.match(/(\d+)\+\s*years?/i);
+  m = text.match(/(\d+)\+\s*years?/i);
   if (m) return `${m[1]}년 이상`;
-  m = description.match(/at least\s*(\d+)\s*years?/i);
+  m = text.match(/at least\s*(\d+)\s*years?/i);
   if (m) return `${m[1]}년 이상`;
 
-  if (/신입/.test(description)) return "신입";
-  if (/entry[\s-]?level/i.test(description)) return "신입";
-  if (/경력무관/.test(description)) return "경력무관";
+  if (/신입/.test(text)) return "신입";
+  if (/entry[\s-]?level/i.test(text)) return "신입";
+  if (/경력무관/.test(text)) return "경력무관";
 
   return "경력무관";
 }
@@ -347,7 +351,7 @@ export async function ingestJobs(): Promise<{
         applicationPeriod: extractApplicationPeriod(job.description),
         applicationDeadline: extractApplicationDeadline(job.description),
         employmentType: extractEmploymentType(job.title, job.description),
-        experienceLevel: extractExperienceLevel(job.description),
+        experienceLevel: extractExperienceLevel(job.title, job.description),
       };
 
       const existed = await prisma.job.findUnique({
