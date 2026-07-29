@@ -10,6 +10,7 @@ import { CompanyLogo } from "@/components/CompanyLogo";
 import { AnalysisPanel } from "@/components/AnalysisPanel";
 import { BackButton } from "@/components/BackButton";
 import { TrackPageView } from "@/components/TrackPageView";
+import { MarkJobViewed } from "@/components/MarkJobViewed";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         dwellEventName="Job Detail Time Spent"
         scrollDepthEventName="Job Detail Scroll Depth"
       />
+      <MarkJobViewed jobId={job.id} />
       <BackButton />
 
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">

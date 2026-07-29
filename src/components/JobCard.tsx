@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SaveButton } from "@/components/SaveButton";
 import { CompanyLogo } from "@/components/CompanyLogo";
+import { NewBadge } from "@/components/NewBadge";
 import { getApplicationStatus } from "@/lib/dday";
 import { clsx } from "clsx";
 
@@ -60,11 +61,7 @@ export function JobCard({
             <span className="truncate text-sm font-semibold text-ink hover:underline">
               {job.companyName}
             </span>
-            {isNew && (
-              <span className="shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
-                NEW
-              </span>
-            )}
+            {isNew && <NewBadge jobId={job.id} />}
           </p>
         </Link>
       ) : (
@@ -77,11 +74,7 @@ export function JobCard({
           />
           <p className="flex min-w-0 items-center gap-1.5">
             <span className="truncate text-sm font-semibold text-ink">{job.companyName}</span>
-            {isNew && (
-              <span className="shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
-                NEW
-              </span>
-            )}
+            {isNew && <NewBadge jobId={job.id} />}
           </p>
         </div>
       )}
