@@ -83,8 +83,8 @@ model Company {
   id            String    @id @default(cuid())
   name          String    @unique
   logo          String?
-  // "산업" 필터와 동일한 값 집합을 재사용
-  industry      String
+  // "산업" 필터와 동일한 값 집합을 재사용. 여러 산업에 걸치는 회사는 복수 태깅 가능.
+  industries    String[]
   // "규모" 필터와 동일한 값 집합을 재사용 (스타트업/유니콘/중견 기업/대기업/에이전시)
   stage         String
   // 아래 세 항목은 자동 수집 소스가 없어 당장은 비어있을 수 있다. 값이 있을 때만 프로필에 노출.
@@ -105,7 +105,7 @@ model Job {
   company     Company?     @relation(fields: [companyId], references: [id])
   role        String
   platforms   String[]
-  industry    String
+  industries  String[]
   stage       String
   location    String?
   description String       @db.Text

@@ -10,7 +10,7 @@ const WEIGHTS = {
 
 export type MatchableJob = {
   role: string;
-  industry: string;
+  industries: string[];
   stage: string;
   platforms: string[];
 };
@@ -30,7 +30,7 @@ export function computeMatchScore(
 
   let score = 0;
   if (preference.roles.includes(job.role)) score += WEIGHTS.role;
-  if (preference.industries.includes(job.industry)) score += WEIGHTS.industry;
+  if (job.industries.some((i) => preference.industries.includes(i))) score += WEIGHTS.industry;
   if (preference.stages.includes(job.stage)) score += WEIGHTS.stage;
 
   const platformMatches = job.platforms.filter((p) =>
@@ -42,7 +42,7 @@ export function computeMatchScore(
 }
 
 export type MatchableCompany = {
-  industry: string;
+  industries: string[];
   stage: string;
 };
 
@@ -55,7 +55,7 @@ export function computeCompanyMatchScore(
   if (!preference) return 0;
 
   let score = 0;
-  if (preference.industries.includes(company.industry)) score += WEIGHTS.industry;
+  if (company.industries.some((i) => preference.industries.includes(i))) score += WEIGHTS.industry;
   if (preference.stages.includes(company.stage)) score += WEIGHTS.stage;
 
   return score;

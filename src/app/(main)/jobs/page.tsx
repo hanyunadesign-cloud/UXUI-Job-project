@@ -43,7 +43,7 @@ export default async function JobsPage({
         archivedAt: null,
         ...(roles.length && { role: { in: roles } }),
         ...(platforms.length && { platforms: { hasSome: platforms } }),
-        ...(industries.length && { industry: { in: industries } }),
+        ...(industries.length && { industries: { hasSome: industries } }),
         ...(stages.length && { stage: { in: stages } }),
         ...(companyQuery && { companyName: { contains: companyQuery, mode: "insensitive" } }),
       },

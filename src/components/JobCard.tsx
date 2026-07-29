@@ -14,7 +14,7 @@ export type JobCardData = {
   companyId: string | null;
   location: string | null;
   platforms: string[];
-  industry: string;
+  industries: string[];
   stage: string;
   applicationDeadline: Date | null;
   experienceLevel: string;
@@ -35,7 +35,7 @@ export function JobCard({
 }) {
   const initial = job.companyName.slice(0, 1);
 
-  const allBadges = [...job.platforms, job.industry, job.stage];
+  const allBadges = [...job.platforms, ...job.industries, job.stage];
   const overflowCount = Math.max(0, allBadges.length - MAX_VISIBLE_BADGES);
   const visibleBadges = overflowCount > 0
     ? allBadges.slice(0, MAX_VISIBLE_BADGES - 1)

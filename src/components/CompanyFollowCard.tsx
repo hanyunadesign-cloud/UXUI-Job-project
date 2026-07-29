@@ -7,7 +7,7 @@ export type CompanyFollowCardData = {
   id: string;
   name: string;
   logo: string | null;
-  industry: string;
+  industries: string[];
   stage: string;
 };
 
@@ -26,7 +26,9 @@ export function CompanyFollowCard({ company }: { company: CompanyFollowCardData 
             {company.name}
           </p>
           <div className="mt-1 flex flex-wrap gap-1">
-            <Badge>{company.industry}</Badge>
+            {company.industries.map((industry) => (
+              <Badge key={industry}>{industry}</Badge>
+            ))}
             <Badge>{company.stage}</Badge>
           </div>
         </div>

@@ -6,7 +6,7 @@ import { prisma } from "./prisma";
 export async function findOrCreateCompanyId(params: {
   companyName: string;
   companyLogo?: string | null;
-  industry: string;
+  industries: string[];
   stage: string;
 }): Promise<string> {
   const company = await prisma.company.upsert({
@@ -14,7 +14,7 @@ export async function findOrCreateCompanyId(params: {
     create: {
       name: params.companyName,
       logo: params.companyLogo ?? null,
-      industry: params.industry,
+      industries: params.industries,
       stage: params.stage,
     },
     update: {},

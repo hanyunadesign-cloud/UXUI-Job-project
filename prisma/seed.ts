@@ -8,7 +8,7 @@ const jobs = [
     companyName: "그린카트",
     role: "프로덕트 디자인",
     platforms: ["앱", "웹"],
-    industry: "커머스",
+    industries: ["커머스"],
     stage: "유니콘",
     location: "서울 강남구",
     description:
@@ -20,7 +20,7 @@ const jobs = [
     companyName: "페이브릿지",
     role: "UXUI 디자인",
     platforms: ["웹"],
-    industry: "핀테크",
+    industries: ["핀테크"],
     stage: "스타트업",
     location: "서울 성동구",
     description:
@@ -32,7 +32,7 @@ const jobs = [
     companyName: "모션랩스",
     role: "GUI 디자인",
     platforms: ["모빌리티", "태블릿"],
-    industry: "모빌리티",
+    industries: ["모빌리티"],
     stage: "대기업",
     location: "경기 화성시",
     description:
@@ -44,7 +44,7 @@ const jobs = [
     companyName: "루프소셜",
     role: "프로덕트 디자인",
     platforms: ["앱"],
-    industry: "SNS",
+    industries: ["SNS"],
     stage: "스타트업",
     location: "서울 마포구",
     description:
@@ -56,7 +56,7 @@ const jobs = [
     companyName: "케어노트",
     role: "UX 리서치",
     platforms: ["앱", "웹"],
-    industry: "헬스케어",
+    industries: ["헬스케어"],
     stage: "중견 기업",
     location: "서울 송파구",
     description:
@@ -68,7 +68,7 @@ const jobs = [
     companyName: "어라운드트립",
     role: "UX 라이팅",
     platforms: ["앱", "웹"],
-    industry: "여행/로컬",
+    industries: ["여행/로컬"],
     stage: "유니콘",
     location: "서울 서초구",
     description:
@@ -80,7 +80,7 @@ const jobs = [
     companyName: "워크플로우웍스",
     role: "UXUI 디자인",
     platforms: ["웹"],
-    industry: "B2B SaaS",
+    industries: ["B2B SaaS"],
     stage: "중견 기업",
     location: "서울 강남구",
     description:
@@ -92,7 +92,7 @@ const jobs = [
     companyName: "홈센스",
     role: "프로덕트 디자인",
     platforms: ["앱", "가전"],
-    industry: "커머스",
+    industries: ["커머스"],
     stage: "대기업",
     location: "경기 수원시",
     description:
@@ -104,7 +104,7 @@ const jobs = [
     companyName: "핏싱크",
     role: "GUI 디자인",
     platforms: ["워치/웨어러블"],
-    industry: "헬스케어",
+    industries: ["헬스케어"],
     stage: "스타트업",
     location: "서울 성수동",
     description:
@@ -116,7 +116,7 @@ const jobs = [
     companyName: "스페이셜웍스",
     role: "UXUI 디자인",
     platforms: ["VR/AR"],
-    industry: "SNS",
+    industries: ["SNS"],
     stage: "스타트업",
     location: "서울 용산구",
     description:
@@ -128,7 +128,7 @@ const jobs = [
     companyName: "스튜디오널",
     role: "프로덕트 디자인",
     platforms: ["웹", "앱"],
-    industry: "B2B SaaS",
+    industries: ["B2B SaaS"],
     stage: "에이전시",
     location: "서울 을지로",
     description:
@@ -140,7 +140,7 @@ const jobs = [
     companyName: "라이드플로우",
     role: "UX 리서치",
     platforms: ["앱", "모빌리티"],
-    industry: "모빌리티",
+    industries: ["모빌리티"],
     stage: "유니콘",
     location: "서울 강서구",
     description:
@@ -152,7 +152,7 @@ const jobs = [
     companyName: "머니루트",
     role: "UX 라이팅",
     platforms: ["앱"],
-    industry: "핀테크",
+    industries: ["핀테크"],
     stage: "중견 기업",
     location: "서울 여의도",
     description:
@@ -164,7 +164,7 @@ const jobs = [
     companyName: "셀프마켓",
     role: "GUI 디자인",
     platforms: ["웹", "태블릿"],
-    industry: "커머스",
+    industries: ["커머스"],
     stage: "대기업",
     location: "서울 구로구",
     description:
@@ -176,7 +176,7 @@ const jobs = [
     companyName: "테이블핏",
     role: "프로덕트 디자인",
     platforms: ["웹"],
-    industry: "B2B SaaS",
+    industries: ["B2B SaaS"],
     stage: "스타트업",
     location: "서울 논현동",
     description:
@@ -188,7 +188,7 @@ const jobs = [
     companyName: "로컬퍼즐",
     role: "UXUI 디자인",
     platforms: ["앱"],
-    industry: "여행/로컬",
+    industries: ["여행/로컬"],
     stage: "스타트업",
     location: "서울 이태원",
     description:

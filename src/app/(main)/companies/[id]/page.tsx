@@ -91,7 +91,9 @@ export default async function CompanyProfilePage({
             <div>
               <h1 className="text-xl font-bold text-ink">{company.name}</h1>
               <div className="mt-2 flex flex-wrap gap-1.5">
-                <Badge>{company.industry}</Badge>
+                {company.industries.map((industry) => (
+                  <Badge key={industry}>{industry}</Badge>
+                ))}
                 <Badge>{company.stage}</Badge>
               </div>
             </div>

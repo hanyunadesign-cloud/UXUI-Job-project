@@ -12,7 +12,7 @@ function sleep(ms: number) {
 type SourceBase = {
   companyName: string;
   companyLogo: string;
-  industry: string;
+  industries: string[];
   stage: string;
   platforms: string[];
   locationIncludes?: string; // 특정 지역 공고만 채택 (예: 서울)
@@ -38,7 +38,7 @@ const SOURCES: Source[] = [
     board: "daangn",
     companyName: "당근",
     companyLogo: faviconFor("daangn.com"),
-    industry: "여행/로컬",
+    industries: ["여행/로컬", "커머스"],
     stage: "유니콘",
     platforms: ["앱", "웹"],
   },
@@ -47,7 +47,7 @@ const SOURCES: Source[] = [
     board: "coupang",
     companyName: "쿠팡",
     companyLogo: faviconFor("coupang.com"),
-    industry: "커머스",
+    industries: ["커머스"],
     stage: "대기업",
     platforms: ["앱", "웹"],
     locationIncludes: "Seoul",
@@ -57,8 +57,8 @@ const SOURCES: Source[] = [
     boardName: "miso",
     companyName: "미소",
     companyLogo: faviconFor("miso.kr"),
-    industry: "커머스",
-    stage: "스타트업",
+    industries: ["커머스"],
+    stage: "중견 기업",
     platforms: ["앱", "웹"],
     locationIncludes: "Seoul",
   },
@@ -67,7 +67,7 @@ const SOURCES: Source[] = [
     boardName: "bjakcareer",
     companyName: "Bjak",
     companyLogo: faviconFor("bjak.com"),
-    industry: "핀테크",
+    industries: ["핀테크"],
     stage: "스타트업",
     platforms: ["앱", "웹"],
     locationIncludes: "Seoul",
@@ -303,7 +303,7 @@ export type NewlyIngestedJob = {
   title: string;
   companyName: string;
   role: string;
-  industry: string;
+  industries: string[];
   stage: string;
   platforms: string[];
 };
@@ -331,6 +331,23 @@ export async function ingestJobs(): Promise<{
     });
 
     const companyId = await findOrCreateCompanyId(source);
+
+    // 소스 피드에서 더 이상 보이지 않는(마감·삭제된) 공고는 자동으로 archive 처리한다.
+    // "상시채용"이라 마감일이 없는 공고는 아래 archiveStaleJobs()의 날짜 기준으로는 절대
+    // 안 걸러지므로, 소스 피드 자체와 직접 비교하는 게 죽은 링크를 잡아내는 유일한 방법이다.
+    const liveUrls = filtered.map((job) => job.applyUrl);
+    const staleResult = await prisma.job.updateMany({
+      where: {
+        companyName: source.companyName,
+        archivedAt: null,
+        applyUrl: { notIn: liveUrls },
+      },
+      data: { archivedAt: new Date() },
+    });
+    if (staleResult.count > 0) {
+      console.log(`  ↳ ${source.companyName}: 소스에서 사라진 공고 ${staleResult.count}건 자동 archive`);
+    }
+
     // 팔로워 알림은 진짜 신규 공고에만 보내야 하므로(기존 공고 정보 업데이트는 제외),
     // upsert 전에 이미 존재하는지 먼저 확인해 이번 실행에서 새로 생긴 것만 따로 모아둔다.
     const newlyCreated: { id: string; title: string }[] = [];
@@ -343,7 +360,7 @@ export async function ingestJobs(): Promise<{
         companyId,
         role: inferRole(job.title),
         platforms: source.platforms,
-        industry: source.industry,
+        industries: source.industries,
         stage: source.stage,
         location: job.location,
         description: job.description,
@@ -372,7 +389,7 @@ export async function ingestJobs(): Promise<{
           title: savedJob.title,
           companyName: source.companyName,
           role: savedJob.role,
-          industry: savedJob.industry,
+          industries: savedJob.industries,
           stage: savedJob.stage,
           platforms: savedJob.platforms,
         });

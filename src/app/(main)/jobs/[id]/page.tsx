@@ -67,7 +67,9 @@ export default async function JobDetailPage({ params }: { params: { id: string }
             <h1 className="text-2xl font-bold text-ink">{job.title}</h1>
             <div className="flex flex-wrap gap-1.5">
               <Badge>{job.role}</Badge>
-              <Badge>{job.industry}</Badge>
+              {job.industries.map((industry) => (
+                <Badge key={industry}>{industry}</Badge>
+              ))}
               <Badge>{job.stage}</Badge>
               {job.platforms.map((platform) => (
                 <Badge key={platform}>{platform}</Badge>

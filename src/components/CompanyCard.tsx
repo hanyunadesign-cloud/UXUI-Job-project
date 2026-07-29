@@ -7,7 +7,7 @@ export type CompanyCardData = {
   id: string;
   name: string;
   logo: string | null;
-  industry: string;
+  industries: string[];
   stage: string;
   hasOpenJobs: boolean;
 };
@@ -51,7 +51,7 @@ export function CompanyCard({
             {company.name}
           </p>
           <p className="mt-1 truncate text-xs text-neutral-400">
-            {company.stage} · {company.industry}
+            {[company.stage, ...company.industries].join(" · ")}
           </p>
         </div>
       </Link>

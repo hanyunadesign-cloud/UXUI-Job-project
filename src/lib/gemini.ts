@@ -75,6 +75,80 @@ export async function analyzeJobDescription(
   };
 }
 
+export type JobClassification = {
+  role: string;
+  platforms: string[];
+  experienceLevel: string;
+  uncertain: boolean;
+  uncertainNote?: string;
+};
+
+const ROLE_OPTIONS = ["GUI 디자인", "UXUI 디자인", "프로덕트 디자인", "UX 라이팅", "UX 리서치"];
+const PLATFORM_OPTIONS = ["웹", "앱", "태블릿", "워치/웨어러블", "모빌리티", "가전", "VR/AR"];
+
+// 업무/매체/경력을 제목 정규식이나 회사 단위 고정값이 아니라, 공고 원문 전체를 읽고 판단하게 한다.
+const classifyModel = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash",
+  systemInstruction:
+    "당신은 채용공고를 분류하는 어시스턴트입니다. 주어진 공고 제목과 본문만 근거로 판단하세요. " +
+    "명시되지 않은 내용은 추측하지 말고 uncertain을 true로 표시하세요.\n\n" +
+    `role은 다음 5개 중 공고 내용상 가장 적합한 하나만 고르세요: ${ROLE_OPTIONS.join(", ")}. ` +
+    "제목만 보지 말고 본문의 주요업무·자격요건까지 읽고 판단하세요.\n\n" +
+    `platforms는 다음 목록에서 공고 내용(주요업무, 회사 제품 설명 등)에 실제로 언급되거나 명확히 유추되는 것만 골라 배열로 담으세요: ${PLATFORM_OPTIONS.join(", ")}. ` +
+    "본문에 웹/앱 등 매체가 전혀 드러나지 않으면 빈 배열을 반환하고 uncertain을 true로 표시하세요. 근거 없이 임의로 넣지 마세요.\n\n" +
+    "experience_level은 원문이 영어여도 반드시 한국어 '~년' 형식으로 변환해서 쓰세요. " +
+    "형식은 다음 중 하나만 쓰세요: 'N년 이상'(예: '3년 이상'), 'N~M년'(예: '2~5년'), '신입', '경력무관'. " +
+    "'경력'이라는 단어는 붙이지 말고 숫자와 '년'만 쓰세요(예: '경력 2년 이상'이 아니라 '2년 이상'). " +
+    "숫자가 전혀 없고 '신입'이라는 단어도 없으면 '경력무관'으로 쓰세요.\n\n" +
+    "role이나 platforms 중 하나라도 확신을 갖고 판단하기 어려우면 uncertain을 true로, 그 이유를 uncertain_note에 한국어 한 문장으로 적으세요.",
+  generationConfig: {
+    responseMimeType: "application/json",
+    responseSchema: {
+      type: SchemaType.OBJECT,
+      properties: {
+        role: { type: SchemaType.STRING, format: "enum", enum: ROLE_OPTIONS },
+        platforms: {
+          type: SchemaType.ARRAY,
+          items: { type: SchemaType.STRING, format: "enum", enum: PLATFORM_OPTIONS },
+        },
+        experience_level: { type: SchemaType.STRING },
+        uncertain: { type: SchemaType.BOOLEAN },
+        uncertain_note: { type: SchemaType.STRING },
+      },
+      required: ["role", "platforms", "experience_level", "uncertain"],
+    },
+  },
+});
+
+export async function classifyJobPosting(
+  title: string,
+  description: string
+): Promise<JobClassification> {
+  const truncated = description.slice(0, MAX_INPUT_CHARS);
+  const result = await classifyModel.generateContent(
+    `제목: ${title}\n\n본문:\n---\n${truncated}\n---`
+  );
+  const parsed = JSON.parse(result.response.text()) as {
+    role?: string;
+    platforms?: string[];
+    experience_level?: string;
+    uncertain?: boolean;
+    uncertain_note?: string;
+  };
+
+  if (!parsed.role || !parsed.experience_level) {
+    throw new Error("분류 응답 형식이 올바르지 않습니다.");
+  }
+
+  return {
+    role: parsed.role,
+    platforms: parsed.platforms ?? [],
+    experienceLevel: parsed.experience_level,
+    uncertain: Boolean(parsed.uncertain),
+    uncertainNote: parsed.uncertain_note,
+  };
+}
+
 export type ExternalJobAnalysisResult = {
   title: string;
   companyName: string;

@@ -25,6 +25,9 @@ export const INDUSTRIES = [
   "헬스케어",
   "모빌리티",
   "게임",
+  "유통",
+  "IT/서비스",
+  "에듀테크",
 ] as const;
 
 export const STAGES = [

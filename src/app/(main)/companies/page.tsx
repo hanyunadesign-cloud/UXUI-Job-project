@@ -97,7 +97,7 @@ export default async function CompaniesPage({
   const filtered = withOpenJobs
     .filter((company) => {
       if (stages.length && !stages.includes(company.stage)) return false;
-      if (industries.length && !industries.includes(company.industry)) return false;
+      if (industries.length && !company.industries.some((i) => industries.includes(i))) return false;
       if (activeOnly && !company.hasOpenJobs) return false;
       if (followingOnly && !followedIds.has(company.id)) return false;
       if (
