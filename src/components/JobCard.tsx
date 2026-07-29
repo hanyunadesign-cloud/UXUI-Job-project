@@ -36,7 +36,8 @@ export function JobCard({
   const status = getApplicationStatus(job.applicationDeadline);
 
   return (
-    <div
+    <Link
+      href={`/jobs/${job.id}`}
       className={clsx(
         "relative flex h-full flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]",
         status.closed && "opacity-60"
@@ -62,7 +63,7 @@ export function JobCard({
         </p>
       </div>
 
-      <Link href={`/jobs/${job.id}`} className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         {/* 제목: 최대 2줄 고정, 1줄짜리 제목도 동일한 자리를 차지 */}
         <h3 className="text-h3 line-clamp-2 min-h-8 text-ink">
           {job.title}
@@ -72,7 +73,7 @@ export function JobCard({
         <p className="text-caption line-clamp-1 min-h-4 text-neutral-500">
           {job.taskKeywords.slice(0, 2).join(" · ")}
         </p>
-      </Link>
+      </div>
 
       {/* 하단 정보: 위 섹션이 모두 고정 높이라 자연스럽게 맞춰지지만, mt-auto로 이중 보장.
           구분선으로 위 직무 설명과 시각적으로 분리한다. */}
@@ -89,6 +90,6 @@ export function JobCard({
           {status.label}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -24,28 +24,34 @@ export function SaveButton({
   const showToast = useToast();
   const { requireLogin, modal } = useLoginPrompt();
 
-  const toggle = () => requireLogin(isLoggedIn, () => {
-    const next = !saved;
-    setSaved(next);
-    trackEvent(next ? "Job Saved" : "Job Unsaved", { jobId });
-    showToast(
-      next ? "공고가 저장되었습니다" : "공고가 해제되었습니다",
-      next ? { label: "보러가기", href: "/mypage" } : undefined
-    );
-    startTransition(async () => {
-      try {
-        const res = await fetch("/api/saved-jobs", {
-          method: next ? "POST" : "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ jobId }),
-        });
-        if (!res.ok) throw new Error("failed");
-      } catch {
-        setSaved(!next);
-        trackEvent("Job Save Failed", { jobId, action: next ? "save" : "unsave" });
-      }
+  // 카드 전체가 상세 페이지로 가는 Link이기도 해서, 저장 버튼 클릭이 그 Link로 버블링되어
+  // 같이 이동해버리지 않도록 막는다.
+  const toggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    requireLogin(isLoggedIn, () => {
+      const next = !saved;
+      setSaved(next);
+      trackEvent(next ? "Job Saved" : "Job Unsaved", { jobId });
+      showToast(
+        next ? "공고가 저장되었습니다" : "공고가 해제되었습니다",
+        next ? { label: "보러가기", href: "/mypage" } : undefined
+      );
+      startTransition(async () => {
+        try {
+          const res = await fetch("/api/saved-jobs", {
+            method: next ? "POST" : "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ jobId }),
+          });
+          if (!res.ok) throw new Error("failed");
+        } catch {
+          setSaved(!next);
+          trackEvent("Job Save Failed", { jobId, action: next ? "save" : "unsave" });
+        }
+      });
     });
-  });
+  };
 
   // 아이콘을 사방 동일한 패딩으로 감싸 터치 영역을 확보한다. 기존에는 아이콘을 오버사이즈
   // 박스 오른쪽에 justify-end로 붙이는 방식이라 아이콘의 실제 시각적 위치가 카드의 다른
