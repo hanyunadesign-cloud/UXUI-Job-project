@@ -104,7 +104,7 @@ export default async function JobsPage({
         ]}
       />
 
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline gap-2">
         <h1 className="text-xl font-bold text-ink">채용 공고</h1>
         <p className="text-sm text-neutral-500">{jobs.length}개의 공고</p>
       </div>
