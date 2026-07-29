@@ -81,7 +81,6 @@ const DESIGN_TITLE_PATTERN =
 function inferRole(title: string): string {
   if (/ux researcher|리서처/i.test(title)) return "UX 리서치";
   if (/ux writer|라이터/i.test(title)) return "UX 라이팅";
-  if (/product designer|프로덕트 디자이너/i.test(title)) return "프로덕트 디자인";
   if (
     /brand designer|graphic designer|design engineer|visual designer|motion designer|contents? designer|그래픽 디자이너/i.test(
       title
