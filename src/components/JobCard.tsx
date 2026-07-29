@@ -23,10 +23,12 @@ export function JobCard({
   job,
   saved,
   isLoggedIn,
+  isNew,
 }: {
   job: JobCardData;
   saved: boolean;
   isLoggedIn: boolean;
+  isNew?: boolean;
 }) {
   const initial = job.companyName.slice(0, 1);
 
@@ -54,8 +56,15 @@ export function JobCard({
             initial={initial}
             size={48}
           />
-          <p className="truncate text-sm font-semibold text-ink hover:underline">
-            {job.companyName}
+          <p className="flex min-w-0 items-center gap-1.5">
+            <span className="truncate text-sm font-semibold text-ink hover:underline">
+              {job.companyName}
+            </span>
+            {isNew && (
+              <span className="shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
+                NEW
+              </span>
+            )}
           </p>
         </Link>
       ) : (
@@ -66,7 +75,14 @@ export function JobCard({
             initial={initial}
             size={48}
           />
-          <p className="truncate text-sm font-semibold text-ink">{job.companyName}</p>
+          <p className="flex min-w-0 items-center gap-1.5">
+            <span className="truncate text-sm font-semibold text-ink">{job.companyName}</span>
+            {isNew && (
+              <span className="shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
+                NEW
+              </span>
+            )}
+          </p>
         </div>
       )}
 

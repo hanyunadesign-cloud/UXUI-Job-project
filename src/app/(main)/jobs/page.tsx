@@ -118,12 +118,14 @@ export default async function JobsPage({
         />
       ) : (
         <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-          {sortedJobs.map((job) => (
+          {sortedJobs.map((job, i) => (
             <JobCard
               key={job.id}
               job={{ ...job, taskKeywords: job.analysis?.taskKeywords ?? [] }}
               saved={savedJobIds.has(job.id)}
               isLoggedIn={Boolean(userId)}
+              // 시범 적용: 카드 하나에서 먼저 확인해보기 위해 목록 첫 번째 공고에만 붙여봄
+              isNew={i === 0}
             />
           ))}
         </div>
