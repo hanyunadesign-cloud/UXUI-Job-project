@@ -87,7 +87,7 @@ function inferRole(title: string): string {
     )
   )
     return "GUI 디자인";
-  return "UX·UI 프로덕트 디자인";
+  return "UXUI·프로덕트";
 }
 
 // 실제 HTML(엔티티 이중 인코딩 없는 경우)을 정리된 텍스트로 변환하는 공통 로직.
