@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
+import { ROLES, PLATFORMS } from "@/lib/constants";
 
 const MAX_INPUT_CHARS = 3000;
 
@@ -83,8 +84,9 @@ export type JobClassification = {
   uncertainNote?: string;
 };
 
-const ROLE_OPTIONS = ["GUI 디자인", "UXUI 디자인", "프로덕트 디자인", "UX 라이팅", "UX 리서치"];
-const PLATFORM_OPTIONS = ["웹", "앱", "태블릿", "워치/웨어러블", "모빌리티", "가전", "VR/AR"];
+// 필터 옵션(src/lib/constants.ts)과 항상 같은 목록을 쓰도록 별도로 하드코딩하지 않고 그대로 가져온다.
+const ROLE_OPTIONS: string[] = [...ROLES];
+const PLATFORM_OPTIONS: string[] = [...PLATFORMS];
 
 // 업무/매체/경력을 제목 정규식이나 회사 단위 고정값이 아니라, 공고 원문 전체를 읽고 판단하게 한다.
 const classifyModel = genAI.getGenerativeModel({
@@ -92,7 +94,7 @@ const classifyModel = genAI.getGenerativeModel({
   systemInstruction:
     "당신은 채용공고를 분류하는 어시스턴트입니다. 주어진 공고 제목과 본문만 근거로 판단하세요. " +
     "명시되지 않은 내용은 추측하지 말고 uncertain을 true로 표시하세요.\n\n" +
-    `role은 다음 5개 중 공고 내용상 가장 적합한 하나만 고르세요: ${ROLE_OPTIONS.join(", ")}. ` +
+    `role은 다음 중 공고 내용상 가장 적합한 하나만 고르세요: ${ROLE_OPTIONS.join(", ")}. ` +
     "제목만 보지 말고 본문의 주요업무·자격요건까지 읽고 판단하세요.\n\n" +
     `platforms는 다음 목록에서 공고 내용(주요업무, 회사 제품 설명 등)에 실제로 언급되거나 명확히 유추되는 것만 골라 배열로 담으세요: ${PLATFORM_OPTIONS.join(", ")}. ` +
     "본문에 웹/앱 등 매체가 전혀 드러나지 않으면 빈 배열을 반환하고 uncertain을 true로 표시하세요. 근거 없이 임의로 넣지 마세요.\n\n" +
