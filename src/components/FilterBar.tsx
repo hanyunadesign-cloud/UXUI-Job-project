@@ -51,6 +51,8 @@ export function FilterBar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  // 드롭다운이 열려있는 동안의 임시 선택 상태. "적용"을 눌러야만 실제 URL(필터)에 반영된다.
+  const [staged, setStaged] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,18 +65,32 @@ export function FilterBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const toggle = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    const current = params.getAll(key);
-    params.delete(key);
-    const nowActive = !current.includes(value);
-    if (current.includes(value)) {
-      current.filter((v) => v !== value).forEach((v) => params.append(key, v));
-    } else {
-      [...current, value].forEach((v) => params.append(key, v));
+  const openDropdown = (key: string) => {
+    if (openGroup === key) {
+      setOpenGroup(null);
+      return;
     }
-    trackEvent("Job Filter Changed", { key, value, active: nowActive });
+    setStaged(searchParams.getAll(key));
+    setOpenGroup(key);
+  };
+
+  const toggleStaged = (value: string) => {
+    setStaged((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
+
+  const toggleSelectAll = (allValues: string[]) => {
+    setStaged((prev) => (prev.length === allValues.length ? [] : allValues));
+  };
+
+  const applyGroup = (key: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete(key);
+    staged.forEach((v) => params.append(key, v));
+    trackEvent("Job Filter Changed", { key, values: staged });
     router.push(`${pathname}?${params.toString()}`);
+    setOpenGroup(null);
   };
 
   const hasFilters = FILTER_GROUPS.some((g) => searchParams.getAll(g.key).length > 0);
@@ -87,12 +103,13 @@ export function FilterBar() {
       {FILTER_GROUPS.map((group) => {
         const active = searchParams.getAll(group.key);
         const isOpen = openGroup === group.key;
+        const allValues = group.options.map((o) => o.value);
 
         return (
           <div key={group.key} className="relative">
             <button
               type="button"
-              onClick={() => setOpenGroup(isOpen ? null : group.key)}
+              onClick={() => openDropdown(group.key)}
               className={clsx(
                 "flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",
                 active.length > 0
@@ -109,35 +126,54 @@ export function FilterBar() {
             </button>
 
             {isOpen && (
-              <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-64 max-w-[calc(100vw-2rem)] flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-dropdown">
-                {group.options.map((option) => {
-                  const isSelected = active.includes(option.value);
-                  return (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => toggle(group.key, option.value)}
-                      className={clsx(
-                        "flex items-start justify-between gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors",
-                        isSelected
-                          ? "bg-blue-50 font-medium text-primary"
-                          : "text-neutral-600 hover:bg-neutral-50"
-                      )}
-                    >
-                      <span className="flex flex-col gap-0.5">
-                        <span>{option.value}</span>
-                        {option.description && (
-                          <span className="whitespace-pre-line text-xs font-normal text-neutral-400">
-                            {option.description}
-                          </span>
+              <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-64 max-w-[calc(100vw-2rem)] flex-col rounded-2xl border border-neutral-200 bg-white shadow-dropdown">
+                <p className="px-5 pb-1 pt-3 text-[15px] font-semibold text-neutral-500">{group.label}</p>
+
+                <div className="flex max-h-72 flex-col gap-0.5 overflow-y-auto px-2 pb-2">
+                  {group.options.map((option) => {
+                    const isSelected = staged.includes(option.value);
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => toggleStaged(option.value)}
+                        className={clsx(
+                          "flex items-start justify-between gap-2 rounded-xl px-2.5 py-2 text-left text-[15px] transition-colors",
+                          isSelected ? "font-medium text-primary" : "text-neutral-600 hover:bg-neutral-50"
                         )}
-                      </span>
-                      {isSelected && (
-                        <CheckIcon aria-hidden strokeWidth={2.5} className="h-3.5 w-3.5 shrink-0" />
-                      )}
-                    </button>
-                  );
-                })}
+                      >
+                        <span className="flex flex-col gap-0.5">
+                          <span>{option.value}</span>
+                          {option.description && (
+                            <span className="whitespace-pre-line text-[15px] font-normal text-neutral-400">
+                              {option.description}
+                            </span>
+                          )}
+                        </span>
+                        {isSelected && (
+                          <CheckIcon aria-hidden strokeWidth={2.5} className="h-3.5 w-3.5 shrink-0" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="flex items-center gap-1.5 border-t border-neutral-100 p-2">
+                  <button
+                    type="button"
+                    onClick={() => toggleSelectAll(allValues)}
+                    className="flex-1 rounded-xl bg-neutral-100 px-3 py-2 text-[15px] font-medium text-neutral-600 transition-colors hover:bg-neutral-200"
+                  >
+                    전체 선택
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyGroup(group.key)}
+                    className="flex-1 rounded-xl bg-primary px-3 py-2 text-[15px] font-medium text-white transition-colors hover:bg-primary-strong"
+                  >
+                    적용
+                  </button>
+                </div>
               </div>
             )}
           </div>
