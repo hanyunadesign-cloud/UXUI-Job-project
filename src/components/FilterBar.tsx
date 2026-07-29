@@ -127,7 +127,7 @@ export function FilterBar() {
 
             {isOpen && (
               <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-64 max-w-[calc(100vw-2rem)] flex-col rounded-2xl border border-neutral-200 bg-white shadow-dropdown">
-                <p className="px-5 pb-1 pt-3 text-[15px] font-semibold text-neutral-500">{group.label}</p>
+                <p className="px-5 pb-1 pt-3 text-xs font-semibold text-neutral-500">{group.label}</p>
 
                 <div className="flex max-h-72 flex-col gap-0.5 overflow-y-auto px-2 pb-2">
                   {group.options.map((option) => {
@@ -138,14 +138,14 @@ export function FilterBar() {
                         type="button"
                         onClick={() => toggleStaged(option.value)}
                         className={clsx(
-                          "flex items-start justify-between gap-2 rounded-xl px-2.5 py-2 text-left text-[15px] transition-colors",
+                          "flex items-start justify-between gap-2 rounded-xl px-2.5 py-2 text-left text-sm transition-colors",
                           isSelected ? "font-medium text-primary" : "text-neutral-600 hover:bg-neutral-50"
                         )}
                       >
                         <span className="flex flex-col gap-0.5">
                           <span>{option.value}</span>
                           {option.description && (
-                            <span className="whitespace-pre-line text-[15px] font-normal text-neutral-400">
+                            <span className="whitespace-pre-line text-xs font-normal text-neutral-400">
                               {option.description}
                             </span>
                           )}
@@ -162,14 +162,14 @@ export function FilterBar() {
                   <button
                     type="button"
                     onClick={() => toggleSelectAll(allValues)}
-                    className="flex-1 rounded-xl bg-neutral-100 px-3 py-2 text-[15px] font-medium text-neutral-600 transition-colors hover:bg-neutral-200"
+                    className="flex-1 rounded-xl bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-200"
                   >
                     전체 선택
                   </button>
                   <button
                     type="button"
                     onClick={() => applyGroup(group.key)}
-                    className="flex-1 rounded-xl bg-primary px-3 py-2 text-[15px] font-medium text-white transition-colors hover:bg-primary-strong"
+                    className="flex-1 rounded-xl bg-primary px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-strong"
                   >
                     적용
                   </button>
