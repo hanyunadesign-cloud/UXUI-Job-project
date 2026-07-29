@@ -25,14 +25,9 @@ const FILTER_GROUPS = [
     })),
   },
   {
-    key: "role",
-    label: "업무",
-    options: ROLES.map((v) => ({ value: v as string, description: undefined })),
-  },
-  {
-    key: "platform",
-    label: "매체",
-    options: PLATFORMS.map((v) => ({ value: v as string, description: undefined })),
+    key: "stage",
+    label: "규모",
+    options: STAGES.map((v) => ({ value: v as string, description: undefined })),
   },
   {
     key: "industry",
@@ -40,9 +35,14 @@ const FILTER_GROUPS = [
     options: INDUSTRIES.map((v) => ({ value: v as string, description: undefined })),
   },
   {
-    key: "stage",
-    label: "규모",
-    options: STAGES.map((v) => ({ value: v as string, description: undefined })),
+    key: "platform",
+    label: "매체",
+    options: PLATFORMS.map((v) => ({ value: v as string, description: undefined })),
+  },
+  {
+    key: "role",
+    label: "업무",
+    options: ROLES.map((v) => ({ value: v as string, description: undefined })),
   },
 ] as const;
 
