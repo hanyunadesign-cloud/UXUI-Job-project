@@ -75,12 +75,14 @@ const SOURCES: Source[] = [
 ];
 
 // UX Engineer, Interaction Designer 등 Ashby 계열 공고에서 흔한 직함까지 포괄하도록 확장.
+// "UX 기획자"처럼 "디자이너/디자인"이 제목에 안 붙는 UX기획 직군도 놓치지 않도록 planner/기획 패턴 포함.
 const DESIGN_TITLE_PATTERN =
-  /(product designer|ux researcher|ux writer|ux designer|ux engineer|ux\/ui|interaction designer|conversation designer|visual designer|motion designer|contents? designer|gui designer|brand designer|graphic designer|design engineer|디자이너|디자인)/i;
+  /(product designer|ux researcher|ux writer|ux designer|ux engineer|ux\/ui|interaction designer|conversation designer|visual designer|motion designer|contents? designer|gui designer|brand designer|graphic designer|design engineer|ux planner|ux strategist|ux\s*기획|디자이너|디자인)/i;
 
 function inferRole(title: string): string {
   if (/ux researcher|리서처/i.test(title)) return "UX 리서치";
   if (/ux writer|라이터/i.test(title)) return "UX 라이팅";
+  if (/ux planner|ux strategist|ux\s*기획/i.test(title)) return "UX기획";
   if (
     /brand designer|graphic designer|design engineer|visual designer|motion designer|contents? designer|그래픽 디자이너/i.test(
       title

@@ -1,6 +1,7 @@
 export const ROLES = [
   "GUI 디자인",
   "UXUI·프로덕트",
+  "UX기획",
   "UX 라이팅",
   "UX 리서치",
 ] as const;
