@@ -15,7 +15,7 @@ export function NewBadge({ jobId }: { jobId: string }) {
   if (!show) return null;
 
   return (
-    <span className="shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
+    <span className="shrink-0 rounded-full bg-negative px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
       NEW
     </span>
   );
