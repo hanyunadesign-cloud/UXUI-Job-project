@@ -40,7 +40,7 @@ const config: Config = {
         },
         positive: "oklch(0.745 0.176 162)",
         negative: {
-          DEFAULT: "oklch(0.649 0.219 19)",
+          DEFAULT: "#FF004D",
           weak: "oklch(0.957 0.025 14)",
           strong: "oklch(0.594 0.249 21)",
         },
