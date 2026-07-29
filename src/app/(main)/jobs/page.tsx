@@ -2,7 +2,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { FilterBar } from "@/components/FilterBar";
+import { SortDropdown } from "@/components/SortDropdown";
 import { JobCard } from "@/components/JobCard";
+import { NewJobsCarousel } from "@/components/NewJobsCarousel";
 import { EmptyState } from "@/components/EmptyState";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { OnboardingSuccessModal } from "./OnboardingSuccessModal";
@@ -13,6 +15,9 @@ import { LoginSuccessTracker } from "@/components/LoginSuccessTracker";
 import { TrackSearchResultCount } from "@/components/TrackSearchResultCount";
 
 export const dynamic = "force-dynamic";
+
+// 가로 스크롤 캐러셀이라 한 화면에 다 안 들어올 만큼 넉넉히 보여준다.
+const NEW_JOBS_COUNT = 12;
 
 function toArray(value: string | string[] | undefined): string[] {
   if (!value) return [];
@@ -36,8 +41,10 @@ export default async function JobsPage({
     typeof searchParams.companyQuery === "string" ? searchParams.companyQuery.trim() : "";
   const sort = searchParams.sort === "deadline" ? "deadline" : "latest";
 
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
   // DB가 원격(서울) 리전에 있어 왕복 지연이 크므로, 서로 의존하지 않는 조회는 병렬로 묶는다.
-  const [matchedJobs, savedJobsList] = await Promise.all([
+  const [matchedJobs, savedJobsList, newJobs] = await Promise.all([
     prisma.job.findMany({
       where: {
         archivedAt: null,
@@ -53,6 +60,13 @@ export default async function JobsPage({
     userId
       ? prisma.savedJob.findMany({ where: { userId }, select: { jobId: true } })
       : Promise.resolve([]),
+    // 이번주 새공고 캐러셀: 현재 적용된 필터/검색과 무관하게 최근 7일 등록 공고를 항상 보여준다.
+    prisma.job.findMany({
+      where: { archivedAt: null, postedAt: { gte: sevenDaysAgo } },
+      include: { analysis: { select: { taskKeywords: true } } },
+      orderBy: { postedAt: "desc" },
+      take: NEW_JOBS_COUNT,
+    }),
   ]);
 
   // experienceLevel은 "3~10년" 같은 자유 형식 텍스트라 Prisma where로 바로 못 걸러서,
@@ -86,6 +100,9 @@ export default async function JobsPage({
 
   const savedJobIds = new Set(savedJobsList.map((s) => s.jobId));
 
+  // 마감된 공고는 "새공고"로서 의미가 없으니 캐러셀에서는 제외한다.
+  const openNewJobs = newJobs.filter((job) => !getApplicationStatus(job.applicationDeadline).closed);
+
   return (
     <div className="flex flex-col gap-8">
       <OnboardingSuccessModal initialOpen={searchParams.onboarded === "1"} />
@@ -104,12 +121,27 @@ export default async function JobsPage({
         ]}
       />
 
-      <div>
+      <div className="flex items-baseline justify-between">
         <h1 className="text-xl font-bold text-ink">채용 공고</h1>
-        <p className="mt-1 text-sm text-neutral-500">{jobs.length}개의 공고</p>
+        <p className="text-sm text-neutral-500">{jobs.length}개의 공고</p>
       </div>
 
+      {openNewJobs.length > 0 && (
+        <>
+          <NewJobsCarousel
+            jobs={openNewJobs.map((job) => ({ ...job, taskKeywords: job.analysis?.taskKeywords ?? [] }))}
+            savedJobIds={savedJobIds}
+            isLoggedIn={Boolean(userId)}
+          />
+          <div className="border-t border-neutral-200" />
+        </>
+      )}
+
       <FilterBar />
+
+      <div className="flex justify-end">
+        <SortDropdown />
+      </div>
 
       {sortedJobs.length === 0 ? (
         <EmptyState

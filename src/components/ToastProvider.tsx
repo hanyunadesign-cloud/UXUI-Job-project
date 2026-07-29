@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import Link from "next/link";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { Check } from "lucide-react";
 
 type ToastAction = { label: string; href: string };
 type ToastState = { id: number; message: string; action?: ToastAction } | null;
@@ -42,7 +42,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               aria-hidden
               className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-ink"
             >
-              <CheckIcon className="h-3.5 w-3.5" strokeWidth={2.5} />
+              <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
             </span>
             <span>{toast.message}</span>
             {toast.action && (

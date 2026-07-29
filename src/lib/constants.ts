@@ -17,24 +17,24 @@ export const PLATFORMS = [
 ] as const;
 
 export const INDUSTRIES = [
+  "IT/서비스",
   "커머스",
   "핀테크",
-  "SNS",
-  "여행/로컬",
   "B2B SaaS",
-  "헬스케어",
+  "AI",
+  "유통",
   "모빌리티",
   "게임",
-  "유통",
-  "IT/서비스",
   "에듀테크",
+  "헬스케어",
+  "SNS",
+  "여행/로컬",
 ] as const;
 
 export const STAGES = [
   "스타트업",
-  "유니콘",
-  "중견 기업",
-  "대기업",
+  "유니콘·스케일업",
+  "대기업·중견",
   "에이전시",
 ] as const;
 

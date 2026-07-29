@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { ChevronDown, Check } from "lucide-react";
 import { INDUSTRIES, STAGES } from "@/lib/constants";
 import { SearchBar } from "@/components/SearchBar";
 import { trackEvent } from "@/lib/analytics";
@@ -74,7 +74,7 @@ export function CompanyFilterBar() {
               >
                 {group.label}
                 {active.length > 0 && <span>{active.length}</span>}
-                <ChevronDownIcon
+                <ChevronDown
                   aria-hidden
                   className={clsx("h-4 w-4 shrink-0 transition-transform", isOpen && "rotate-180")}
                 />
@@ -98,7 +98,7 @@ export function CompanyFilterBar() {
                       >
                         {option}
                         {isSelected && (
-                          <CheckIcon aria-hidden strokeWidth={2.5} className="h-3.5 w-3.5 shrink-0" />
+                          <Check aria-hidden strokeWidth={2.5} className="h-3.5 w-3.5 shrink-0" />
                         )}
                       </button>
                     );

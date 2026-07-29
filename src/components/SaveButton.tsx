@@ -2,11 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { clsx } from "clsx";
-import { BookmarkIcon as BookmarkOutline } from "@heroicons/react/24/outline";
-import { BookmarkIcon as BookmarkSolid } from "@heroicons/react/24/solid";
+import { Bookmark } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
 import { useLoginPrompt } from "@/hooks/useLoginPrompt";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 export function SaveButton({
   jobId,
@@ -47,13 +47,12 @@ export function SaveButton({
     });
   });
 
-  // 아이콘(24px, h-6 w-6 고정)을 사방 동일한 패딩으로 감싸 터치 영역을 확보한다.
-  // 기존에는 아이콘을 오버사이즈 박스 오른쪽에 justify-end로 붙이는 방식이라 아이콘의
-  // 실제 시각적 위치가 카드의 다른 16px(p-4) 기준선과 어긋났다. 패딩 기반으로 바꾸고
-  // 카드 쪽 absolute 오프셋에서 이 패딩만큼을 미리 빼서, 아이콘의 실제 가장자리가
-  // 카드 콘텐츠의 16px 인셋과 정확히 맞도록 한다.
-  const Icon = saved ? BookmarkSolid : BookmarkOutline;
-
+  // 아이콘을 사방 동일한 패딩으로 감싸 터치 영역을 확보한다. 기존에는 아이콘을 오버사이즈
+  // 박스 오른쪽에 justify-end로 붙이는 방식이라 아이콘의 실제 시각적 위치가 카드의 다른
+  // 16px(p-4) 기준선과 어긋났다. 패딩 기반으로 바꾸고 카드 쪽 absolute 오프셋에서 이 패딩만큼을
+  // 미리 빼서, 아이콘의 실제 가장자리가 카드 콘텐츠의 16px 인셋과 정확히 맞도록 한다.
+  // 아이콘 자체 크기도 size에 맞춰 함께 줄여야 좁은 카드 모서리에서 두꺼워 보이지 않는다
+  // (md=24px 상세페이지 단독 버튼, sm=20px 카드 모서리처럼 조밀한 자리).
   return (
     <>
       <button
@@ -68,7 +67,11 @@ export function SaveButton({
           saved ? "text-primary" : "text-neutral-300 hover:text-neutral-500"
         )}
       >
-        <Icon className="h-6 w-6" aria-hidden />
+        <Bookmark
+          className={size === "md" ? ICON_SIZE.lg : ICON_SIZE.md}
+          fill={saved ? "currentColor" : "none"}
+          aria-hidden
+        />
       </button>
       {modal}
     </>

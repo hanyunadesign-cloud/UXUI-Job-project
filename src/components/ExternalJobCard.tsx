@@ -3,11 +3,12 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { BookmarkIcon as BookmarkSolid } from "@heroicons/react/24/solid";
+import { Bookmark } from "lucide-react";
 import { Badge } from "@/components/Badge";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 export type ExternalJobCardData = {
   id: string;
@@ -68,7 +69,7 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
         aria-label="저장한 링크 삭제"
         className="absolute right-2.5 top-2.5 flex shrink-0 items-center justify-end p-1.5 text-primary transition-colors active:scale-[0.92] disabled:opacity-60"
       >
-        <BookmarkSolid className="h-6 w-6" aria-hidden />
+        <Bookmark className={ICON_SIZE.md} fill="currentColor" aria-hidden />
       </button>
 
       <div className="flex items-center gap-3 pr-12">

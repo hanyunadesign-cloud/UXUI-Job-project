@@ -2,11 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { clsx } from "clsx";
-import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
-import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
+import { Heart } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
 import { useLoginPrompt } from "@/hooks/useLoginPrompt";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 export function FollowButton({
   companyId,
@@ -42,12 +42,10 @@ export function FollowButton({
     });
   });
 
-  // 텍스트와 나란히 붙는 인라인 아이콘이라 시스템 규칙상 16px(h-4 w-4) 고정.
+  // 텍스트와 나란히 붙는 인라인 아이콘이라 시스템 규칙상 ICON_SIZE.sm(16px) 고정.
   // 버튼 자체는 상태와 무관하게 항상 같은 중립 아웃라인 필로, 상태는 하트 아이콘의
   // 색/채움 여부(회색 아웃라인 ↔ primary 블루 solid)로만 표현한다. 라벨도 "팔로우/팔로잉"
   // 대신 상태와 무관한 "관심기업"으로 고정.
-  const Icon = following ? HeartSolid : HeartOutline;
-
   return (
     <>
       <button
@@ -58,7 +56,11 @@ export function FollowButton({
         aria-label={following ? "관심기업 해제" : "관심기업으로 등록"}
         className="inline-flex items-center justify-center gap-1.5 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-ink transition-colors active:scale-[0.95] disabled:cursor-not-allowed hover:bg-neutral-50"
       >
-        <Icon className={clsx("h-4 w-4", following ? "text-primary" : "text-neutral-400")} aria-hidden />
+        <Heart
+          className={clsx(ICON_SIZE.sm, following ? "text-primary" : "text-neutral-400")}
+          fill={following ? "currentColor" : "none"}
+          aria-hidden
+        />
         관심기업
       </button>
       {modal}

@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { clsx } from "clsx";
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/Button";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 const CATEGORIES = ["불편했어요", "이런 기능이 있으면 좋겠어요", "기타"] as const;
 
@@ -46,7 +47,7 @@ export function ServiceFeedbackForm() {
   if (submitted) {
     return (
       <div className="flex flex-col items-center gap-3 rounded-2xl border border-neutral-200 bg-white px-6 py-16 text-center">
-        <CheckCircleIcon className="h-9 w-9 text-primary" aria-hidden />
+        <CheckCircle className={clsx(ICON_SIZE.xl, "text-primary")} aria-hidden />
         <div className="flex flex-col gap-1">
           <p className="text-base font-semibold text-ink">의견을 잘 전달받았어요</p>
           <p className="text-sm text-neutral-400">꼼꼼히 읽고 서비스 개선에 반영할게요</p>

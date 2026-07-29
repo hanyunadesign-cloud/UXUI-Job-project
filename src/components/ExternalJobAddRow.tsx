@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { LinkIcon } from "@heroicons/react/24/outline";
+import { clsx } from "clsx";
+import { Link } from "lucide-react";
+import { ICON_SIZE } from "@/lib/design-tokens";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
 
@@ -39,7 +41,7 @@ export function ExternalJobAddRow() {
 
   return (
     <div className="mb-4 flex h-16 items-center gap-2 rounded-2xl border border-neutral-200 bg-white pl-4 pr-2">
-      <LinkIcon className="h-4 w-4 shrink-0 text-neutral-400" aria-hidden />
+      <Link className={clsx(ICON_SIZE.sm, "shrink-0 text-neutral-400")} aria-hidden />
       <input
         type="text"
         value={url}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { Check } from "lucide-react";
 import { Button } from "@/components/Button";
 import { trackEvent } from "@/lib/analytics";
 
@@ -43,7 +43,7 @@ export function OnboardingSuccessModal({ initialOpen }: { initialOpen: boolean }
       <div className="flex w-full max-w-sm flex-col gap-6 rounded-2xl bg-white p-6 text-center shadow-sheet">
         <div className="flex flex-col items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white">
-            <CheckIcon className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />
+            <Check className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />
           </div>
           <h2 className="text-lg font-bold text-ink">로그인이 완료되었습니다!</h2>
           <p className="text-sm text-neutral-500">

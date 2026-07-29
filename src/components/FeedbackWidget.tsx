@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
-import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import { Send } from "lucide-react";
+import { ICON_SIZE } from "@/lib/design-tokens";
 import { trackEvent } from "@/lib/analytics";
 import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 
@@ -176,7 +177,7 @@ export function FeedbackWidget({
             aria-label="피드백 전송"
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary-strong active:scale-[0.92] disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:active:scale-100"
           >
-            <PaperAirplaneIcon className="h-4 w-4" aria-hidden />
+            <Send className={ICON_SIZE.sm} aria-hidden />
           </button>
         </div>
       )}

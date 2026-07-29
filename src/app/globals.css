@@ -6,6 +6,51 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ================= 디자인 토큰 =================
+   전체 페이지 감사 후 확정한 타이포그래피/간격/아이콘 규칙. 임의값(text-[13px], gap-[10px] 등)
+   대신 아래 스케일만 사용한다.
+
+   [타이포그래피] 아래 5단계 유틸리티 클래스로만 크기/굵기/행간을 지정한다. 루트 폰트는
+   브라우저 기본값(16px)을 그대로 쓴다 — 전역 배율을 걸면 아이콘 등 개별로 이미 줄여둔
+   요소와 곱연산으로 겹쳐서 과하게 작아지므로, 크기 조정은 항상 아래 클래스 단위로만 한다.
+   색상은 여기 포함하지 않으므로 text-ink/text-neutral-500 등을 항상 같이 붙인다.
+   - text-h1    24px / bold   — 페이지 최상위 제목 (예: "채용 공고")
+   - text-h2    18px / bold   — 섹션 제목
+   - text-h3    14px / bold   — 카드 제목 등 콘텐츠 내 최상위 텍스트(본문과 크기는 같고 굵기로만 구분)
+   - text-body  14px / medium — 기본 UI/본문 텍스트 (버튼, 라벨, 문단)
+   - text-caption 12px / medium — 메타 정보, 캡션
+   식별 정보(회사명·사용자 이름 등)는 text-body에 font-semibold를 더해 강조한다.
+   font-weight는 medium(기본) / semibold(식별 강조) / bold(제목) 3단계만 쓴다.
+
+   [간격] Tailwind 기본 스케일 중 아래 7단계(4px 배수)만 쓴다. 그 사이값(1.5/2.5/3.5 등)이나
+   임의 브래킷 값은 쓰지 않는다.
+   1(4px) · 2(8px) · 3(12px) · 4(16px) · 6(24px) · 8(32px) · 12(48px)
+
+   [아이콘] lucide-react로 통일(다른 아이콘 라이브러리·손으로 그린 SVG 금지). 북마크·하트처럼
+   채워진 상태를 표현할 땐 별도 solid 아이콘이 없으므로 같은 아이콘에 fill="currentColor"를
+   조건부로 줘서 표현한다(fill="none"이 기본). 크기는 src/lib/design-tokens.ts의
+   ICON_SIZE(16/20/24px) 3단계만 쓴다. 아바타·로고 같은 이미지 컨테이너 크기는 이 스케일과
+   무관하게 별도로 정한다. stroke는 지정하지 않으면 라이브러리 기본값(2)이고, 체크마크처럼
+   작은 크기(14px)에서 더 또렷하게 읽혀야 하는 경우에만 2.5로 강조한다. 색상은 항상
+   stroke="currentColor" + Tailwind 텍스트 컬러 클래스로 지정하고 hex/oklch를 직접 박지 않는다. */
+@layer components {
+  .text-h1 {
+    @apply text-2xl font-bold leading-snug;
+  }
+  .text-h2 {
+    @apply text-lg font-bold leading-snug;
+  }
+  .text-h3 {
+    @apply text-sm font-bold leading-snug;
+  }
+  .text-body {
+    @apply text-sm font-medium;
+  }
+  .text-caption {
+    @apply text-xs font-medium;
+  }
+}
+
 :root {
   /* 다크모드 미지원: OS 설정과 무관하게 항상 라이트 색상 스킴을 강제한다. */
   color-scheme: light;

@@ -19,13 +19,12 @@ const PAGE_SIZE = 16;
 // 가로 스크롤 캐러셀이라 한 화면에 다 안 들어올 만큼 넉넉히 보여준다.
 const RECOMMENDED_COUNT = 8;
 
-// 기본 정렬 우선순위: 대기업 → 유니콘 → 중견기업 → 에이전시 → 스타트업.
+// 기본 정렬 우선순위: 대기업·중견 → 유니콘·스케일업 → 에이전시 → 스타트업.
 const STAGE_PRIORITY: Record<string, number> = {
-  대기업: 0,
-  유니콘: 1,
-  중견기업: 2,
-  에이전시: 3,
-  스타트업: 4,
+  "대기업·중견": 0,
+  "유니콘·스케일업": 1,
+  에이전시: 2,
+  스타트업: 3,
 };
 
 function stageRank(stage: string): number {

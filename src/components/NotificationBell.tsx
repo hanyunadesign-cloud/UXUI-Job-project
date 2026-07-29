@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { clsx } from "clsx";
-import { BellIcon } from "@heroicons/react/24/outline";
+import { Bell } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 type NotificationItem = {
   id: string;
@@ -102,7 +103,7 @@ export function NotificationBell() {
         aria-label="알림"
         className="relative flex h-9 w-9 items-center justify-center text-neutral-500 transition-colors hover:text-ink"
       >
-        <BellIcon className="h-6 w-6" aria-hidden />
+        <Bell className={ICON_SIZE.lg} aria-hidden />
         {unreadCount > 0 && (
           <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-negative px-1 text-[10px] font-semibold leading-none text-white">
             {unreadCount > 9 ? "9+" : unreadCount}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowUpIcon } from "@heroicons/react/24/outline";
+import { ArrowUp } from "lucide-react";
+import { ICON_SIZE } from "@/lib/design-tokens";
 import { clsx } from "clsx";
 
 // 화면 높이 1개 분량 이상 내려갔을 때만 노출한다.
@@ -35,7 +36,7 @@ export function ScrollToTopButton() {
         visible ? "opacity-100" : "pointer-events-none opacity-0"
       )}
     >
-      <ArrowUpIcon className="h-5 w-5" aria-hidden />
+      <ArrowUp className={ICON_SIZE.md} aria-hidden />
     </button>
   );
 }

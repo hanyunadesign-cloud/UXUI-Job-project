@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { clsx } from "clsx";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 // 클릭 트래킹을 위해 클라이언트 컴포넌트로 전환했다. 페이지 이동 자체는 여전히
 // Link의 기본 네비게이션만으로 충분하다.
@@ -41,7 +42,7 @@ export function Pagination({
             : "hover:bg-neutral-100 hover:text-ink"
         )}
       >
-        <ChevronLeftIcon className="h-4 w-4" aria-hidden />
+        <ChevronLeft className={ICON_SIZE.sm} aria-hidden />
       </Link>
 
       {pages.map((page) => (
@@ -72,7 +73,7 @@ export function Pagination({
             : "hover:bg-neutral-100 hover:text-ink"
         )}
       >
-        <ChevronRightIcon className="h-4 w-4" aria-hidden />
+        <ChevronRight className={ICON_SIZE.sm} aria-hidden />
       </Link>
     </nav>
   );

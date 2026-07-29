@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { clsx } from "clsx";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { Check } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 
 export function EmailAlertToggle({ initialEnabled }: { initialEnabled: boolean }) {
@@ -40,7 +40,7 @@ export function EmailAlertToggle({ initialEnabled }: { initialEnabled: boolean }
           : "bg-primary text-white hover:bg-primary-strong"
       )}
     >
-      {enabled && <CheckIcon className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />}
+      {enabled && <Check className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />}
       {enabled ? "알림 받는 중" : "이메일로 알림 받기"}
     </button>
   );

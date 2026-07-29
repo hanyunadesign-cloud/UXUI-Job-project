@@ -2,11 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { clsx } from "clsx";
-import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
-import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
+import { Heart } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
 import { useLoginPrompt } from "@/hooks/useLoginPrompt";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 // 카드 그리드처럼 좁은 공간에서 기업을 빠르게 팔로우/해제하기 위한 아이콘 전용 토글.
 // FollowButton(알약형)과 API/로그인 리다이렉트 동작은 동일하되, JobCard의 SaveButton과
@@ -49,9 +49,8 @@ export function CompanyFollowIcon({
     });
   });
 
-  // 카드 모서리의 독립 토글 아이콘이라 시스템 규칙상 24px(h-6 w-6) 고정.
-  const Icon = following ? HeartSolid : HeartOutline;
-
+  // 카드 모서리처럼 조밀한 자리의 독립 토글 아이콘이라 ICON_SIZE.md(20px) 고정.
+  // 단독 페이지에 크게 놓이는 아이콘(ICON_SIZE.lg)과 달리 카드 안에서는 한 단계 작게 쓴다.
   return (
     <>
       <button
@@ -68,7 +67,7 @@ export function CompanyFollowIcon({
           following ? "text-primary" : "text-neutral-300 hover:text-neutral-500"
         )}
       >
-        <Icon className="h-6 w-6" aria-hidden />
+        <Heart className={ICON_SIZE.md} fill={following ? "currentColor" : "none"} aria-hidden />
       </button>
       {modal}
     </>
