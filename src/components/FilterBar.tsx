@@ -74,23 +74,30 @@ export function FilterBar() {
     setOpenGroup(key);
   };
 
-  const toggleStaged = (value: string) => {
-    setStaged((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-    );
-  };
-
-  const toggleSelectAll = (allValues: string[]) => {
-    setStaged((prev) => (prev.length === allValues.length ? [] : allValues));
-  };
-
-  const applyGroup = (key: string) => {
+  // 선택 즉시 URL(필터)에 반영한다. staged는 드롭다운을 열어둔 채로 체크 상태를
+  // 보여주기 위한 용도로만 남겨두고, 커밋 자체는 매 클릭마다 바로 일어난다.
+  const commitToUrl = (key: string, values: string[]) => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete(key);
-    staged.forEach((v) => params.append(key, v));
-    trackEvent("Job Filter Changed", { key, values: staged });
+    values.forEach((v) => params.append(key, v));
+    trackEvent("Job Filter Changed", { key, values });
     router.push(`${pathname}?${params.toString()}`);
-    setOpenGroup(null);
+  };
+
+  const toggleStaged = (key: string, value: string) => {
+    setStaged((prev) => {
+      const next = prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value];
+      commitToUrl(key, next);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = (key: string, allValues: string[]) => {
+    setStaged((prev) => {
+      const next = prev.length === allValues.length ? [] : allValues;
+      commitToUrl(key, next);
+      return next;
+    });
   };
 
   const hasFilters = FILTER_GROUPS.some((g) => searchParams.getAll(g.key).length > 0);
@@ -134,7 +141,7 @@ export function FilterBar() {
                       <button
                         key={option.value}
                         type="button"
-                        onClick={() => toggleStaged(option.value)}
+                        onClick={() => toggleStaged(group.key, option.value)}
                         className={clsx(
                           "flex items-start justify-between gap-2 rounded-xl px-2.5 py-2 text-left text-sm transition-colors",
                           isSelected ? "font-medium text-primary" : "text-neutral-600 hover:bg-neutral-50"
@@ -159,14 +166,14 @@ export function FilterBar() {
                 <div className="flex items-center gap-1.5 border-t border-neutral-100 p-2">
                   <button
                     type="button"
-                    onClick={() => toggleSelectAll(allValues)}
+                    onClick={() => toggleSelectAll(group.key, allValues)}
                     className="flex-1 rounded-xl bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-200"
                   >
                     전체 선택
                   </button>
                   <button
                     type="button"
-                    onClick={() => applyGroup(group.key)}
+                    onClick={() => setOpenGroup(null)}
                     className="flex-1 rounded-xl bg-primary px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-strong"
                   >
                     적용
