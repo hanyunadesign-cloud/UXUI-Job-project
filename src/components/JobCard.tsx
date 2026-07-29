@@ -48,36 +48,19 @@ export function JobCard({
         <SaveButton jobId={job.id} initialSaved={saved} isLoggedIn={isLoggedIn} size="sm" />
       </div>
 
-      {/* 프로필 행: 기업 로고/기업명은 카드 나머지 부분과 별도로 기업 프로필로 연결된다 */}
-      {job.companyId ? (
-        <Link href={`/companies/${job.companyId}`} className="flex items-center gap-3 pr-12">
-          <CompanyLogo
-            src={job.companyLogo}
-            alt={job.companyName}
-            initial={initial}
-            size={48}
-          />
-          <p className="flex min-w-0 items-center gap-1.5">
-            <span className="truncate text-sm font-semibold text-ink hover:underline">
-              {job.companyName}
-            </span>
-            {isNew && <NewBadge jobId={job.id} />}
-          </p>
-        </Link>
-      ) : (
-        <div className="flex items-center gap-3 pr-12">
-          <CompanyLogo
-            src={job.companyLogo}
-            alt={job.companyName}
-            initial={initial}
-            size={48}
-          />
-          <p className="flex min-w-0 items-center gap-1.5">
-            <span className="truncate text-sm font-semibold text-ink">{job.companyName}</span>
-            {isNew && <NewBadge jobId={job.id} />}
-          </p>
-        </div>
-      )}
+      {/* 프로필 행: 기업 로고/기업명은 클릭해도 아무 데도 이동하지 않는 순수 표시 정보다 */}
+      <div className="flex items-center gap-3 pr-12">
+        <CompanyLogo
+          src={job.companyLogo}
+          alt={job.companyName}
+          initial={initial}
+          size={48}
+        />
+        <p className="flex min-w-0 items-center gap-1.5">
+          <span className="truncate text-sm font-semibold text-ink">{job.companyName}</span>
+          {isNew && <NewBadge jobId={job.id} />}
+        </p>
+      </div>
 
       <Link href={`/jobs/${job.id}`} className="flex flex-col gap-3">
         {/* 제목: 최대 2줄 고정, 1줄짜리 제목도 동일한 자리를 차지 */}
