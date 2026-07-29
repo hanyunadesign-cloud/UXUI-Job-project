@@ -30,6 +30,16 @@ export const STAGES = [
   "에이전시",
 ] as const;
 
+// STAGES는 CompanyFilterBar/OnboardingWizard 등 여러 곳이 "문자열 배열"로 그대로 쓰고 있어서
+// {value, description} 객체로 바꾸지 않고, 설명이 필요한 곳(FilterBar 드롭다운)에서만
+// 이 조회용 맵을 따로 참조한다.
+export const STAGE_DESCRIPTIONS: Record<string, string> = {
+  스타트업: "0to1 단계",
+  "유니콘·스케일업": "1to100 단계",
+  "대기업·중견": "100to1000 단계",
+  에이전시: "클라이언트 컨설팅",
+};
+
 export const EXPERIENCE_LEVELS = [
   { value: "신입", description: "인턴 또는 실무 경험 없음" },
   { value: "주니어", description: "기초적인 업무 수행\n(1~3년차에 준하는 실력)" },

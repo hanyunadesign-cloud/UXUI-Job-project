@@ -9,6 +9,7 @@ import {
   PLATFORMS,
   INDUSTRIES,
   STAGES,
+  STAGE_DESCRIPTIONS,
   EXPERIENCE_LEVELS,
 } from "@/lib/constants";
 import { SortDropdown } from "@/components/SortDropdown";
@@ -27,7 +28,7 @@ const FILTER_GROUPS = [
   {
     key: "stage",
     label: "규모",
-    options: STAGES.map((v) => ({ value: v as string, description: undefined })),
+    options: STAGES.map((v) => ({ value: v as string, description: STAGE_DESCRIPTIONS[v] })),
   },
   {
     key: "industry",
