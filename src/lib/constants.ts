@@ -6,15 +6,7 @@ export const ROLES = [
   "UX 리서치",
 ] as const;
 
-export const PLATFORMS = [
-  "웹",
-  "앱",
-  "태블릿",
-  "워치/웨어러블",
-  "모빌리티",
-  "가전",
-  "VR/AR",
-] as const;
+export const PLATFORMS = ["앱", "웹", "모빌리티", "기타"] as const;
 
 export const INDUSTRIES = [
   "IT/서비스",
