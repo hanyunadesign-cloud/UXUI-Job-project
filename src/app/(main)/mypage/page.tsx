@@ -10,7 +10,6 @@ import { ExternalJobAddRow } from "@/components/ExternalJobAddRow";
 import { CompanyFollowCard } from "@/components/CompanyFollowCard";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
-import { EmailAlertToggle } from "./EmailAlertToggle";
 import { TrackPageView } from "@/components/TrackPageView";
 
 export const dynamic = "force-dynamic";
@@ -31,8 +30,7 @@ export default async function MyPage({
   const userId = (session.user as { id: string }).id;
   const activeTab = searchParams.tab === "following" ? "following" : "saved";
 
-  const [preference, savedJobs, externalJobs, follows] = await Promise.all([
-    prisma.preference.findUnique({ where: { userId } }),
+  const [savedJobs, externalJobs, follows] = await Promise.all([
     activeTab === "saved"
       ? prisma.savedJob.findMany({
           where: { userId },
@@ -158,18 +156,6 @@ export default async function MyPage({
             )}
           </>
         )}
-      </div>
-
-      <div className="border-t border-neutral-200 pt-10">
-        <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-sm font-semibold text-ink">채용공고 알림</h2>
-            <p className="mt-1 text-sm text-neutral-500">
-              관심 조건에 맞는 새 공고를 이메일로 받아보세요.
-            </p>
-          </div>
-          <EmailAlertToggle initialEnabled={preference?.emailOptIn ?? false} />
-        </div>
       </div>
     </div>
   );
