@@ -1,12 +1,11 @@
 import type { ExperienceLevel } from "@/lib/constants";
 
-// 각 경력 구간이 대응하는 연차 범위. C레벨은 상한을 두지 않는다.
+// 각 경력 구간이 대응하는 연차 범위. 시니어는 상한을 두지 않는다.
 const BUCKET_RANGES: Record<ExperienceLevel, [number, number]> = {
   신입: [0, 0],
   주니어: [1, 3],
   미들: [3, 7],
-  시니어: [7, 15],
-  "C레벨": [15, Infinity],
+  시니어: [7, Infinity],
 };
 
 // 공고 원문에서 추출한 experienceLevel은 "3~10년", "8년 이상", "신입", "경력무관" 등
@@ -15,7 +14,7 @@ const BUCKET_RANGES: Record<ExperienceLevel, [number, number]> = {
 function parseExperienceRange(text: string): [number, number] {
   if (!text) return [0, Infinity];
 
-  // 버킷 이름 그대로 저장된 경우(신입/주니어/미들/시니어/C레벨) 그 버킷 범위를 바로 쓴다.
+  // 버킷 이름 그대로 저장된 경우(신입/주니어/미들/시니어) 그 버킷 범위를 바로 쓴다.
   // 이걸 먼저 체크하지 않으면 "미들"/"주니어"/"시니어" 같은 텍스트에는 숫자도 "경력"도
   // 없어서 맨 아래 기본값([0, Infinity])으로 빠져, 모든 경력 필터에 다 걸리는 버그가 난다.
   if (text in BUCKET_RANGES) return BUCKET_RANGES[text as ExperienceLevel];

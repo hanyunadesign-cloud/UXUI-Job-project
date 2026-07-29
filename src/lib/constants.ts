@@ -36,9 +36,8 @@ export const EXPERIENCE_LEVELS = [
   { value: "미들", description: "준수한 이해도, 프로젝트 전담\n(3~7년차에 준하는 실력)" },
   {
     value: "시니어",
-    description: "높은 이해도, 다수로 구성된 팀 리드\n(7~15년차에 준하는 실력)",
+    description: "높은 이해도, 다수로 구성된 팀 리드\n(7년차 이상에 준하는 실력)",
   },
-  { value: "C레벨", description: "전문가 수준, 임원급 의사결정권" },
 ] as const;
 
 export type Role = (typeof ROLES)[number];
