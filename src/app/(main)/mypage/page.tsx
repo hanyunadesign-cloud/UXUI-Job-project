@@ -80,6 +80,7 @@ export default async function MyPage({
         name="Mypage Viewed"
         props={{ tab: activeTab }}
         dwellEventName="Mypage Time Spent"
+        scrollDepthEventName="Mypage Scroll Depth"
       />
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 border-b border-neutral-200">

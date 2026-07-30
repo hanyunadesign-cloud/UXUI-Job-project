@@ -90,7 +90,11 @@ export default async function JobsPage({
     <div className="flex flex-col gap-8">
       <OnboardingSuccessModal initialOpen={searchParams.onboarded === "1"} />
       {searchParams.loginSuccess === "1" && <LoginSuccessTracker isNewUser={false} />}
-      <TrackPageView name="Jobs List Viewed" dwellEventName="Jobs List Time Spent" />
+      <TrackPageView
+        name="Jobs List Viewed"
+        dwellEventName="Jobs List Time Spent"
+        scrollDepthEventName="Jobs List Scroll Depth"
+      />
       <TrackSearchResultCount
         eventName="Job Search Result Count"
         resultCount={jobs.length}

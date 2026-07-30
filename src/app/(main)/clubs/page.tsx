@@ -42,7 +42,11 @@ const CLUBS = [
 export default function ClubsPage() {
   return (
     <div className="flex flex-col gap-8">
-      <TrackPageView name="Clubs Viewed" dwellEventName="Clubs Time Spent" />
+      <TrackPageView
+        name="Clubs Viewed"
+        dwellEventName="Clubs Time Spent"
+        scrollDepthEventName="Clubs Scroll Depth"
+      />
       <div>
         <h1 className="text-xl font-bold text-ink">IT 동아리</h1>
         <p className="mt-1 text-sm text-neutral-500">

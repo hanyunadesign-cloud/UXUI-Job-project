@@ -4,7 +4,11 @@ import { TrackPageView } from "@/components/TrackPageView";
 export default function FeedbackPage() {
   return (
     <div className="mx-auto flex w-full max-w-content flex-col gap-8">
-      <TrackPageView name="Feedback Page Viewed" dwellEventName="Feedback Page Time Spent" />
+      <TrackPageView
+        name="Feedback Page Viewed"
+        dwellEventName="Feedback Page Time Spent"
+        scrollDepthEventName="Feedback Page Scroll Depth"
+      />
       <div className="flex flex-col gap-1">
         <h1 className="text-xl font-bold text-ink">서비스 의견</h1>
         <p className="text-sm text-neutral-400">

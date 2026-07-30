@@ -24,11 +24,14 @@ function ensureMixpanel() {
 
 const VISIT_COUNT_KEY = "uxui_visit_count";
 const SESSION_COUNTED_KEY = "uxui_visit_counted";
+const LAST_VISIT_AT_KEY = "uxui_last_visit_at";
 
-// "이번이 몇 번째 방문인지"를 신규 vs 재방문자 비교에 쓸 수 있도록 super property로
-// 등록해, 이후 이 세션에서 보내는 모든 이벤트에 visitCount가 자동으로 붙게 한다.
-// sessionStorage로 같은 세션(탭) 안에서는 페이지를 여러 번 이동해도 중복 카운트되지
-// 않게 막는다.
+// "이번이 몇 번째 방문인지"(visitCount), "재방문자인지"(isReturningVisitor), "지난
+// 방문에서 며칠 만에 돌아왔는지"(daysSinceLastVisit)를 신규 vs 재방문/복귀 주기 분석에
+// 쓸 수 있도록 super property로 등록해, 이후 이 세션에서 보내는 모든 이벤트에 자동으로
+// 붙게 한다. sessionStorage로 같은 세션(탭) 안에서는 페이지를 여러 번 이동해도 중복
+// 카운트되지 않게 막는다. daysSinceLastVisit은 "저장된 마지막 방문 시각 → 지금"으로 이번
+// 세션 시작 시점에 한 번만 계산하고, 그 다음엔 지금 시각으로 마지막 방문 시각을 갱신한다.
 function registerVisitCount() {
   try {
     if (sessionStorage.getItem(SESSION_COUNTED_KEY)) return;
@@ -36,7 +39,24 @@ function registerVisitCount() {
     const count = (raw ? parseInt(raw, 10) : 0) + 1;
     localStorage.setItem(VISIT_COUNT_KEY, String(count));
     sessionStorage.setItem(SESSION_COUNTED_KEY, "1");
-    mixpanel.register({ visitCount: count });
+
+    const lastVisitRaw = localStorage.getItem(LAST_VISIT_AT_KEY);
+    const daysSinceLastVisit = lastVisitRaw
+      ? Math.floor((Date.now() - Number(lastVisitRaw)) / (1000 * 60 * 60 * 24))
+      : null;
+    localStorage.setItem(LAST_VISIT_AT_KEY, String(Date.now()));
+
+    const isReturningVisitor = count > 1;
+    mixpanel.register({
+      visitCount: count,
+      isReturningVisitor,
+      ...(daysSinceLastVisit !== null && { daysSinceLastVisit }),
+    });
+    gtag("set", "user_properties", {
+      visit_count: count,
+      is_returning_visitor: isReturningVisitor,
+      ...(daysSinceLastVisit !== null && { days_since_last_visit: daysSinceLastVisit }),
+    });
   } catch {
     // 시크릿 모드 등 storage 접근이 막힌 환경이면 건너뛴다.
   }

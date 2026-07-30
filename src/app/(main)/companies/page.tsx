@@ -121,7 +121,11 @@ export default async function CompaniesPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <TrackPageView name="Companies List Viewed" dwellEventName="Companies List Time Spent" />
+      <TrackPageView
+        name="Companies List Viewed"
+        dwellEventName="Companies List Time Spent"
+        scrollDepthEventName="Companies List Scroll Depth"
+      />
       <TrackSearchResultCount
         eventName="Company Search Result Count"
         resultCount={filtered.length}

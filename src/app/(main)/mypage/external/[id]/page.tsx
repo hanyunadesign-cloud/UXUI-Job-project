@@ -34,6 +34,7 @@ export default async function ExternalJobDetailPage({
         name="External Job Detail Viewed"
         props={{ externalJobId: job.id, companyName: job.companyName }}
         dwellEventName="External Job Detail Time Spent"
+        scrollDepthEventName="External Job Detail Scroll Depth"
       />
       <BackButton />
 

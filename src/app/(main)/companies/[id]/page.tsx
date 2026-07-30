@@ -76,6 +76,7 @@ export default async function CompanyProfilePage({
         name="Company Profile Viewed"
         props={{ companyId: company.id, companyName: company.name, following: isFollowing }}
         dwellEventName="Company Profile Time Spent"
+        scrollDepthEventName="Company Profile Scroll Depth"
       />
       <BackButton />
 
