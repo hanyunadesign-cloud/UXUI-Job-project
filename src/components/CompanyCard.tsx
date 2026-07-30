@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { Badge } from "@/components/Badge";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { CompanyFollowIcon } from "@/components/CompanyFollowIcon";
+import { trackEvent } from "@/lib/analytics";
 
 export type CompanyCardData = {
   id: string;
@@ -16,10 +19,13 @@ export function CompanyCard({
   company,
   following,
   isLoggedIn,
+  source,
 }: {
   company: CompanyCardData;
   following: boolean;
   isLoggedIn: boolean;
+  // 이 카드가 어느 화면에 떠 있었는지("companies_grid"/"recommended_carousel").
+  source: "companies_grid" | "recommended_carousel";
 }) {
   return (
     <div className="relative flex h-full flex-col rounded-2xl border border-neutral-200 bg-white px-3.5 pt-4 pb-8 transition-colors hover:border-neutral-300">
@@ -38,6 +44,9 @@ export function CompanyCard({
 
       <Link
         href={`/companies/${company.id}`}
+        onClick={() =>
+          trackEvent("Company Card Clicked", { companyId: company.id, companyName: company.name, source })
+        }
         className="flex flex-1 flex-col items-center gap-3 pt-8 text-center"
       >
         <CompanyLogo

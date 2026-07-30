@@ -27,7 +27,10 @@ export function ProfileMenu() {
 
   if (status !== "authenticated") {
     return (
-      <Link href="/login" className="text-sm font-medium text-neutral-400 hover:text-ink">
+      <Link
+        href="/login?source=profile_menu"
+        className="text-sm font-medium text-neutral-400 hover:text-ink"
+      >
         로그인
       </Link>
     );
@@ -57,7 +60,10 @@ export function ProfileMenu() {
         <div className="absolute right-0 top-[calc(100%+8px)] z-20 flex w-40 flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-dropdown">
           <Link
             href="/mypage"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              trackEvent("My Page Link Clicked");
+              setIsOpen(false);
+            }}
             className="rounded-xl px-3 py-2 text-left text-sm text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-ink"
           >
             마이페이지

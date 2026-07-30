@@ -25,7 +25,7 @@ export default async function MyPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/login");
+  if (!session?.user) redirect("/login?source=auth_gate");
 
   const userId = (session.user as { id: string }).id;
   const activeTab = searchParams.tab === "following" ? "following" : "saved";

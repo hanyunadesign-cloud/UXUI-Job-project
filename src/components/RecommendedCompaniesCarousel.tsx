@@ -66,6 +66,7 @@ export function RecommendedCompaniesCarousel({
               company={company}
               following={followedIds.has(company.id)}
               isLoggedIn={isLoggedIn}
+              source="recommended_carousel"
             />
           </div>
         ))}

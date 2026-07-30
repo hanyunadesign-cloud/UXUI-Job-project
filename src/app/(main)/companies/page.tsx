@@ -169,6 +169,7 @@ export default async function CompaniesPage({
               company={company}
               following={followedIds.has(company.id)}
               isLoggedIn={Boolean(userId)}
+              source="companies_grid"
             />
           ))}
         </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { ICON_SIZE } from "@/lib/design-tokens";
+import { trackEvent } from "@/lib/analytics";
 import { clsx } from "clsx";
 
 // 화면 높이 1개 분량 이상 내려갔을 때만 노출한다.
@@ -21,6 +22,7 @@ export function ScrollToTopButton() {
   }, []);
 
   const scrollToTop = () => {
+    trackEvent("Scroll To Top Clicked");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
   };

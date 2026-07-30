@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { ProfileMenu } from "@/components/ProfileMenu";
+import { trackEvent } from "@/lib/analytics";
 
 const NAV_ITEMS = [
   { href: "/jobs", label: "채용" },
@@ -26,6 +27,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => trackEvent("Header Nav Clicked", { label: item.label, href: item.href })}
               className={clsx(
                 "text-sm font-medium transition-colors",
                 pathname.startsWith(item.href)

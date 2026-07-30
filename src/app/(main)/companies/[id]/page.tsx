@@ -74,7 +74,7 @@ export default async function CompanyProfilePage({
     <div className="flex flex-col gap-8">
       <TrackPageView
         name="Company Profile Viewed"
-        props={{ companyId: company.id, companyName: company.name }}
+        props={{ companyId: company.id, companyName: company.name, following: isFollowing }}
         dwellEventName="Company Profile Time Spent"
       />
       <BackButton />

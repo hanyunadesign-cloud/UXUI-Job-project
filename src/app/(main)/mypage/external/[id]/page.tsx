@@ -15,7 +15,7 @@ export default async function ExternalJobDetailPage({
   params: { id: string };
 }) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/login");
+  if (!session?.user) redirect("/login?source=auth_gate");
   const userId = (session.user as { id: string }).id;
 
   const job = await prisma.externalJobSave.findUnique({ where: { id: params.id } });

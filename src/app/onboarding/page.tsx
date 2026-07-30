@@ -14,7 +14,7 @@ export default async function OnboardingPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/login");
+  if (!session?.user) redirect("/login?source=auth_gate");
 
   const userId = (session.user as { id: string }).id;
   const existing = await prisma.preference.findUnique({ where: { userId } });

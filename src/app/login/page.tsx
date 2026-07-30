@@ -20,8 +20,10 @@ export default function LoginPage() {
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  // 랜딩페이지에서 바로 왔는지("landing_direct") vs 게스트로 둘러보다 로그인 유도
-  // 모달을 거쳐 왔는지("gated_modal") 구분해서, 로그인 완료까지 이어붙여 분석한다.
+  // 어디를 거쳐 로그인 페이지에 왔는지 구분해서, 로그인 완료까지 이어붙여 분석한다.
+  // profile_menu(GNB 로그인 링크로 직접) / gated_modal(게스트로 둘러보다 로그인 유도 모달
+  // 확인) / auth_gate(마이페이지·온보딩처럼 로그인 필요한 페이지 직접 접근) / unknown(그 외,
+  // 예: 세션 만료로 NextAuth가 자체적으로 리다이렉트한 경우).
   const entrySource = searchParams.get("source") ?? "unknown";
 
   return (
