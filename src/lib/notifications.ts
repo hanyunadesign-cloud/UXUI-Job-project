@@ -33,12 +33,21 @@ export async function notifyFollowersOfNewJobs(
   });
 }
 
+// 관심조건을 비워둔 채 emailOptIn만 켠 유저는 computeMatchScore가 항상 0을 반환해 영원히
+// 메일을 못 받는 버그(빈 배열 = "매칭 안 됨"으로 해석됨)가 있음. 이걸 포함해 발송 설정을
+// 한 번에 제대로 정리하기 전까지, 실제 발송만 이 플래그로 잠시 꺼둔다. 공고 수집/보관이나
+// 매칭 점수 계산 자체는 그대로 두고 마지막 발송 호출 한 곳만 막는 것 — 준비되면 true로
+// 되돌리면 된다. (팔로우 기업의 인앱 알림 벨 알림인 notifyFollowersOfNewJobs는 이메일이
+// 아니라 별개 기능이라 여기 포함 안 함.)
+const EMAIL_DIGEST_ENABLED = false;
+
 // 크론 1회 실행에서 새로 생긴 공고 전체를 대상으로, 이메일 알림을 켠 유저마다 본인의 온보딩
 // 관심 조건(직무/플랫폼/산업/규모)에 맞는 것만 걸러 하루 1통으로 묶어 보낸다. 공고 1건당
 // 메일 1통이 아니라, 한 번에 여러 건이 올라와도 유저 입장에서는 다이제스트 메일 1통만 받는다.
 export async function sendMatchingJobEmailDigests(
   newJobs: (MatchableJob & { id: string; title: string; companyName: string })[]
 ): Promise<void> {
+  if (!EMAIL_DIGEST_ENABLED) return;
   if (newJobs.length === 0) return;
 
   const optedIn = await prisma.preference.findMany({
