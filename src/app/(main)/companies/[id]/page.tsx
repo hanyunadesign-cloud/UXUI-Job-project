@@ -130,6 +130,7 @@ export default async function CompanyProfilePage({
               job={{ ...job, taskKeywords: job.analysis?.taskKeywords ?? [] }}
               saved={savedJobIds.has(job.id)}
               isLoggedIn={Boolean(userId)}
+              source="company_detail"
             />
           ))}
         </div>

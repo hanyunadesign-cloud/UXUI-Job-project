@@ -127,6 +127,7 @@ export default async function JobsPage({
               // 등록 후 24시간 이내 공고에는 NEW 뱃지를 붙인다. 실제로 본 유저에게는
               // NewBadge 컴포넌트가 localStorage 기록을 보고 알아서 숨긴다.
               isNew={Date.now() - job.postedAt.getTime() < 24 * 60 * 60 * 1000}
+              source="jobs_list"
             />
           ))}
         </div>
