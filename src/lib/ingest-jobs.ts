@@ -198,16 +198,18 @@ async function fetchSourceJobs(source: Source): Promise<NormalizedJob[]> {
     : fetchAshbyJobs(source);
 }
 
-// 마감된 지 1개월이 지난 공고는 목록에서 제거하되, 통계/복구를 위해 실제로 지우지는 않고
+// 마감된 지 3주가 지난 공고는 목록에서 제거하되, 통계/복구를 위해 실제로 지우지는 않고
 // archivedAt만 채워서 소프트 삭제 처리한다(모든 목록 쿼리는 archivedAt: null 조건으로 걸러낸다).
+const CLOSED_RETENTION_DAYS = 21;
+
 async function archiveStaleJobs(): Promise<number> {
-  const oneMonthAgo = new Date();
-  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - CLOSED_RETENTION_DAYS);
 
   const result = await prisma.job.updateMany({
     where: {
       archivedAt: null,
-      applicationDeadline: { lt: oneMonthAgo },
+      applicationDeadline: { lt: cutoff },
     },
     data: { archivedAt: new Date() },
   });
