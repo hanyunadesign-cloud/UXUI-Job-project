@@ -11,6 +11,7 @@ import { AnalysisPanel } from "@/components/AnalysisPanel";
 import { BackButton } from "@/components/BackButton";
 import { TrackPageView } from "@/components/TrackPageView";
 import { MarkJobViewed } from "@/components/MarkJobViewed";
+import { renderWithBoldTitles } from "@/lib/markdown-emphasis";
 
 export const dynamic = "force-dynamic";
 
@@ -89,7 +90,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         <div className="rounded-2xl border border-neutral-200 bg-white p-6">
           <h2 className="mb-4 text-sm font-semibold text-ink">공고 내용</h2>
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-700">
-            {job.description}
+            {renderWithBoldTitles(job.description)}
           </p>
         </div>
 
