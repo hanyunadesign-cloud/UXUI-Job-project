@@ -274,3 +274,34 @@ export async function analyzeExternalJobPosting(
     resumeTip: parsed.resume_tip,
   };
 }
+
+// 자동 수집된 공고 원문의 줄바꿈/문단 구조만 정리한다(내용은 절대 바꾸지 않음).
+// 원본 HTML이 문장 하나마다 별도 <p>로 쪼개져 있는 경우가 많아서, 기계적으로 변환하면
+// 같은 주제의 문장들도 전부 빈 줄로 떨어져 문단처럼 안 보이는 문제가 있다. 이건 구조
+// 정리라 JSON 스키마 없이 순수 텍스트로 응답받는다(텍스트가 길어서 JSON 이스케이핑
+// 오버헤드/잘림 위험을 피하기 위함).
+const reflowModel = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash",
+  systemInstruction:
+    "당신은 채용공고 원문의 줄바꿈과 문단 구조만 정리하는 편집자입니다. 아래 규칙을 반드시 지키세요.\n\n" +
+    "1. 단어, 문장, 순서 등 내용은 절대 바꾸거나 추가하거나 삭제하지 마세요. 오직 줄바꿈 구조만 다시 정리합니다.\n" +
+    "2. 같은 주제/맥락으로 이어지는 문장들(예: 인사말, 회사 소개의 연속된 문장들)은 하나의 문단으로 묶어서 " +
+    "줄바꿈 없이(또는 문장 사이 줄바꿈 한 번만) 붙이세요. 서로 다른 주제/문단으로 넘어갈 때만 빈 줄(줄바꿈 두 번)로 구분하세요.\n" +
+    "3. 소제목(예: '이런 일을 해요', '이런 분을 찾고 있어요')은 그 바로 다음에 오는 내용(문단이나 불릿 리스트)과 " +
+    "붙여서 빈 줄 없이 이어주세요. 빈 줄은 그 소제목 앞(이전 섹션과의 경계)에만 넣으세요.\n" +
+    "4. '-'로 시작하는 불릿 리스트 항목들끼리는 빈 줄 없이 촘촘하게 붙이세요. 리스트가 끝나고 다음 문단/소제목이 " +
+    "시작될 때만 빈 줄로 구분하세요.\n" +
+    "5. 마크다운 기호(**, #, > 등)를 새로 추가하지 마세요. 원문에 없던 강조 표시나 목록 기호를 만들지 마세요.\n" +
+    "6. 결과는 오직 정리된 원문 텍스트만 반환하세요. 설명, 인사말, 코드블록 표시(```) 등을 덧붙이지 마세요.",
+});
+
+export async function reflowJobDescriptionParagraphs(description: string): Promise<string> {
+  const result = await reflowModel.generateContent(
+    `다음 채용공고 원문의 줄바꿈/문단 구조만 정리해줘. 내용은 그대로 유지해줘.\n\n---\n${description}\n---`
+  );
+  const text = result.response.text().trim();
+  if (!text) {
+    throw new Error("문단 정리 응답이 비어있습니다.");
+  }
+  return text;
+}
