@@ -100,6 +100,11 @@ body {
   margin: 0;
   appearance: none;
   background: transparent;
+  /* 입력 자체(트랙 전체 너비)는 클릭을 받지 않게 막는다. 이게 없으면 z-index가 더 높은
+     쪽이 트랙 전체를 가로채서, 반대쪽 핸들이 눈에 보이는 위치에서도 클릭이 안 먹는다.
+     실제 클릭은 아래 ::-webkit-slider-thumb/::-moz-range-thumb에서만 pointer-events:auto로
+     열어준 "핸들 원" 영역에서만 일어난다. */
+  pointer-events: none;
 }
 .dual-range-thumb::-webkit-slider-runnable-track {
   background: transparent;

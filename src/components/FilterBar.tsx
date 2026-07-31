@@ -142,6 +142,14 @@ export function FilterBar() {
         const isOpen = openGroup === group.key;
         const isActive = isExperience ? hasExperienceFilter : active.length > 0;
         const allValues = group.options.map((o) => o.value);
+        // 두 핸들이 같은 값에 겹쳐 있을 때(0/최댓값 끝뿐 아니라 3~3년처럼 중간값도 포함),
+        // 겹친 지점을 클릭/드래그하면 항상 위쪽 z-index의 input이 반응한다. 남은 여유
+        // 공간이 더 넓은 쪽(왼쪽 끝에 가까우면 최댓값 핸들, 오른쪽 끝에 가까우면 최솟값
+        // 핸들)을 위로 올려서, 사용자가 넓히고 싶을 확률이 더 높은 방향의 핸들이 항상
+        // 잡히도록 한다. "핸들이 숨어서 못 옮긴다"는 문제를 모든 값에서 막기 위함.
+        const expStackedValue = expStaged[0];
+        const expStacked = expStaged[0] === expStaged[1];
+        const expMinOnTop = expStacked && expStackedValue > SLIDER_MAX_YEARS - expStackedValue;
 
         return (
           <div key={group.key} className="relative">
@@ -190,10 +198,7 @@ export function FilterBar() {
                         setExpStaged(([, max]) => [Math.min(Number(e.target.value), max), max])
                       }
                       aria-label="최소 경력"
-                      className={clsx(
-                        "dual-range-thumb",
-                        expStaged[0] === expStaged[1] ? "z-20" : "z-10"
-                      )}
+                      className={clsx("dual-range-thumb", expMinOnTop ? "z-20" : "z-10")}
                     />
                     <input
                       type="range"
@@ -205,7 +210,7 @@ export function FilterBar() {
                         setExpStaged(([min]) => [min, Math.max(Number(e.target.value), min)])
                       }
                       aria-label="최대 경력"
-                      className="dual-range-thumb z-10"
+                      className={clsx("dual-range-thumb", expMinOnTop ? "z-10" : "z-20")}
                     />
                   </div>
                   <div className="flex justify-between text-xs font-medium text-neutral-400">
