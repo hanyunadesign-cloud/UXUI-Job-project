@@ -151,6 +151,62 @@ export async function classifyJobPosting(
   };
 }
 
+export type RelevanceVerdict = "match" | "ambiguous" | "reject";
+
+export type RelevanceJudgment = {
+  verdict: RelevanceVerdict;
+  note?: string;
+};
+
+// 제목 정규식(디자이너/디자인 포함 여부)만으로는 브랜드·그래픽·산업(제품)디자인처럼 UXUI와
+// 무관한 공고까지 걸러진다. 정규식 통과 후 신규 공고에 한해 본문까지 읽고 실제 UXUI 직군인지
+// 한 번 더 판단한다 — candidate-jobs 파이프라인(스케줄 에이전트)과 동일한 3단계 기준
+// (명확히 관련 → match, 명확히 무관 → reject, 애매함 → ambiguous)을 그대로 재사용한다.
+const relevanceModel = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash",
+  systemInstruction:
+    "당신은 UXUI/프로덕트 디자이너 전문 채용 사이트의 큐레이터입니다. 채용공고 제목과 본문을 읽고 " +
+    "이 공고가 실제로 UXUI 디자인 직군(프로덕트 디자이너, UX/UI 디자이너, UX 리서처, UX 라이터, " +
+    "UX 기획자·전략가, GUI 디자이너, 인터랙션 디자이너 등)인지 판단하세요.\n\n" +
+    "브랜딩 디자이너, 그래픽/편집 디자이너(마케팅 소재·인쇄물 제작 위주), 산업디자이너(제품 외관·실물 " +
+    "설계), 인테리어·공간 디자이너, 게임 아트/일러스트 디자이너처럼 UXUI와 무관한 디자인 직군은 " +
+    "제외 대상입니다.\n\n" +
+    "명확히 UXUI 직군이면 verdict를 'match', 명확히 무관하면 'reject', 본문만으로 확신하기 어려우면 " +
+    "'ambiguous'로 답하세요. 'ambiguous' 또는 'reject'인 경우 note에 왜 그렇게 판단했는지 한국어 " +
+    "한 문장으로 적으세요.",
+  generationConfig: {
+    responseMimeType: "application/json",
+    responseSchema: {
+      type: SchemaType.OBJECT,
+      properties: {
+        verdict: { type: SchemaType.STRING, format: "enum", enum: ["match", "ambiguous", "reject"] },
+        note: { type: SchemaType.STRING },
+      },
+      required: ["verdict"],
+    },
+  },
+});
+
+export async function judgeJobRelevance(
+  title: string,
+  description: string
+): Promise<RelevanceJudgment> {
+  const truncated = description.slice(0, MAX_INPUT_CHARS);
+  const result = await relevanceModel.generateContent(
+    `제목: ${title}\n\n본문:\n---\n${truncated}\n---`
+  );
+  const parsed = JSON.parse(result.response.text()) as {
+    verdict?: string;
+    note?: string;
+  };
+
+  if (!parsed.verdict || !["match", "ambiguous", "reject"].includes(parsed.verdict)) {
+    throw new Error("적합성 판단 응답 형식이 올바르지 않습니다.");
+  }
+
+  return { verdict: parsed.verdict as RelevanceVerdict, note: parsed.note };
+}
+
 export type ExternalJobAnalysisResult = {
   title: string;
   companyName: string;

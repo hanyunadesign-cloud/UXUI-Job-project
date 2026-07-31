@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { prisma } from "./prisma";
-import { analyzeJobDescription } from "./gemini";
+import { analyzeJobDescription, judgeJobRelevance } from "./gemini";
 import { findOrCreateCompanyId } from "./company";
 import { notifyFollowersOfNewJobs } from "./notifications";
 import {
@@ -246,6 +246,12 @@ export async function ingestJobs(): Promise<{
     });
 
     const companyId = await findOrCreateCompanyId(source);
+    // 회사 채용 페이지 자체(공개 API 엔드포인트가 아니라 사람이 보는 페이지)를 검토 화면에
+    // 참고 링크로 남기기 위한 URL.
+    const sourceUrl =
+      source.provider === "greenhouse"
+        ? `https://boards.greenhouse.io/${source.board}`
+        : `https://jobs.ashbyhq.com/${source.boardName}`;
 
     // 소스 피드에서 더 이상 보이지 않는(마감·삭제된) 공고는 자동으로 archive 처리한다.
     // "상시채용"이라 마감일이 없는 공고는 아래 archiveStaleJobs()의 날짜 기준으로는 절대
@@ -291,11 +297,57 @@ export async function ingestJobs(): Promise<{
         select: { id: true },
       });
 
-      const savedJob = await prisma.job.upsert({
-        where: { applyUrl: job.applyUrl },
-        create: data,
-        update: data,
-      });
+      let savedJob: { id: string; title: string; role: string; industries: string[]; stage: string; platforms: string[] };
+
+      if (existed) {
+        // 이미 발행된 공고는 재판단 없이 그대로 최신 내용으로 갱신한다.
+        savedJob = await prisma.job.update({ where: { applyUrl: job.applyUrl }, data });
+      } else {
+        // 검토 대기 중(CandidateJob)인 공고는 매번 다시 판단하지 않고 건너뛴다.
+        const existingCandidate = await prisma.candidateJob.findUnique({
+          where: { applyUrl: job.applyUrl },
+          select: { id: true },
+        });
+        if (existingCandidate) {
+          console.log(`  ↳ ${source.companyName} | ${job.title}: 검토 대기 중, 스킵`);
+          continue;
+        }
+
+        // 신규 공고만 제목 정규식 통과 후 본문까지 읽고 실제 UXUI 직군인지 한 번 더 판단한다
+        // (브랜드/그래픽/산업디자인 등 제목만으로는 정규식에 걸리는 무관 공고를 거르기 위함).
+        let judgment;
+        try {
+          judgment = await judgeJobRelevance(job.title, job.description);
+        } catch (error) {
+          console.warn(`  ↳ ${source.companyName} | ${job.title}: 적합성 판단 실패, 안전하게 검토 대기로 보냄`, error);
+          judgment = { verdict: "ambiguous" as const, note: "AI 판단 실패로 자동 검토 대기 처리됨" };
+        }
+        await sleep(1000);
+
+        if (judgment.verdict === "reject") {
+          console.log(`  ↳ ${source.companyName} | ${job.title}: UXUI 무관 판단, 건너뜀 (${judgment.note ?? "근거 없음"})`);
+          continue;
+        }
+
+        if (judgment.verdict === "ambiguous") {
+          await prisma.candidateJob.create({
+            data: {
+              companyName: source.companyName,
+              companyLogo: source.companyLogo,
+              title: job.title,
+              applyUrl: job.applyUrl,
+              description: job.description,
+              sourceUrl,
+              aiNote: judgment.note,
+            },
+          });
+          console.log(`  ↳ ${source.companyName} | ${job.title}: 애매함, 검토 대기로 보냄`);
+          continue;
+        }
+
+        // verdict === "match"
+        savedJob = await prisma.job.create({ data });
+      }
 
       if (!existed) {
         newlyCreated.push({ id: savedJob.id, title: savedJob.title });
