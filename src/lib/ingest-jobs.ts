@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { prisma } from "./prisma";
-import { analyzeJobDescription, judgeJobRelevance } from "./gemini";
+import { analyzeJobDescription, judgeJobRelevance, reflowJobDescriptionParagraphs } from "./gemini";
 import { findOrCreateCompanyId } from "./company";
 import { notifyFollowersOfNewJobs } from "./notifications";
 import {
@@ -278,6 +278,17 @@ export async function ingestJobs(): Promise<{
     const newlyCreated: { id: string; title: string }[] = [];
 
     for (const job of filtered) {
+      // 원본 HTML이 문장마다 별도 <p>로 쪼개져 있는 경우가 많아, 같은 주제의 문장들도
+      // 전부 빈 줄로 떨어져 문단처럼 안 보이는 문제가 있다. 매일 소스에서 다시 받아오는
+      // 원문 그대로 저장하면 한 번 정리해도 다음 실행에서 도로 원상복구되므로, 매번
+      // 저장 직전에 정리한다(기존 공고 갱신 포함).
+      try {
+        job.description = await reflowJobDescriptionParagraphs(job.description);
+      } catch (error) {
+        console.warn(`  ↳ ${source.companyName} | ${job.title}: 문단 정리 실패, 원본 텍스트 사용`, error);
+      }
+      await sleep(1000);
+
       const data = {
         title: job.title,
         companyName: source.companyName,

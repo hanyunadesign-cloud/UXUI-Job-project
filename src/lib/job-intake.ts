@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import { analyzeJobDescription, classifyJobPosting } from "./gemini";
+import { analyzeJobDescription, classifyJobPosting, reflowJobDescriptionParagraphs } from "./gemini";
 import { findOrCreateCompanyId } from "./company";
 import type { Job } from "@prisma/client";
 
@@ -113,7 +113,14 @@ export type JobCandidateInput = {
 // 있는 걸로 가정(대상 8개 기업 전부 기존에 등록돼있음)하고, 그 회사의 industries/stage를
 // 그대로 물려받는다 — 에이전트가 산업/규모까지 판단하게 하지 않고 이미 정제된 값을 재사용한다.
 export async function createJobFromCandidate(candidate: JobCandidateInput): Promise<Job> {
-  const classification = await classifyJobPosting(candidate.title, candidate.description);
+  // 스케줄 에이전트가 페이지에서 그대로 긁어온 원문이든, 검토 화면에서 승인한 CandidateJob의
+  // 저장된 원문이든, 줄바꿈/문단 구조가 지저분할 수 있어 발행 직전에 한 번 정리한다.
+  const description = await reflowJobDescriptionParagraphs(candidate.description).catch((error) => {
+    console.warn(`  ↳ 문단 정리 실패, 원본 텍스트 사용 (${candidate.applyUrl})`, error);
+    return candidate.description;
+  });
+
+  const classification = await classifyJobPosting(candidate.title, description);
 
   const companyId = await findOrCreateCompanyId({
     companyName: candidate.companyName,
@@ -134,17 +141,17 @@ export async function createJobFromCandidate(candidate: JobCandidateInput): Prom
       industries: company.industries,
       stage: company.stage,
       location: candidate.location ?? null,
-      description: candidate.description,
+      description,
       applyUrl: candidate.applyUrl,
-      applicationPeriod: extractApplicationPeriod(candidate.description),
-      applicationDeadline: extractApplicationDeadline(candidate.description),
-      employmentType: extractEmploymentType(candidate.title, candidate.description),
+      applicationPeriod: extractApplicationPeriod(description),
+      applicationDeadline: extractApplicationDeadline(description),
+      employmentType: extractEmploymentType(candidate.title, description),
       experienceLevel: classification.experienceLevel,
     },
   });
 
   try {
-    const analysis = await analyzeJobDescription(candidate.description);
+    const analysis = await analyzeJobDescription(description);
     await prisma.jobAnalysis.create({ data: { jobId: job.id, ...analysis } });
   } catch (error) {
     console.warn(`  ↳ AI 분석 실패 (상세페이지 방문 시 재시도됨): ${job.id}`, error);
