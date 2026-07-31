@@ -58,16 +58,10 @@ const SOURCES: Source[] = [
     platforms: ["앱", "웹"],
     locationIncludes: "Seoul",
   },
-  {
-    provider: "ashby",
-    boardName: "miso",
-    companyName: "미소",
-    companyLogo: faviconFor("miso.kr"),
-    industries: ["IT/서비스", "커머스"],
-    stage: "유니콘·스케일업",
-    platforms: ["앱", "웹"],
-    locationIncludes: "Seoul",
-  },
+  // 미소는 애시비 공개 API(boardName: "miso")가 404로 죽었다 — 채용 페이지 자체가
+  // NineHire(miso.ninehire.site/careerboard)로 옮겨갔는데, 이 플랫폼은 공고 목록을
+  // 클라이언트에서만 불러와서 SSR에도 API에도 안 잡힌다(2026-07-31 확인). 다시 API 기반
+  // 자동화는 불가능하니, 스케줄 클라우드 에이전트(candidate-jobs 파이프라인) 쪽에 편입시켜야 함.
   {
     provider: "ashby",
     boardName: "bjakcareer",
@@ -235,6 +229,9 @@ export async function ingestJobs(): Promise<{
   const allNewJobs: NewlyIngestedJob[] = [];
 
   for (const source of SOURCES) {
+    // 소스 하나가 실패해도(API 스펙 변경, 일시적 다운 등) 나머지 소스는 계속 처리되게 격리한다.
+    // 예전엔 여기서 던진 에러가 함수 전체를 중단시켜서, 목록 뒷순서 소스가 통째로 스킵됐었다.
+    try {
     const jobs = await fetchSourceJobs(source);
 
     const filtered = jobs.filter((job) => {
@@ -392,6 +389,9 @@ export async function ingestJobs(): Promise<{
     }
 
     await notifyFollowersOfNewJobs(companyId, source.companyName, newlyCreated);
+    } catch (error) {
+      console.error(`✗ ${source.companyName} 소스 처리 실패, 다음 소스로 넘어감:`, error);
+    }
   }
 
   const archived = await archiveStaleJobs();
