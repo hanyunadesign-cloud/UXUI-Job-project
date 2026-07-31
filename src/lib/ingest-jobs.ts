@@ -103,13 +103,20 @@ function cleanHtmlToText($: cheerio.CheerioAPI): string {
     $(el).append("\n");
   });
 
-  return $.root()
-    .text()
-    .split("\n")
-    .map((line) => line.trim())
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+  return (
+    $.root()
+      .text()
+      .split("\n")
+      .map((line) => line.trim())
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n")
+      // 원본 HTML이 <li>를 줄바꿈으로 예쁘게 들여쓰기해둔 경우, 그 원본 개행 문자까지
+      // .text()가 그대로 끌고 와서 우리가 붙인 \n과 합쳐져 불릿 항목 사이에 의도치 않은
+      // 빈 줄이 생긴다(원본은 촘촘한 목록인데 결과는 한 줄씩 띄엄띄엄 벌어짐). 연속된
+      // "- " 항목 사이의 빈 줄만 제거해 목록을 다시 촘촘하게 만든다.
+      .replace(/^(- .*)\n\n(?=- )/gm, "$1\n")
+      .trim()
+  );
 }
 
 function greenhouseHtmlToText(rawContent: string): string {
