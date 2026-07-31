@@ -4,26 +4,27 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
-import {
-  ROLES,
-  PLATFORMS,
-  INDUSTRIES,
-  STAGES,
-  STAGE_DESCRIPTIONS,
-  EXPERIENCE_LEVELS,
-} from "@/lib/constants";
+import { ROLES, PLATFORMS, INDUSTRIES, STAGES, STAGE_DESCRIPTIONS } from "@/lib/constants";
+import { SLIDER_MAX_YEARS } from "@/lib/experience";
 import { SortDropdown } from "@/components/SortDropdown";
 import { SearchBar } from "@/components/SearchBar";
 import { trackEvent } from "@/lib/analytics";
+
+// 경력 슬라이더의 [최소, 최대] 값에 맞춰 버튼에 표시할 라벨을 만든다.
+function experienceLabel(min: number, max: number): string {
+  if (min === 0 && max === SLIDER_MAX_YEARS) return "전체";
+  if (min === 0 && max === 0) return "신입";
+  if (max === SLIDER_MAX_YEARS) return `${min}년 이상`;
+  if (min === max) return `${min}년`;
+  const left = min === 0 ? "신입" : `${min}년`;
+  return `${left} ~ ${max}년`;
+}
 
 const FILTER_GROUPS = [
   {
     key: "experience",
     label: "경력",
-    options: EXPERIENCE_LEVELS.map((e) => ({
-      value: e.value as string,
-      description: e.description as string | undefined,
-    })),
+    options: [] as { value: string; description?: string }[],
   },
   {
     key: "stage",
@@ -54,7 +55,13 @@ export function FilterBar() {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   // 드롭다운이 열려있는 동안의 임시 선택 상태. "적용"을 눌러야만 실제 URL(필터)에 반영된다.
   const [staged, setStaged] = useState<string[]>([]);
+  // 경력 슬라이더 전용 임시 상태. 드래그 중에는 URL에 반영하지 않고(매 프레임 네비게이션은
+  // 너무 잦다), "적용"을 눌렀을 때만 커밋한다.
+  const [expStaged, setExpStaged] = useState<[number, number]>([0, SLIDER_MAX_YEARS]);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const committedExpMin = Number(searchParams.get("experienceMin") ?? 0);
+  const committedExpMax = Number(searchParams.get("experienceMax") ?? SLIDER_MAX_YEARS);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -71,7 +78,11 @@ export function FilterBar() {
       setOpenGroup(null);
       return;
     }
-    setStaged(searchParams.getAll(key));
+    if (key === "experience") {
+      setExpStaged([committedExpMin, committedExpMax]);
+    } else {
+      setStaged(searchParams.getAll(key));
+    }
     setOpenGroup(key);
   };
 
@@ -82,6 +93,20 @@ export function FilterBar() {
     params.delete(key);
     values.forEach((v) => params.append(key, v));
     trackEvent("Job Filter Changed", { key, values });
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  // 경력 슬라이더는 [min, max] 두 값을 한 번에 커밋한다. 전체 범위(0~최댓값)면
+  // 필터가 꺼진 상태와 같으므로 파라미터 자체를 지운다.
+  const commitExperienceToUrl = (min: number, max: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("experienceMin");
+    params.delete("experienceMax");
+    if (min > 0 || max < SLIDER_MAX_YEARS) {
+      params.set("experienceMin", String(min));
+      params.set("experienceMax", String(max));
+    }
+    trackEvent("Job Filter Changed", { key: "experience", values: [`${min}-${max}`] });
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -101,7 +126,10 @@ export function FilterBar() {
     });
   };
 
-  const hasFilters = FILTER_GROUPS.some((g) => searchParams.getAll(g.key).length > 0);
+  const hasExperienceFilter = committedExpMin > 0 || committedExpMax < SLIDER_MAX_YEARS;
+  const hasFilters =
+    FILTER_GROUPS.some((g) => g.key !== "experience" && searchParams.getAll(g.key).length > 0) ||
+    hasExperienceFilter;
 
   return (
     <div
@@ -109,8 +137,10 @@ export function FilterBar() {
       className="flex flex-wrap items-center gap-2 border-b border-neutral-200 pb-6"
     >
       {FILTER_GROUPS.map((group) => {
+        const isExperience = group.key === "experience";
         const active = searchParams.getAll(group.key);
         const isOpen = openGroup === group.key;
+        const isActive = isExperience ? hasExperienceFilter : active.length > 0;
         const allValues = group.options.map((o) => o.value);
 
         return (
@@ -120,20 +150,93 @@ export function FilterBar() {
               onClick={() => openDropdown(group.key)}
               className={clsx(
                 "flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",
-                active.length > 0
+                isActive
                   ? "border-primary bg-blue-50 text-primary"
                   : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300"
               )}
             >
               {group.label}
-              {active.length > 0 && <span>{active.length}</span>}
+              {isExperience
+                ? isActive && <span>{experienceLabel(committedExpMin, committedExpMax)}</span>
+                : active.length > 0 && <span>{active.length}</span>}
               <ChevronDownIcon
                 aria-hidden
                 className={clsx("h-4 w-4 shrink-0 transition-transform", isOpen && "rotate-180")}
               />
             </button>
 
-            {isOpen && (
+            {isOpen && isExperience && (
+              <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-72 max-w-[calc(100vw-2rem)] flex-col rounded-2xl border border-neutral-200 bg-white shadow-dropdown">
+                <div className="flex flex-col gap-6 p-5">
+                  <p className="text-center text-[15px] font-semibold text-primary-strong">
+                    {experienceLabel(expStaged[0], expStaged[1])}
+                  </p>
+                  <div className="relative h-6 w-full">
+                    <div className="absolute top-1/2 h-[5px] w-full -translate-y-1/2 rounded-full bg-neutral-200" />
+                    <div
+                      className="absolute top-1/2 h-[5px] -translate-y-1/2 rounded-full bg-primary"
+                      style={{
+                        left: `${(expStaged[0] / SLIDER_MAX_YEARS) * 100}%`,
+                        right: `${100 - (expStaged[1] / SLIDER_MAX_YEARS) * 100}%`,
+                      }}
+                    />
+                    <input
+                      type="range"
+                      min={0}
+                      max={SLIDER_MAX_YEARS}
+                      step={1}
+                      value={expStaged[0]}
+                      onChange={(e) =>
+                        setExpStaged(([, max]) => [Math.min(Number(e.target.value), max), max])
+                      }
+                      aria-label="최소 경력"
+                      className={clsx(
+                        "dual-range-thumb",
+                        expStaged[0] === expStaged[1] ? "z-20" : "z-10"
+                      )}
+                    />
+                    <input
+                      type="range"
+                      min={0}
+                      max={SLIDER_MAX_YEARS}
+                      step={1}
+                      value={expStaged[1]}
+                      onChange={(e) =>
+                        setExpStaged(([min]) => [min, Math.max(Number(e.target.value), min)])
+                      }
+                      aria-label="최대 경력"
+                      className="dual-range-thumb z-10"
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs font-medium text-neutral-400">
+                    <span>신입</span>
+                    <span>{SLIDER_MAX_YEARS}년 이상</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 border-t border-neutral-100 p-2">
+                  <button
+                    type="button"
+                    onClick={() => setExpStaged([0, SLIDER_MAX_YEARS])}
+                    className="flex-1 rounded-xl bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-200"
+                  >
+                    전체 선택
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      commitExperienceToUrl(expStaged[0], expStaged[1]);
+                      setOpenGroup(null);
+                    }}
+                    className="flex-1 rounded-xl bg-primary px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-strong"
+                  >
+                    적용
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {isOpen && !isExperience && (
               <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-64 max-w-[calc(100vw-2rem)] flex-col rounded-2xl border border-neutral-200 bg-white shadow-dropdown">
                 <div className="flex max-h-72 flex-col gap-0.5 overflow-y-auto p-2">
                   {group.options.map((option) => {

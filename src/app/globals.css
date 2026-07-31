@@ -84,3 +84,64 @@ body {
   background-color: oklch(0.851 0.018 264);
   border-radius: 9999px;
 }
+
+/* 경력 필터의 이중 핸들 슬라이더. <input type="range"> 두 개를 같은 자리에 겹쳐 놓고
+   트랙은 투명 처리한 뒤(핸들만 보이게), 채워진 구간은 별도 div로 그린다. */
+.dual-range-thumb {
+  /* 트랙(4px)과 무관하게 핸들 높이(24px) 기준으로 위아래 중앙에 고정한다.
+     inset:0으로 부모 전체 높이를 차지하게 하면 브라우저마다 썸을 다르게 중앙 정렬해
+     삐뚤어져 보이므로, 입력 자체를 핸들 크기에 맞춰 정확히 중앙에 둔다. */
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 24px;
+  transform: translateY(-50%);
+  margin: 0;
+  appearance: none;
+  background: transparent;
+}
+.dual-range-thumb::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 100%;
+}
+.dual-range-thumb::-moz-range-track {
+  background: transparent;
+  height: 100%;
+}
+.dual-range-thumb::-webkit-slider-thumb {
+  appearance: none;
+  pointer-events: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background: oklch(0.620 0.219 257);
+  border: 2px solid #ffffff;
+  box-shadow: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.dual-range-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background: oklch(0.620 0.219 257);
+  border: 2px solid #ffffff;
+  box-shadow: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* 핸들을 잡고 있는 동안(포커스/드래그)만 주변에 옅은 파란 링을 두껍게 보여준다. */
+.dual-range-thumb:focus {
+  outline: none;
+}
+.dual-range-thumb:focus::-webkit-slider-thumb,
+.dual-range-thumb:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px oklch(0.620 0.219 257 / 0.18);
+}
+.dual-range-thumb:focus::-moz-range-thumb,
+.dual-range-thumb:active::-moz-range-thumb {
+  box-shadow: 0 0 0 5px oklch(0.620 0.219 257 / 0.18);
+}

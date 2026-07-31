@@ -40,18 +40,7 @@ export const STAGE_DESCRIPTIONS: Record<string, string> = {
   에이전시: "클라이언트 컨설팅",
 };
 
-export const EXPERIENCE_LEVELS = [
-  { value: "신입", description: "인턴 또는 실무 경험 없음" },
-  { value: "주니어", description: "기초적인 업무 수행\n(1~3년차에 준하는 실력)" },
-  { value: "미들", description: "준수한 이해도, 프로젝트 전담\n(3~7년차에 준하는 실력)" },
-  {
-    value: "시니어",
-    description: "높은 이해도, 다수로 구성된 팀 리드\n(7년차 이상에 준하는 실력)",
-  },
-] as const;
-
 export type Role = (typeof ROLES)[number];
 export type Platform = (typeof PLATFORMS)[number];
 export type Industry = (typeof INDUSTRIES)[number];
 export type Stage = (typeof STAGES)[number];
-export type ExperienceLevel = (typeof EXPERIENCE_LEVELS)[number]["value"];

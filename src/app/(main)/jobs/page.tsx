@@ -6,7 +6,7 @@ import { JobCard } from "@/components/JobCard";
 import { EmptyState } from "@/components/EmptyState";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { OnboardingSuccessModal } from "./OnboardingSuccessModal";
-import { matchesExperienceLevel } from "@/lib/experience";
+import { matchesExperienceRange, SLIDER_MAX_YEARS } from "@/lib/experience";
 import { getApplicationStatus } from "@/lib/dday";
 import { TrackPageView } from "@/components/TrackPageView";
 import { LoginSuccessTracker } from "@/components/LoginSuccessTracker";
@@ -17,6 +17,12 @@ export const dynamic = "force-dynamic";
 function toArray(value: string | string[] | undefined): string[] {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
+}
+
+function toNumber(value: string | string[] | undefined, fallback: number): number {
+  if (typeof value !== "string") return fallback;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
 }
 
 export default async function JobsPage({
@@ -31,7 +37,9 @@ export default async function JobsPage({
   const platforms = toArray(searchParams.platform);
   const industries = toArray(searchParams.industry);
   const stages = toArray(searchParams.stage);
-  const experienceLevels = toArray(searchParams.experience);
+  const experienceMin = toNumber(searchParams.experienceMin, 0);
+  const experienceMax = toNumber(searchParams.experienceMax, SLIDER_MAX_YEARS);
+  const hasExperienceFilter = experienceMin > 0 || experienceMax < SLIDER_MAX_YEARS;
   const companyQuery =
     typeof searchParams.companyQuery === "string" ? searchParams.companyQuery.trim() : "";
   const sort = searchParams.sort === "deadline" ? "deadline" : "latest";
@@ -56,12 +64,10 @@ export default async function JobsPage({
   ]);
 
   // experienceLevel은 "3~10년" 같은 자유 형식 텍스트라 Prisma where로 바로 못 걸러서,
-  // 조회 후 구간 매칭(matchesExperienceLevel)으로 한 번 더 필터링한다.
-  const jobs = experienceLevels.length
+  // 조회 후 구간 매칭(matchesExperienceRange)으로 한 번 더 필터링한다.
+  const jobs = hasExperienceFilter
     ? matchedJobs.filter((job) =>
-        experienceLevels.some((level) =>
-          matchesExperienceLevel(job.experienceLevel, level)
-        )
+        matchesExperienceRange(job.experienceLevel, experienceMin, experienceMax)
       )
     : matchedJobs;
 
@@ -104,7 +110,8 @@ export default async function JobsPage({
           "platform",
           "industry",
           "stage",
-          "experience",
+          "experienceMin",
+          "experienceMax",
         ]}
       />
 

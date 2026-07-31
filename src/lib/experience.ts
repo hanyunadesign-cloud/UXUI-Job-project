@@ -1,7 +1,9 @@
-import type { ExperienceLevel } from "@/lib/constants";
+// 필터 슬라이더의 최댓값(년차). 이 값을 선택하면 "그 이상"(상한 없음)을 뜻한다.
+export const SLIDER_MAX_YEARS = 10;
 
-// 각 경력 구간이 대응하는 연차 범위. 시니어는 상한을 두지 않는다.
-const BUCKET_RANGES: Record<ExperienceLevel, [number, number]> = {
+// 공고 원문에 "신입/주니어/미들/시니어" 같은 버킷 이름이 그대로 저장된 경우, 그 이름이
+// 대응하는 연차 범위. parseExperienceRange에서만 내부적으로 참조한다.
+const BUCKET_RANGES: Record<string, [number, number]> = {
   신입: [0, 0],
   주니어: [1, 3],
   미들: [3, 7],
@@ -17,7 +19,7 @@ function parseExperienceRange(text: string): [number, number] {
   // 버킷 이름 그대로 저장된 경우(신입/주니어/미들/시니어) 그 버킷 범위를 바로 쓴다.
   // 이걸 먼저 체크하지 않으면 "미들"/"주니어"/"시니어" 같은 텍스트에는 숫자도 "경력"도
   // 없어서 맨 아래 기본값([0, Infinity])으로 빠져, 모든 경력 필터에 다 걸리는 버그가 난다.
-  if (text in BUCKET_RANGES) return BUCKET_RANGES[text as ExperienceLevel];
+  if (text in BUCKET_RANGES) return BUCKET_RANGES[text];
 
   if (text.includes("경력무관")) return [0, Infinity];
 
@@ -54,15 +56,15 @@ function parseExperienceRange(text: string): [number, number] {
   return [0, Infinity];
 }
 
-export function matchesExperienceLevel(
+// 경력 필터 슬라이더에서 선택한 [selMin, selMax] 연차 구간과 공고의 경력 구간이 겹치는지
+// 확인한다. selMax가 슬라이더 최댓값(SLIDER_MAX_YEARS)이면 "그 이상"이므로 상한을 두지 않는다.
+export function matchesExperienceRange(
   experienceLevel: string,
-  bucket: string
+  selMin: number,
+  selMax: number
 ): boolean {
-  const range = BUCKET_RANGES[bucket as ExperienceLevel];
-  if (!range) return false;
-
   const [jobMin, jobMax] = parseExperienceRange(experienceLevel);
-  const [bucketMin, bucketMax] = range;
+  const effectiveSelMax = selMax >= SLIDER_MAX_YEARS ? Infinity : selMax;
 
-  return jobMin <= bucketMax && jobMax >= bucketMin;
+  return jobMin <= effectiveSelMax && jobMax >= selMin;
 }
