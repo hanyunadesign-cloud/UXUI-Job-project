@@ -224,3 +224,19 @@ model Notification {
 
   @@index([userId, read])
 }
+
+// 스케줄 클라우드 에이전트가 채용 페이지를 직접 읽고 발견했지만 UXUI 직군인지 애매하다고
+// 판단한 공고. 명확한 건 바로 Job으로 발행되고, 이 테이블엔 사람이 승인해야 하는 것만 쌓인다.
+model CandidateJob {
+  id           String   @id @default(cuid())
+  companyName  String
+  companyLogo  String?
+  title        String
+  applyUrl     String   @unique
+  description  String   @db.Text
+  // 에이전트가 발견한 채용 목록 페이지 URL(회사 채용 사이트 자체, 이 공고 개별 링크가 아님)
+  sourceUrl    String
+  // 에이전트가 왜 애매하다고 판단했는지 한 줄 근거 — 검토 화면에 그대로 보여준다.
+  aiNote       String?  @db.Text
+  discoveredAt DateTime @default(now())
+}

@@ -3,6 +3,12 @@ import { prisma } from "./prisma";
 import { analyzeJobDescription } from "./gemini";
 import { findOrCreateCompanyId } from "./company";
 import { notifyFollowersOfNewJobs } from "./notifications";
+import {
+  extractApplicationPeriod,
+  extractApplicationDeadline,
+  extractEmploymentType,
+  extractExperienceLevel,
+} from "./job-intake";
 
 // Gemini 무료 티어 분당 요청 한도를 여유 있게 지키기 위한 간격 (새로 분석을 호출했을 때만 대기)
 function sleep(ms: number) {
@@ -123,98 +129,6 @@ function greenhouseHtmlToText(rawContent: string): string {
 function ashbyHtmlToText(html: string): string {
   // Ashby의 descriptionHtml은 정상적인 HTML이라 이중 디코딩이 필요 없다.
   return cleanHtmlToText(cheerio.load(html));
-}
-
-// 공고 원문에서 구체적인 날짜가 들어간 서류접수 기간만 인정한다.
-// "매주 화요일 마감"처럼 반복되는 상대적 마감은 고정 기간이 아니므로 제외하고 상시채용으로 처리한다.
-const APPLICATION_PERIOD_PATTERNS = [
-  /\d{4}[.\-]\s?\d{1,2}[.\-]\s?\d{1,2}\s?[~\-–]\s?\d{4}[.\-]\s?\d{1,2}[.\-]\s?\d{1,2}/,
-  /\d{1,2}월\s?\d{1,2}일\s?[~\-–]\s?\d{1,2}월\s?\d{1,2}일/,
-  /\d{4}[.\-]\s?\d{1,2}[.\-]\s?\d{1,2}\s?까지/,
-  /\d{1,2}월\s?\d{1,2}일\s?까지/,
-];
-
-function extractApplicationPeriod(description: string): string {
-  for (const pattern of APPLICATION_PERIOD_PATTERNS) {
-    const match = description.match(pattern);
-    if (match) return match[0].replace(/\s+/g, " ").trim();
-  }
-  return "상시채용";
-}
-
-// 연도가 없는 "MM월 DD일" 표기는 이미 지난 날짜면 마감일이 과거일 수 없으므로 내년으로 간주한다.
-function inferYear(month: number, day: number, now: Date): number {
-  const year = now.getFullYear();
-  const candidate = new Date(year, month - 1, day);
-  if (candidate.getTime() < now.getTime() - 24 * 60 * 60 * 1000) {
-    return year + 1;
-  }
-  return year;
-}
-
-function extractApplicationDeadline(description: string): Date | null {
-  const now = new Date();
-
-  let m = description.match(
-    /\d{4}[.\-]\s?\d{1,2}[.\-]\s?\d{1,2}\s?[~\-–]\s?(\d{4})[.\-]\s?(\d{1,2})[.\-]\s?(\d{1,2})/
-  );
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-
-  m = description.match(/\d{1,2}월\s?\d{1,2}일\s?[~\-–]\s?(\d{1,2})월\s?(\d{1,2})일/);
-  if (m) {
-    const month = Number(m[1]);
-    const day = Number(m[2]);
-    return new Date(inferYear(month, day, now), month - 1, day);
-  }
-
-  m = description.match(/(\d{4})[.\-]\s?(\d{1,2})[.\-]\s?(\d{1,2})\s?까지/);
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-
-  m = description.match(/(\d{1,2})월\s?(\d{1,2})일\s?까지/);
-  if (m) {
-    const month = Number(m[1]);
-    const day = Number(m[2]);
-    return new Date(inferYear(month, day, now), month - 1, day);
-  }
-
-  return null;
-}
-
-function extractEmploymentType(title: string, description: string): string {
-  const text = `${title} ${description}`;
-  if (/인턴|intern/i.test(text)) return "인턴";
-  if (/계약직/.test(text)) return "계약직";
-  if (/프리랜서|freelance/i.test(text)) return "프리랜서";
-  return "정규직";
-}
-
-// 실제 공고 원문은 "경력 5년 이상"이 아니라 "5년 이상의 디자인 경력", "8+ years of experience"처럼
-// 숫자가 "경력"이라는 단어보다 먼저 나오거나 아예 영문으로 적힌 경우가 대부분이라, "경력"이 숫자 앞에
-// 와야만 매칭되던 기존 정규식은 실제로는 거의 매칭되지 않았다. 숫자+년/years 패턴 자체를 기준으로 찾는다.
-// 제목의 "(7년 이상)"처럼 본문에는 안 반복되고 제목에만 있는 경우가 많아 title도 같이 본다
-// (extractEmploymentType과 동일한 이유).
-function extractExperienceLevel(title: string, description: string): string {
-  const text = `${title} ${description}`;
-
-  // 범위: "3~5년", "3-5 years"
-  let m = text.match(/(\d+)\s*[~\-]\s*(\d+)\s*년/);
-  if (m) return `${m[1]}~${m[2]}년`;
-  m = text.match(/(\d+)\s*[~\-]\s*(\d+)\+?\s*years?/i);
-  if (m) return `${m[1]}~${m[2]}년`;
-
-  // 최소 연차: "5년 이상", "8+ years of experience", "at least 2 years"
-  m = text.match(/(\d+)\s*년\s*(이상|이하)/);
-  if (m) return `${m[1]}년 ${m[2]}`;
-  m = text.match(/(\d+)\+\s*years?/i);
-  if (m) return `${m[1]}년 이상`;
-  m = text.match(/at least\s*(\d+)\s*years?/i);
-  if (m) return `${m[1]}년 이상`;
-
-  if (/신입/.test(text)) return "신입";
-  if (/entry[\s-]?level/i.test(text)) return "신입";
-  if (/경력무관/.test(text)) return "경력무관";
-
-  return "경력무관";
 }
 
 type NormalizedJob = {
