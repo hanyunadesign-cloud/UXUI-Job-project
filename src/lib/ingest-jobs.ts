@@ -198,9 +198,9 @@ async function fetchSourceJobs(source: Source): Promise<NormalizedJob[]> {
     : fetchAshbyJobs(source);
 }
 
-// 마감된 지 3주가 지난 공고는 목록에서 제거하되, 통계/복구를 위해 실제로 지우지는 않고
+// 마감된 지 10일이 지난 공고는 목록에서 제거하되, 통계/복구를 위해 실제로 지우지는 않고
 // archivedAt만 채워서 소프트 삭제 처리한다(모든 목록 쿼리는 archivedAt: null 조건으로 걸러낸다).
-const CLOSED_RETENTION_DAYS = 21;
+const CLOSED_RETENTION_DAYS = 10;
 
 async function archiveStaleJobs(): Promise<number> {
   const cutoff = new Date();
