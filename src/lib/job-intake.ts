@@ -9,11 +9,23 @@ import type { Job } from "@prisma/client";
 
 // 공고 원문에서 구체적인 날짜가 들어간 서류접수 기간만 인정한다.
 // "매주 화요일 마감"처럼 반복되는 상대적 마감은 고정 기간이 아니므로 제외하고 상시채용으로 처리한다.
+// 날짜 구분자는 "."/"-" 뿐 아니라 "/"(예: 2026/08/17)도 실제 공고 원문에서 흔히 쓰여서 함께 받는다.
 const APPLICATION_PERIOD_PATTERNS = [
-  /\d{4}[.\-]\s?\d{1,2}[.\-]\s?\d{1,2}\s?[~\-–]\s?\d{4}[.\-]\s?\d{1,2}[.\-]\s?\d{1,2}/,
+  // 첫 날짜와 "~" 사이에도 "(수) 15:00" 같은 요일/시각 표기가 흔히 끼어들어 약간의 간격을 허용한다.
+  /\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}.{0,12}?[~\-–]\s?\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}/,
+  /(\d{4})년\s?\d{1,2}월\s?\d{1,2}일.{0,12}?[~\-–]\s?(\d{4}년\s?)?\d{1,2}월\s?\d{1,2}일/,
   /\d{1,2}월\s?\d{1,2}일\s?[~\-–]\s?\d{1,2}월\s?\d{1,2}일/,
-  /\d{4}[.\-]\s?\d{1,2}[.\-]\s?\d{1,2}\s?까지/,
+  // 날짜와 "까지" 사이에 "(화) 24시" 같은 요일/시각 표기가 끼어드는 경우가 흔해서 약간의
+  // 간격을 허용한다(너무 넓게 잡으면 엉뚱한 "까지"와 묶일 수 있어 12자로 제한).
+  /\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}.{0,12}?까지/,
+  /\d{4}년\s?\d{1,2}월\s?\d{1,2}일.{0,12}?까지/,
   /\d{1,2}월\s?\d{1,2}일\s?까지/,
+  // "~2026.08.21(금) 23:59"처럼 "까지"도 없이 "~"만 붙은 채로 끝나는 경우("~"가 "이 날짜까지"의
+  // 줄임 표기로 흔히 쓰인다). "까지"는 있어도 되고 없어도 된다.
+  /~\s?\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}(?:.{0,12}?까지)?/,
+  // "접수 마감일: 2026/08/17"처럼 범위나 "까지" 없이 마감 라벨 바로 뒤에 날짜만 오는 경우.
+  /(?:접수\s?마감일?|모집\s?마감일?|마감일자|마감일)\s*[:：]?\s*\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}/,
+  /(?:접수\s?마감일?|모집\s?마감일?|마감일자|마감일)\s*[:：]?\s*\d{4}년\s?\d{1,2}월\s?\d{1,2}일/,
 ];
 
 export function extractApplicationPeriod(description: string): string {
@@ -37,8 +49,15 @@ function inferYear(month: number, day: number, now: Date): number {
 export function extractApplicationDeadline(description: string): Date | null {
   const now = new Date();
 
+  // 날짜 구분자는 "."/"-" 뿐 아니라 "/"(예: 2026/08/17)도 실제 공고 원문에서 흔히 쓰인다.
+  // 첫 날짜와 "~" 사이에도 "(수) 15:00" 같은 요일/시각 표기가 흔히 끼어들어 약간의 간격을 허용한다.
   let m = description.match(
-    /\d{4}[.\-]\s?\d{1,2}[.\-]\s?\d{1,2}\s?[~\-–]\s?(\d{4})[.\-]\s?(\d{1,2})[.\-]\s?(\d{1,2})/
+    /\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}.{0,12}?[~\-–]\s?(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2})/
+  );
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+
+  m = description.match(
+    /(?:\d{4}년\s?)?\d{1,2}월\s?\d{1,2}일.{0,12}?[~\-–]\s?(\d{4})년\s?(\d{1,2})월\s?(\d{1,2})일/
   );
   if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
 
@@ -49,7 +68,12 @@ export function extractApplicationDeadline(description: string): Date | null {
     return new Date(inferYear(month, day, now), month - 1, day);
   }
 
-  m = description.match(/(\d{4})[.\-]\s?(\d{1,2})[.\-]\s?(\d{1,2})\s?까지/);
+  // 날짜와 "까지" 사이에 "(화) 24시" 같은 요일/시각 표기가 끼어드는 경우가 흔해서 약간의
+  // 간격을 허용한다(너무 넓게 잡으면 엉뚱한 "까지"와 묶일 수 있어 12자로 제한).
+  m = description.match(/(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2}).{0,12}?까지/);
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+
+  m = description.match(/(\d{4})년\s?(\d{1,2})월\s?(\d{1,2})일.{0,12}?까지/);
   if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
 
   m = description.match(/(\d{1,2})월\s?(\d{1,2})일\s?까지/);
@@ -58,6 +82,22 @@ export function extractApplicationDeadline(description: string): Date | null {
     const day = Number(m[2]);
     return new Date(inferYear(month, day, now), month - 1, day);
   }
+
+  // "~2026.08.21(금) 23:59"처럼 "까지"도 없이 "~"만 붙은 채로 끝나는 경우("~"가 "이 날짜까지"의
+  // 줄임 표기로 흔히 쓰인다). "까지"는 있어도 되고 없어도 된다.
+  m = description.match(/~\s?(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2})/);
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+
+  // "접수 마감일: 2026/08/17"처럼 범위나 "까지" 없이 마감 라벨 바로 뒤에 날짜만 오는 경우.
+  m = description.match(
+    /(?:접수\s?마감일?|모집\s?마감일?|마감일자|마감일)\s*[:：]?\s*(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2})/
+  );
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+
+  m = description.match(
+    /(?:접수\s?마감일?|모집\s?마감일?|마감일자|마감일)\s*[:：]?\s*(\d{4})년\s?(\d{1,2})월\s?(\d{1,2})일/
+  );
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
 
   return null;
 }
