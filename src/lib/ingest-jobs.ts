@@ -158,12 +158,23 @@ async function fetchGreenhouseJobs(source: GreenhouseSource): Promise<Normalized
 
   return data.jobs.map((job) => ({
     title: job.title,
-    applyUrl: job.absolute_url,
+    applyUrl: buildApplyUrl(source, job),
     location: job.location?.name ?? null,
     description: job.content
       ? greenhouseHtmlToText(job.content).slice(0, 5000)
       : job.title,
   }));
+}
+
+// 그린하우스 API가 주는 absolute_url을 그대로 썼더니, 당근은 이 링크(about.daangn.com에
+// gh_jid 쿼리로 특정 공고를 띄우는 임베드 위젯)가 깨져서 회사 소개 페이지로만 연결됐다.
+// 당근은 별도 채용 전용 사이트(careers.daangn.com)의 링크가 실제로 동작해서, 이 회사만
+// URL을 다시 만든다. 그 외 회사는 absolute_url을 그대로 쓴다.
+function buildApplyUrl(source: GreenhouseSource, job: GreenhouseJob): string {
+  if (source.board === "daangn") {
+    return `https://careers.daangn.com/jobs/role/${job.id}/`;
+  }
+  return job.absolute_url;
 }
 
 type AshbyJob = {
