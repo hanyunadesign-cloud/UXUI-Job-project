@@ -27,12 +27,6 @@ const APPEAL_JOB_IDS = new Set([
   "cmsjzdz1v000hmmwnyot0wp88", // 엑스에이아이(xAI)
 ]);
 
-// 상세 페이지 상단 배지 줄(직군/업종/스테이지/플랫폼)을 뺄지 시범 테스트 중 — 우선
-// 아정당 하나만 빼서 반응을 본다. 목록 페이지 카드에는 영향 없음(상세 페이지 전용).
-const HIDE_TOP_BADGES_JOB_IDS = new Set([
-  "cmsk1ir4u0002qae1xik22zn3", // 아정당
-]);
-
 export default async function JobDetailPage({ params }: { params: { id: string } }) {
   // getServerSession은 JWT를 로컬에서 검증할 뿐 DB를 안 타서 사실상 즉시 끝난다. 먼저
   // 받아두면, DB가 원격(서울) 리전이라 왕복이 느린 job/saved 조회 두 개를 병렬로 묶을 수 있다.
@@ -55,7 +49,10 @@ export default async function JobDetailPage({ params }: { params: { id: string }
 
   const saved = Boolean(savedRecord);
   const isAppealPointsPilot = APPEAL_JOB_IDS.has(job.id);
-  const hideTopBadges = HIDE_TOP_BADGES_JOB_IDS.has(job.id);
+  // 상단 배지 줄(직군/업종/스테이지/플랫폼)은 "기업 정보" 탭 내용과 겹쳐서, 어필 포인트
+  // 시범 적용 대상 5개 공고에서는 빼고 그만큼 헤더-본문 간격을 넓힌다(아정당에서 먼저
+  // 확인해본 방식을 나머지 4개에도 동일 적용).
+  const hideTopBadges = isAppealPointsPilot;
 
   return (
     <div className={`flex flex-col ${hideTopBadges ? "gap-10" : "gap-8"}`}>
