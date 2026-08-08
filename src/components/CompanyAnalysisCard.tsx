@@ -3,16 +3,16 @@
 import { useState } from "react";
 import { ExternalLink, Info, ChevronDown } from "lucide-react";
 import { clsx } from "clsx";
-import { STAGES } from "@/lib/constants";
+import { STAGES, type Stage } from "@/lib/constants";
 
-// "기업 정보" 탭 시범 적용 대상 5개 공고 한정 콘텐츠(AppealPointsCard와 동일한 패턴).
-// 링크는 DB에 없는 필드라 AI 추정 대신 직접 웹 검색으로 확인한 값만 쓴다. 확인 못 한
-// 항목(디자인 블로그 등)은 지어내지 않고 null로 둬서 "확인 안 됨"으로 표시한다. 채용공고
-// 게재 부서 항목은 정보 가치가 낮아 제외했다.
+// "기업 정보" 탭 콘텐츠. 링크는 DB에 없는 필드라 AI 추정 대신 직접 웹 검색으로 확인한 값만
+// 쓴다. 확인 못 한 항목(디자인 블로그 등)은 지어내지 않고 null로 둬서 "확인 안 됨"으로 표시한다.
+// 채용공고 게재 부서 항목은 정보 가치가 낮아 제외했다. 회사명으로 조회한다 — 같은 회사의 여러
+// 공고가 도메인/문제 설명을 그대로 공유해서(스테이지는 공고별 job.stage를 별도 prop으로 받는다,
+// 아래 CompanyAnalysisCard 참고), 공고 id가 아니라 companyName이 키다.
 type CompanyAnalysisData = {
   companyUrl: string | null;
   designBlogUrl: string | null;
-  stage: (typeof STAGES)[number];
   domainPrimary: string;
   domainSecondary: string;
   domainKeywords: [string, string, string];
@@ -42,13 +42,11 @@ const STAGE_KEYWORDS: Record<(typeof STAGES)[number], [string, string, string]> 
   에이전시: ["클라이언트 설득", "컨셉 제안", "다양한 산업군"],
 };
 
-// 시범 적용 대상 5개 공고 각각의 회사 분석. job.id로 조회한다.
+// 회사명으로 조회한다. 회사명 문자열은 반드시 job.companyName과 정확히 일치해야 한다.
 const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
-  // 토스인슈어런스
-  cms6d6b7e00024l8qf69w38zy: {
+  토스인슈어런스: {
     companyUrl: "https://tossinsu.com",
     designBlogUrl: "https://toss.tech/category/design",
-    stage: "유니콘·스케일업",
     domainPrimary: "핀테크 · 보험",
     domainSecondary:
       "보험과 기술을 결합한 인슈어테크 서비스예요. 법인보험대리점(GA)으로서 보험설계사와 고객을 연결하는 플랫폼을 만들어요.",
@@ -57,11 +55,9 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemRest:
       "설계사에게는 반복 업무 효율을, 고객에게는 직관적인 가입·상담 경험을 만드는 B2C·B2B 제품을 함께 만들어요.",
   },
-  // 아정당
-  cmsk1ir4u0002qae1xik22zn3: {
+  아정당: {
     companyUrl: "https://recruit.ajd.co.kr",
     designBlogUrl: null,
-    stage: "유니콘·스케일업",
     domainPrimary: "홈서비스 · O2O",
     domainSecondary:
       "이사·청소 같은 생활 서비스를 전문가와 연결하는 O2O 플랫폼이에요. 복잡한 예약·매칭 과정을 제품으로 편리하게 만들어요.",
@@ -69,11 +65,9 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "이사·청소처럼 복잡한 생활 서비스를 예약하는 과정을 더 쉽게 만드는 게 핵심 문제예요.",
     problemRest: "고객이 겪는 문제를 논리적 근거로 정의하고, 일관된 디자인 시스템으로 풀어내는 프로덕트를 만들어요.",
   },
-  // 네이버웹툰
-  cmsk1j36a0007qae1rernnein: {
+  네이버웹툰: {
     companyUrl: "https://recruit.webtoonscorp.com",
     designBlogUrl: null,
-    stage: "대기업·중견",
     domainPrimary: "콘텐츠 · 엔터테인먼트",
     domainSecondary:
       "전 세계 이용자에게 웹툰을 서비스하는 콘텐츠 플랫폼이에요. 작가와 독자를 연결하는 커뮤니티 기능과 창작 도구까지 함께 만들어요.",
@@ -81,11 +75,9 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "작가와 독자가 웹툰 생태계 안에서 더 잘 만나고 소통하게 만드는 게 핵심 문제예요.",
     problemRest: "작가홈·유저홈 같은 공통 커뮤니티 플랫폼으로, 한국과 글로벌 이용자 모두에게 일관된 경험을 만들어요.",
   },
-  // 한패스
-  cmsjzgwqj000cx7fc1x7py9zs: {
+  한패스: {
     companyUrl: "https://www.hanpass.com",
     designBlogUrl: null,
-    stage: "유니콘·스케일업",
     domainPrimary: "핀테크 · 외국인금융",
     domainSecondary:
       "외국인 고객을 위한 해외송금·금융 서비스를 만드는 핀테크예요. 송금을 넘어 교통, 통신, 커리어 매칭까지 생활 전반의 금융 경험을 확장하고 있어요.",
@@ -93,16 +85,464 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "외국인 고객이 낯선 한국에서 겪는 복잡한 금융 절차를 쉽게 만드는 게 핵심 문제예요.",
     problemRest: "언어와 제도가 낯선 고객도 직관적으로 쓸 수 있는 해외송금·금융 서비스를 만들어요.",
   },
-  // 엑스에이아이(xAI)
-  cmsjzdz1v000hmmwnyot0wp88: {
+  엑스에이아이: {
     companyUrl: "https://x.ai",
     designBlogUrl: null,
-    stage: "유니콘·스케일업",
     domainPrimary: "AI",
     domainSecondary: "우주를 이해하는 AI 시스템을 만드는 걸 미션으로 하는 AI 기업이에요. 소셜·AI 기반 프로덕트 전반의 경험을 설계해요.",
     domainKeywords: ["AI", "소셜 프로덕트", "글로벌"],
     problemLede: "AI가 만드는 새로운 경험을, 사람이 실제로 쓸 수 있는 제품으로 다듬는 게 핵심 문제예요.",
     problemRest: "빠르게 움직이는 팀에서, AI 도구까지 활용해 프로덕트 경험을 처음부터 끝까지 설계해요.",
+  },
+  "111퍼센트": {
+    companyUrl: "http://www.111percent.net/",
+    designBlogUrl: null,
+    domainPrimary: "게임 · 모바일",
+    domainSecondary: "'랜덤다이스' 등 캐주얼 모바일 게임을 만드는 게임 개발사예요. 전 세계 1억 명 이상의 유저가 즐기는 타이틀을 다수 보유하고 있어요.",
+    domainKeywords: ["캐주얼 게임", "모바일 게임", "글로벌 서비스"],
+    problemLede: "짧은 시간에 강한 재미를 주는 캐주얼 게임을 만들어 전 세계 유저에게 꾸준히 새로운 즐거움을 전하는 게 핵심 문제예요.",
+    problemRest: "빠른 출시와 반복 개선으로 글로벌 시장에서 경쟁력 있는 게임 경험을 만들어가요.",
+  },
+  "BGF리테일": {
+    companyUrl: "https://www.bgfretail.com/",
+    designBlogUrl: null,
+    domainPrimary: "유통 · 편의점",
+    domainSecondary: "CU 편의점을 운영하는 국내 대표 유통 서비스 기업이에요. 오프라인 매장과 온라인 서비스를 아우르는 다양한 디지털 플랫폼을 함께 만들어요.",
+    domainKeywords: ["편의점 유통", "커머스", "O2O 플랫폼"],
+    problemLede: "전국 매장망과 연결된 디지털 서비스를 통해 고객이 더 편리하게 상품과 혜택을 이용하도록 만드는 게 핵심 문제예요.",
+    problemRest: "모바일 앱부터 운영 어드민까지 다양한 플랫폼의 사용자 경험을 함께 설계해요.",
+  },
+  "Bjak": {
+    companyUrl: "https://bjak.my/en",
+    designBlogUrl: null,
+    domainPrimary: "핀테크 · AI",
+    domainSecondary: "동남아시아 최대 보험 비교 플랫폼 BJAK를 운영하며, 최근에는 AI 네이티브 개인 비서 프로덕트 'A1'을 새로 만들고 있어요.",
+    domainKeywords: ["인슈어테크", "AI 어시스턴트", "동남아 핀테크"],
+    problemLede: "복잡한 금융·보험 상품을 비교하고 가입하는 과정을 쉽게 만들고, 나아가 AI가 사용자의 일상 업무를 대신 처리해주는 신뢰할 수 있는 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "특히 A1 프로덕트에서는 사용자가 AI의 행동을 이해하고 통제할 수 있는 새로운 상호작용 방식을 처음부터 정의하고 있어요.",
+  },
+  "F&CO(에프앤코)": {
+    companyUrl: "https://banila.com",
+    designBlogUrl: null,
+    domainPrimary: "뷰티 · 화장품",
+    domainSecondary: "바닐라코 등 뷰티 브랜드를 운영하는 화장품 기업이에요. 상세페이지, 광고 소재 등 브랜드 콘텐츠를 만들어요.",
+    domainKeywords: ["뷰티 브랜드", "이커머스 콘텐츠", "생성형 AI 활용"],
+    problemLede: "브랜드 톤앤매너를 지키면서도 다양한 채널의 콘텐츠를 빠르게, 많은 양으로 만들어내는 게 핵심 문제예요.",
+    problemRest: "생성형 AI 등 새로운 제작 방식을 접목해 반복적인 콘텐츠 제작 효율을 높이는 시도를 함께 하고 있어요.",
+  },
+  "LG유플러스": {
+    companyUrl: "https://www.lguplus.com/",
+    designBlogUrl: "https://techblog.uplus.co.kr/",
+    domainPrimary: "통신 · IT서비스",
+    domainSecondary: "국내 3대 이동통신사 중 하나로, 모바일·인터넷·IPTV 등 통신 서비스와 다양한 모바일 프로덕트를 운영해요.",
+    domainKeywords: ["이동통신", "모바일 프로덕트", "디자인시스템"],
+    problemLede: "수많은 고객이 매일 쓰는 모바일 서비스를 자체 디자인시스템(UDS) 기준으로 일관되게 개선하는 게 핵심 문제예요.",
+    problemRest: "NPS 등 정량 지표와 UX 리서치를 함께 활용해 고객경험을 지속적으로 고도화해요.",
+  },
+  "Loonshot Games": {
+    companyUrl: "https://job-boards.greenhouse.io/loonshotgames",
+    designBlogUrl: null,
+    domainPrimary: "게임 · 서브컬처",
+    domainSecondary: "크래프톤의 완전 자회사로, 모바일 수집형 RPG(서브컬처 장르) 신작을 개발하는 게임 스튜디오예요.",
+    domainKeywords: ["서브컬처 게임", "모바일 RPG", "크래프톤 계열사"],
+    problemLede: "다양한 모바일 해상도와 글로벌 서비스 환경에서도 매력적인 서브컬처 게임의 GUI 경험을 일관되게 전달하는 게 핵심 문제예요.",
+    problemRest: "Unity 3D와 Noesis GUI를 기반으로 게임 플레이에 맞는 UI 구조와 연출을 설계해요.",
+  },
+  "OliveTree Games": {
+    companyUrl: "https://job-boards.greenhouse.io/olivetreegames",
+    designBlogUrl: null,
+    domainPrimary: "게임 · 캐주얼",
+    domainSecondary: "크래프톤 자회사로, 전 세계 유저가 함께 즐기는 소셜·캐주얼·퍼즐 게임을 만드는 글로벌 게임 스튜디오예요.",
+    domainKeywords: ["캐주얼 퍼즐 게임", "소셜 게임", "크래프톤 계열사"],
+    problemLede: "북미 스타일의 캐주얼 게임 감성을 유지하면서도 글로벌 유저가 직관적으로 즐길 수 있는 UI를 만드는 게 핵심 문제예요.",
+    problemRest: "메타 씬과 인게임 전반의 UI 컨셉·레이아웃을 함께 설계해요.",
+  },
+  "pxd": {
+    companyUrl: "https://www.pxd.co.kr/ko",
+    designBlogUrl: "https://story.pxd.co.kr",
+    domainPrimary: "디자인 컨설팅 · 에이전시",
+    domainSecondary: "UX 리서치부터 UI/GUI 디자인, 프론트엔드 개발까지 아우르는 UX 디자인 컨설팅 회사예요. 다양한 산업의 클라이언트 프로젝트를 함께 진행해요.",
+    domainKeywords: ["UX 컨설팅", "에이전시", "프로덕트 디자인"],
+    problemLede: "클라이언트마다 다른 서비스와 사용자 문제를 짧은 프로젝트 기간 안에 리서치부터 디자인까지 풀어내는 게 핵심 문제예요.",
+    problemRest: "웹, 모바일, IoT 등 다양한 디바이스와 산업을 넘나들며 UX/UI 문제를 해결해요.",
+  },
+  "골프존": {
+    companyUrl: "https://www.golfzon.com/",
+    designBlogUrl: null,
+    domainPrimary: "스포츠테크 · 골프",
+    domainSecondary: "스크린골프 시뮬레이터를 중심으로 한 골프 플랫폼 기업이에요. 앱과 운영 서비스를 위한 다양한 디지털 프로덕트를 만들어요.",
+    domainKeywords: ["스크린골프", "스포츠테크", "모바일 서비스"],
+    problemLede: "스크린골프 이용자가 예약부터 이벤트 참여까지 앱에서 편하게 이용할 수 있도록 만드는 게 핵심 문제예요.",
+    problemRest: "디자인 시스템 기반의 일관된 UI로 서비스 운영과 프로모션을 함께 지원해요.",
+  },
+  "그린리본": {
+    companyUrl: "https://home.green-ribbon.co.kr/",
+    designBlogUrl: null,
+    domainPrimary: "핀테크 · 헬스케어",
+    domainSecondary: "핀테크·SaaS·보험·헬스케어 데이터를 다루는 플랫폼을 만드는 서울 기반 초기 스타트업이에요.",
+    domainKeywords: ["데이터 플랫폼", "인슈어테크", "초기 스타트업"],
+    problemLede: "흩어진 보험·금융·헬스케어 데이터를 사용자가 쉽게 확인하고 활용할 수 있도록 만드는 게 핵심 문제예요.",
+    problemRest: "리텐션과 전환율을 데이터 기반으로 개선하며 제품을 빠르게 검증해가요.",
+  },
+  "네오위즈": {
+    companyUrl: "https://www.neowiz.com/kr/aboutus",
+    designBlogUrl: null,
+    domainPrimary: "게임 · 엔터테인먼트",
+    domainSecondary: "피망 등 다양한 게임 서비스를 운영하는 국내 대표 게임 기업이에요. Onetake 스튜디오는 서브컬처 장르의 PC/콘솔 신작을 만들어요.",
+    domainKeywords: ["게임 퍼블리싱", "서브컬처 게임", "PC·콘솔"],
+    problemLede: "서브컬처 팬들이 몰입할 수 있는 개성 있는 게임 비주얼과 UI 연출을 만드는 게 핵심 문제예요.",
+    problemRest: "드로잉 역량과 AI 활용 등 새로운 제작 방식을 함께 접목해 다양한 컨셉을 빠르게 제안해요.",
+  },
+  "슈퍼센트": {
+    companyUrl: "https://supercent.io/",
+    designBlogUrl: null,
+    domainPrimary: "게임 · 퍼블리싱",
+    domainSecondary: "캐주얼 모바일 게임을 만들고 퍼블리싱하는 회사예요. XP Hero, Pizza Ready, Burger Please! 등 자체 게임과 글로벌 퍼블리싱 사업을 함께 하고 있어요.",
+    domainKeywords: ["캐주얼 게임", "모바일 퍼블리싱", "글로벌 서비스"],
+    problemLede: "많은 유저가 짧은 시간에도 몰입할 수 있는 캐주얼 게임 경험을 빠르게 만들고 검증하는 게 핵심 문제예요.",
+    problemRest: "라이브 서비스 운영과 글로벌 다운로드 확장을 동시에 다뤄야 해서, UI가 다양한 장르와 문화권에서 일관되게 작동해야 해요.",
+  },
+  "스노우": {
+    companyUrl: "https://www.snowcorp.com/",
+    designBlogUrl: null,
+    domainPrimary: "IT/서비스 · 카메라·콘텐츠",
+    domainSecondary: "네이버 계열의 카메라·콘텐츠 앱 기업이에요. SNOW, EPIK, LINE Camera, 소다, 푸디 등 다양한 카메라·이미지 편집 서비스를 운영해요.",
+    domainKeywords: ["카메라 앱", "AI 콘텐츠", "글로벌 서비스"],
+    problemLede: "사진과 영상을 누구나 쉽고 재미있게 꾸밀 수 있게 만드는 게 핵심 문제예요.",
+    problemRest: "생성형 AI를 활용한 콘텐츠 제작 워크플로우를 서비스 곳곳에 빠르게 녹여내는 것도 중요한 과제예요.",
+  },
+  "스마일게이트": {
+    companyUrl: "https://www.smilegate.com/ko/",
+    designBlogUrl: null,
+    domainPrimary: "게임 · 엔터테인먼트",
+    domainSecondary: "로스트아크, 크로스파이어 등을 서비스하는 게임 그룹이에요. MMORPG를 비롯한 다양한 장르의 게임을 개발·서비스해요.",
+    domainKeywords: ["MMORPG", "게임 퍼블리싱", "글로벌 서비스"],
+    problemLede: "복잡한 게임 시스템을 유저가 직관적으로 이해하고 몰입할 수 있는 UI로 풀어내는 게 핵심 문제예요.",
+    problemRest: "오랜 기간 서비스되는 대형 MMORPG 특성상, UI 일관성을 지키면서도 콘텐츠 업데이트에 유연하게 대응해야 해요.",
+  },
+  "스타쉽엔터테인먼트": {
+    companyUrl: "https://www.starship-ent.com/",
+    designBlogUrl: null,
+    domainPrimary: "엔터테인먼트 · 콘텐츠",
+    domainSecondary: "몬스타엑스, IVE, 우주소녀 등 아티스트를 매니지먼트하는 연예기획사예요. 아티스트 관련 마케팅·프로모션 콘텐츠도 함께 제작해요.",
+    domainKeywords: ["연예기획사", "아티스트 마케팅", "콘텐츠 제작"],
+    problemLede: "아티스트의 매력을 다양한 채널에서 일관되고 매력적인 비주얼로 전달하는 게 핵심 문제예요.",
+    problemRest: "온·오프라인 프로모션이 끊임없이 이어지는 만큼, 빠른 속도로 완성도 높은 콘텐츠를 만들어내는 역량이 중요해요.",
+  },
+  "스펙터": {
+    companyUrl: "https://www.specter.co.kr/",
+    designBlogUrl: null,
+    domainPrimary: "HR테크 · 채용",
+    domainSecondary: "온라인 평판조회(레퍼런스 체크) 서비스를 제공하는 인재 검증 플랫폼이에요. 기업의 채용 검증 과정을 디지털로 빠르고 간편하게 만들어요.",
+    domainKeywords: ["레퍼런스 체크", "채용 검증", "B2B SaaS"],
+    problemLede: "몇 주씩 걸리던 평판조회 절차를 며칠로 줄이면서도 신뢰할 수 있게 만드는 게 핵심 문제예요.",
+    problemRest: "복잡한 채용 검증 워크플로우를 인사담당자가 직접, 쉽게 다룰 수 있는 경험으로 구조화하는 게 중요해요.",
+  },
+  "시나미로빌리지": {
+    companyUrl: null,
+    designBlogUrl: null,
+    domainPrimary: "광고테크 · 마케팅",
+    domainSecondary: "광고주 센터를 포함한 웹/앱 서비스를 운영하는 회사예요. 프로덕트 디자인과 마케팅 콘텐츠 제작을 함께 담당해요.",
+    domainKeywords: ["광고 플랫폼", "광고주 센터", "그로스 마케팅"],
+    problemLede: "광고주가 복잡한 광고 운영 기능을 헷갈리지 않고 다룰 수 있는 인터페이스를 만드는 게 핵심 문제예요.",
+    problemRest: "초기 서비스 단계라 프로덕트 개선과 마케팅 콘텐츠 제작을 동시에 빠르게 진행해야 해요.",
+  },
+  "씨티티디": {
+    companyUrl: "https://www.cttd.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "이커머스 · 디지털 에이전시",
+    domainSecondary: "이커머스 플랫폼의 UX/UI를 설계하고 운영하는 디지털 에이전시예요. 브랜드와 커머스를 아우르는 웹/앱 프로젝트와 광고·프로모션 콘텐츠도 함께 만들어요.",
+    domainKeywords: ["이커머스 UX/UI", "디지털 에이전시", "브랜드 커머스"],
+    problemLede: "여러 클라이언트의 이커머스 서비스를 짧은 주기 안에 완성도 있게 만들어내는 게 핵심 문제예요.",
+    problemRest: "브랜드마다 다른 방향성과 개발 환경에 맞춰 유연하게 UX/UI를 설계하고 커뮤니케이션하는 역량이 중요해요.",
+  },
+  "아이스크림아트": {
+    companyUrl: "https://i-screamarts.com/",
+    designBlogUrl: null,
+    domainPrimary: "에듀테크 · 콘텐츠",
+    domainSecondary: "AI 기반 디지털 아트 교육 플랫폼 '아트봉봉'을 만드는 회사예요. 아트봉봉스쿨을 통해 선생님과 학생을 위한 디지털 미술 교육 서비스를 운영해요.",
+    domainKeywords: ["에듀테크", "디지털 아트 교육", "아트봉봉"],
+    problemLede: "어린이와 선생님이 쉽게 쓸 수 있는 디지털 미술 교육 도구를 만드는 게 핵심 문제예요.",
+    problemRest: "서비스 UI/UX뿐 아니라 상세페이지·프로모션 같은 마케팅 디자인까지 함께 다뤄야 하는 환경이에요.",
+  },
+  "아이헤이트플라잉버그스": {
+    companyUrl: "https://mildang.kr/",
+    designBlogUrl: null,
+    domainPrimary: "에듀테크 · AI",
+    domainSecondary: "AI 기반 어댑티브 러닝 서비스 '밀당영어'와 온택트 학습 관리 서비스 '밀당PT'를 만드는 에듀테크 기업이에요.",
+    domainKeywords: ["어댑티브 러닝", "에듀테크", "온택트 교육"],
+    problemLede: "학생 개개인에게 맞는 학습 경험을 데이터와 AI로 설계하는 게 핵심 문제예요.",
+    problemRest: "질 높은 교육 기회의 평등이라는 미션 아래, 반복 개선을 통해 실제 학습 성과로 이어지는 제품을 만드는 게 중요해요.",
+  },
+  "알세미": {
+    companyUrl: "https://www.alsemy.com/",
+    designBlogUrl: null,
+    domainPrimary: "B2B SaaS · 반도체 AI",
+    domainSecondary: "반도체 공정 엔지니어를 위한 AI 기반 소프트웨어를 만드는 스타트업이에요. 공정 정의, 3D 시각화, 데이터 분석, 모델링을 하나의 제품 안에서 지원해요.",
+    domainKeywords: ["반도체 EDA", "AI 소프트웨어", "B2B 툴"],
+    problemLede: "반도체 엔지니어가 다루는 복잡한 작업을 하나의 제품 안에서 직관적으로 처리할 수 있게 만드는 게 핵심 문제예요.",
+    problemRest: "디자이너 없이 성장해온 제품이라, 첫 전담 디자이너가 UX 방향성과 일관성을 새로 정의해야 하는 단계예요.",
+  },
+  "어댑트": {
+    companyUrl: "https://www.adaptkorea.com/",
+    designBlogUrl: null,
+    domainPrimary: "커머스 · K-뷰티",
+    domainSecondary: "푸드올로지, 오브제 등 K-뷰티·이너뷰티 브랜드를 운영하는 D2C 미디어커머스 기업이에요. 국내 성과를 바탕으로 아마존, Shopee 등 글로벌 채널로 확장하고 있어요.",
+    domainKeywords: ["D2C 커머스", "K-뷰티", "글로벌 확장"],
+    problemLede: "국내에서 검증된 브랜드력을 해외 채널에서도 통하는 비주얼과 상세페이지로 옮기는 게 핵심 문제예요.",
+    problemRest: "권역별로 다른 시장 트렌드와 플랫폼 특성에 맞춰 일관된 브랜드 가이드라인을 확장해야 해요.",
+  },
+  "큐라움": {
+    companyUrl: "https://www.curaum.com",
+    designBlogUrl: null,
+    domainPrimary: "헬스케어 · 의료기기",
+    domainSecondary: "구강 내 장치를 세척·보관·살균하는 클리움 클리너 등 개인 맞춤형 의료기기와 디지털치료제를 만드는 헬스케어 기업이에요.",
+    domainKeywords: ["헬스케어", "의료기기", "디지털치료제"],
+    problemLede: "구강 내 장치 관리처럼 번거롭고 놓치기 쉬운 위생 관리를 기기와 서비스로 편리하게 만드는 게 핵심 문제예요.",
+    problemRest: "센싱·처리 기술을 활용해 의료기기 사용 경험을 일반 사용자도 쉽게 다룰 수 있는 서비스로 풀어내요.",
+  },
+  "크래프톤": {
+    companyUrl: "https://www.krafton.com",
+    designBlogUrl: null,
+    domainPrimary: "게임 · 엔터테인먼트",
+    domainSecondary: "배틀그라운드 등 글로벌 IP를 보유한 게임 개발사예요. 최근 AI 기반 신사업(AI Frontier)에도 투자하며 서비스 영역을 넓히고 있어요.",
+    domainKeywords: ["게임", "글로벌 IP", "AI 서비스"],
+    problemLede: "대규모 이용자를 대상으로 한 게임·AI 서비스에서 일관되고 완성도 높은 사용자 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "웹/모바일 서비스의 UX 설계부터 디자인 시스템 구축까지, 신규 AI 서비스의 사용성을 데이터 기반으로 최적화해요.",
+  },
+  "토스": {
+    companyUrl: "https://toss.im",
+    designBlogUrl: "https://toss.tech/category/design",
+    domainPrimary: "핀테크 · 금융 슈퍼앱",
+    domainSecondary: "송금, 결제, 대출, 보험, 투자 등 다양한 금융 서비스를 하나의 앱에 모은 종합 금융 플랫폼이에요. 토스뱅크, 토스증권 등 여러 계열사를 아우르는 토스 커뮤니티의 중심이에요.",
+    domainKeywords: ["핀테크", "슈퍼앱", "금융 플랫폼"],
+    problemLede: "복잡하고 진입장벽 높은 금융 서비스를 쉽고 간편한 경험으로 바꾸는 게 핵심 문제예요.",
+    problemRest: "여러 금융 상품을 하나의 앱과 디자인 원칙 아래 일관되게 묶어, 사용자가 어렵게 느끼던 절차를 단순화해요.",
+  },
+  "토스뱅크": {
+    companyUrl: "https://www.tossbank.com",
+    designBlogUrl: "https://toss.tech/category/design",
+    domainPrimary: "핀테크 · 인터넷은행",
+    domainSecondary: "토스의 인터넷전문은행이에요. 예·적금, 대출, 외환 등 기존 은행 상품을 더 쉽고 유리한 조건으로 제공해요.",
+    domainKeywords: ["인터넷은행", "핀테크", "예대출·외환"],
+    problemLede: "복잡하고 불편했던 은행 업무를 누구나 쉽게 이용할 수 있는 경험으로 바꾸는 게 핵심 문제예요.",
+    problemRest: "'지금 이자 받기', '평생 무료 환전'처럼 기존 은행에 없던 가치를 제품으로 만들어 제공해요.",
+  },
+  "토스인컴": {
+    companyUrl: "https://tossincome.com",
+    designBlogUrl: "https://toss.tech/category/design",
+    domainPrimary: "핀테크 · 세무",
+    domainSecondary: "토스 커뮤니티의 계열사로, 소득·세무 영역의 불편함을 해소하는 서비스를 만들어요. '숨은 환급액 찾기' 등이 대표 서비스예요.",
+    domainKeywords: ["세무테크", "환급", "핀테크"],
+    problemLede: "개인이 스스로 해결하기 어려운 세무 영역의 복잡함을 제품으로 쉽게 풀어주는 게 핵심 문제예요.",
+    problemRest: "매일 쓰는 서비스는 아니지만 누구나 마주치는 세무 영역에서, 놓치기 쉬운 환급 같은 가치를 찾아줘요.",
+  },
+  "토스증권": {
+    companyUrl: "https://www.tossinvest.com",
+    designBlogUrl: "https://toss.tech/category/design",
+    domainPrimary: "핀테크 · 증권",
+    domainSecondary: "누적 가입자 740만 명 규모의 모바일 증권 서비스예요. 국내·해외 주식, 채권, 옵션 등 다양한 투자 상품을 쉽고 직관적인 경험으로 제공해요.",
+    domainKeywords: ["증권", "투자", "핀테크"],
+    problemLede: "어렵고 진입장벽 높던 투자 경험을 누구나 쉽게 시작할 수 있게 만드는 게 핵심 문제예요.",
+    problemRest: "해외주식 거래대금 1위로 빠르게 성장하며, 복잡한 투자 정보를 이해하기 쉬운 UX로 풀어내요.",
+  },
+  "토스페이먼츠": {
+    companyUrl: "https://www.tosspayments.com",
+    designBlogUrl: "https://toss.tech/category/design",
+    domainPrimary: "핀테크 · 페이먼츠",
+    domainSecondary: "카드, 계좌이체, 간편결제 등 온라인 사업에 필요한 전자결제 솔루션을 제공하는 페이테크 기업이에요. 결제부터 사업 운영까지 필요한 솔루션을 지원해요.",
+    domainKeywords: ["페이먼츠", "PG", "핀테크"],
+    problemLede: "사업자가 겪는 결제·운영의 비효율을 기술로 해소하는 게 핵심 문제예요.",
+    problemRest: "기술부터 운영까지 사업에 필요한 모든 결제 솔루션을 한 곳에서 제공해 사업자의 부담을 줄여요.",
+  },
+  "토스플레이스": {
+    companyUrl: "https://tossplace.com",
+    designBlogUrl: "https://toss.tech/category/design",
+    domainPrimary: "핀테크 · 오프라인 결제",
+    domainSecondary: "오프라인 매장을 위한 결제 단말기와 포스(POS) 솔루션을 만드는 토스 계열사예요. 출시 2년 만에 가맹점 10만 개를 돌파했어요.",
+    domainKeywords: ["오프라인 결제", "POS", "핀테크"],
+    problemLede: "200만 자영업자가 겪는 매장 운영의 번거로움을 제품으로 줄이는 게 핵심 문제예요.",
+    problemRest: "결제 단말기, 포스기에 대한 익숙한 고정관념을 깨고, 사장님·고객·대리점 모두에게 새로운 경험을 만들어요.",
+  },
+  "네이버클라우드": {
+    companyUrl: "https://career.navercloudcorp.com/navercloud/",
+    designBlogUrl: null,
+    domainPrimary: "클라우드 · B2B SaaS",
+    domainSecondary: "네이버의 클라우드 사업 계열사로, 기업용 협업 툴 NAVER WORKS를 비롯한 클라우드·AI 기반 B2B 솔루션을 제공해요.",
+    domainKeywords: ["클라우드", "그룹웨어", "B2B SaaS"],
+    problemLede: "기업의 결재·근태 등 반복적인 경영지원 업무를 더 쉽고 정확하게 처리하도록 돕는 게 핵심 문제예요.",
+    problemRest: "AI를 접목한 기능으로 관리자와 실무자 모두의 업무 효율을 높이는 방향을 고민해요.",
+  },
+  "넷마블네오": {
+    companyUrl: "https://mcompany.netmarble.com/studio/list/neo",
+    designBlogUrl: null,
+    domainPrimary: "게임",
+    domainSecondary: "넷마블의 자회사로, 리니지2 레볼루션 등 실사풍 대형 모바일 게임을 개발하는 스튜디오예요.",
+    domainKeywords: ["모바일 게임", "실사풍 그래픽", "넷마블 계열사"],
+    problemLede: "대규모 실사풍 게임에서 몰입감 있는 비주얼과 직관적인 UI를 동시에 구현하는 게 핵심 문제예요.",
+    problemRest: "화려한 그래픽 안에서도 플레이어가 정보를 빠르게 읽고 조작할 수 있는 인터페이스를 만들어요.",
+  },
+  "누비랩": {
+    companyUrl: "https://www.nuvilab.com/ko",
+    designBlogUrl: null,
+    domainPrimary: "헬스케어 · 푸드테크",
+    domainSecondary: "헬스케어·교육·푸드서비스의 식사 데이터를 AI로 분석하는 푸드테크 스타트업이에요. 누적 투자 160억원, 한국·미국 1,100여 고객사를 보유하고 있어요.",
+    domainKeywords: ["푸드테크", "AI 비주얼", "B2B SaaS"],
+    problemLede: "식사 데이터를 AI로 정확히 분석하고, 그 결과를 신뢰감 있는 비주얼로 전달하는 게 핵심 문제예요.",
+    problemRest: "생성형 AI로 만든 콘텐츠가 실제 브랜드·서비스에 바로 쓸 수 있는 품질인지 검증하는 과정이 중요해요.",
+  },
+  "닥터나우": {
+    companyUrl: "https://doctornow.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "헬스케어 · 디지털헬스",
+    domainSecondary: "비대면진료와 약 처방, 실시간 의료상담을 제공하는 국내 대표 비대면진료 플랫폼이에요.",
+    domainKeywords: ["비대면진료", "헬스케어 플랫폼", "모바일 앱"],
+    problemLede: "환자·의료진 등 여러 이해관계자를 연결하는 비대면진료 경험을 데이터 기반으로 설계하는 게 핵심 문제예요.",
+    problemRest: "리서치와 가설 검증을 반복하며 사용자 피드백을 제품에 빠르게 반영해요.",
+  },
+  "당근": {
+    companyUrl: "https://about.daangn.com/",
+    designBlogUrl: "https://medium.com/daangn",
+    domainPrimary: "커머스 · 하이퍼로컬",
+    domainSecondary: "동네 이웃과 지역 업체를 연결하는 하이퍼로컬 플랫폼이에요. 중고거래를 넘어 동네 소식, 지역 비즈니스, 커뮤니티까지 아우르는 서비스를 만들어가고 있어요.",
+    domainKeywords: ["하이퍼로컬", "중고거래", "디자인 시스템"],
+    problemLede: "수천만 명이 매일 쓰는 서비스에서 일관되고 신뢰할 수 있는 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "디자인 시스템과 팀 간 협업 기준을 통해 하나의 결정이 제품 전체 완성도로 이어지도록 해요.",
+  },
+  "대상웰라이프": {
+    companyUrl: "https://www.daesangwellife.com/kr/index",
+    designBlogUrl: null,
+    domainPrimary: "헬스케어 · 뉴트리션",
+    domainSecondary: "과학 기반 영양 솔루션을 중심으로 개인 맞춤형 건강기능식품과 헬스케어 앱을 만드는 기업이에요. 뉴케어, 스포식스 등의 브랜드를 운영해요.",
+    domainKeywords: ["헬스케어 앱", "뉴트리션", "커머스"],
+    problemLede: "영양 제품과 디지털 서비스를 연결해 사용자가 자신에게 맞는 건강 관리를 쉽게 하도록 돕는 게 핵심 문제예요.",
+    problemRest: "신규 헬스케어 앱과 커머스 앱의 UX를 사용자 친화적으로 설계하는 게 중요해요.",
+  },
+  "더플라토": {
+    companyUrl: "https://tiro.ooo/ko/",
+    designBlogUrl: null,
+    domainPrimary: "AI · 생산성 툴",
+    domainSecondary: "AI 미팅 어시스턴트 '티로(Tiro)'를 만드는 스타트업이에요. 출시 1년 만에 ARR 100만 달러를 돌파했고, 사용의 35%가 일본·미국 등 해외에서 발생해요.",
+    domainKeywords: ["AI 미팅 어시스턴트", "글로벌 서비스", "Human-AI 인터랙션"],
+    problemLede: "비정형적인 비즈니스 대화를 AI가 이해할 수 있는 구조화된 데이터로 바꾸는 게 핵심 문제예요.",
+    problemRest: "한·미·일 등 여러 나라 고객이 함께 쓰는 만큼 언어와 맥락 차이를 고려한 인터페이스가 필요해요.",
+  },
+  "듀오톤": {
+    companyUrl: "https://duotone.io/",
+    designBlogUrl: null,
+    domainPrimary: "디자인 에이전시",
+    domainSecondary: "비즈니스와 사용자 문제를 구조화해 실행 가능한 디지털 경험으로 설계하는 디자인 에이전시예요.",
+    domainKeywords: ["UX 컨설팅", "디자인 에이전시", "B2B 프로젝트"],
+    problemLede: "클라이언트의 비즈니스 목표와 사용자 요구를 함께 만족시키는 UX 전략을 설계하는 게 핵심 문제예요.",
+    problemRest: "화면을 그리는 데 그치지 않고 문제의 배경을 이해하고 설계 근거를 만들어 구현까지 함께해요.",
+  },
+  "디지털웍스": {
+    companyUrl: "https://www.digitalworks.co.kr/",
+    designBlogUrl: null,
+    domainPrimary: "디자인 에이전시",
+    domainSecondary: "PC·모바일 앱의 UI/UX 디자인을 수행하는 디자인 에이전시예요.",
+    domainKeywords: ["UI/UX 디자인", "에이전시", "PL 프로젝트"],
+    problemLede: "다양한 클라이언트의 서비스를 트렌드와 사용성을 반영한 화면으로 구현하는 게 핵심 문제예요.",
+    problemRest: "여러 프로젝트를 동시에 리딩하며 완성도 높은 디자인 결과물을 만들어요.",
+  },
+  "딥오토": {
+    companyUrl: "http://deepauto.ai",
+    designBlogUrl: null,
+    domainPrimary: "AI · B2B SaaS",
+    domainSecondary: "KAIST AI대학원 교수와 연구원이 창립한 스타트업으로, 생성형 AI 기술을 기업용 제품으로 전환해요.",
+    domainKeywords: ["Agentic AI", "B2B SaaS", "브랜드 커뮤니케이션"],
+    problemLede: "복잡한 AI 기술을 투자자와 고객이 이해할 수 있는 시각언어로 전달하는 게 핵심 문제예요.",
+    problemRest: "IR 자료부터 브랜드 콘텐츠까지 회사의 핵심 커뮤니케이션을 일관된 톤앤매너로 만들어요.",
+  },
+  "라이터스컴퍼니": {
+    companyUrl: "https://www.kooky.io/",
+    designBlogUrl: null,
+    domainPrimary: "콘텐츠 · 엔터테인먼트",
+    domainSecondary: "글로벌 K-Pop 팬덤 플랫폼 'Kooky'를 운영하는 스타트업이에요. 아티스트와 팬을 온·오프라인으로 연결하는 경험을 만들어요.",
+    domainKeywords: ["K-Pop 팬덤", "글로벌 서비스", "커뮤니티"],
+    problemLede: "언어와 국가가 다른 팬들이 아티스트와 더 가깝게 연결되는 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "제품 기획부터 화면 설계, 필요시 구현까지 한 사람이 폭넓게 책임지는 구조예요.",
+  },
+  "라이트브레인": {
+    companyUrl: "https://rightbrain.co.kr/",
+    designBlogUrl: null,
+    domainPrimary: "UX 컨설팅 · 에이전시",
+    domainSecondary: "리서치, 컨설팅, UI 디자인을 아우르는 UX 전문 컨설팅 기업이에요. 금융, 미디어, 커머스 등 다양한 산업의 프로젝트를 수행해요.",
+    domainKeywords: ["UX 컨설팅", "리서치", "디자인 그룹"],
+    problemLede: "고객사의 도메인마다 다른 사용자 문제를 리서치로 정확히 짚어내는 게 핵심 문제예요.",
+    problemRest: "정량·정성 리서치와 사용성 테스트로 인사이트를 도출하고 이를 실제 디자인 전략으로 연결해요.",
+  },
+  "라인페이플러스": {
+    companyUrl: "https://linepaypluscorp.com/",
+    designBlogUrl: null,
+    domainPrimary: "핀테크 · 결제",
+    domainSecondary: "대만의 결제 플랫폼 LINE Pay의 기획·개발을 담당하는 라인 계열사예요. 대만, 태국, 일본에서 모바일 송금·결제 서비스를 지원해요.",
+    domainKeywords: ["모바일 결제", "리워드 광고", "글로벌 서비스"],
+    problemLede: "결제를 넘어 리워드 광고·커머스 등 새로운 서비스에서도 신뢰할 수 있는 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "AI를 활용해 프로토타입 제작과 디자인 생산성을 높이는 방법을 함께 고민해요.",
+  },
+  "라포랩스": {
+    companyUrl: "https://www.rapportlabs.kr/",
+    designBlogUrl: null,
+    domainPrimary: "커머스 · 패션",
+    domainSecondary: "4050세대를 위한 라이프스타일 플랫폼 '퀸잇' 등을 운영하는 커머스 스타트업이에요.",
+    domainKeywords: ["이커머스", "패션 플랫폼", "PB 브랜드"],
+    problemLede: "타깃 세대가 신뢰할 수 있는 상품 정보를 빠르게 전달하는 상세페이지를 만드는 게 핵심 문제예요.",
+    problemRest: "여러 PB 브랜드의 상품을 브랜드 가이드에 맞게 일관되게 보여주는 게 중요해요.",
+  },
+  "레트리카": {
+    companyUrl: "https://retrica.co/",
+    designBlogUrl: null,
+    domainPrimary: "IT/서비스 · 카메라 앱",
+    domainSecondary: "5억+ 다운로드를 기록한 글로벌 카메라 앱 '레트리카'와 신규 AI 사진·영상 앱 'acha AI'를 만드는 회사예요.",
+    domainKeywords: ["카메라 앱", "AI 이미지", "글로벌 서비스"],
+    problemLede: "전 세계 사용자가 매일 쓰는 카메라 앱에서 재미있고 완성도 높은 촬영·편집 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "새로운 AI 카메라 앱까지 함께 확장하며 디자인 시스템을 유지해요.",
+  },
+  "룰루랩": {
+    companyUrl: "https://www.lulu-lab.com/",
+    designBlogUrl: null,
+    domainPrimary: "헬스케어 · 뷰티테크",
+    domainSecondary: "AI 기반 피부 분석 솔루션 '루미니'로 뷰티·메디컬 산업의 디지털 혁신을 이끄는 기업이에요. 삼성전자 사내벤처 C랩에서 스핀오프했어요.",
+    domainKeywords: ["AI 피부분석", "뷰티테크", "B2B 세일즈"],
+    problemLede: "복잡한 AI 피부 분석 기술을 병원·에스테틱·해외 파트너가 쉽게 이해하도록 시각화하는 게 핵심 문제예요.",
+    problemRest: "제품 소개서부터 키오스크 UI까지 다양한 접점에서 일관된 브랜드 경험을 만들어요.",
+  },
+  "뤼튼": {
+    companyUrl: "https://wrtn.ai",
+    designBlogUrl: null,
+    domainPrimary: "AI · 콘텐츠",
+    domainSecondary: "AI 캐릭터와의 인터랙티브 스토리 경험을 만드는 서비스예요. 한국(크랙)과 일본(Kyarapu) 두 시장에서 서비스 중이며 유료화 1개월 만에 월매출 20억원을 넘었어요.",
+    domainKeywords: ["AI 캐릭터", "인터랙티브 스토리", "글로벌 서비스"],
+    problemLede: "AI 캐릭터와의 대화를 게임·웹소설처럼 몰입감 있는 콘텐츠 경험으로 설계하는 게 핵심 문제예요.",
+    problemRest: "서비스 구조와 사용자 여정을 정의하고, 배포 후 성과를 분석해 지속적으로 개선해요.",
+  },
+  "마상소프트": {
+    companyUrl: "https://www.masangsoft.com/",
+    designBlogUrl: null,
+    domainPrimary: "게임",
+    domainSecondary: "부산에 기반한 게임 개발사로, 라이브 서비스 중인 게임의 UI/UX와 웹·플랫폼 서비스를 함께 만들어요.",
+    domainKeywords: ["라이브 게임", "게임 UI", "부산 게임사"],
+    problemLede: "서비스 중인 게임에서 플레이어가 직관적으로 조작할 수 있는 UI 리소스를 지속적으로 관리하는 게 핵심 문제예요.",
+    problemRest: "게임 UI뿐 아니라 프로모션·이벤트, 웹 플랫폼 디자인까지 폭넓게 다뤄요.",
+  },
+  "무신사": {
+    companyUrl: "https://www.musinsa.com/",
+    designBlogUrl: "https://techblog.musinsa.com/",
+    domainPrimary: "커머스 · 패션",
+    domainSecondary: "약 6,000개 패션 브랜드를 다루는 국내 대표 온라인 패션 플랫폼이에요.",
+    domainKeywords: ["이커머스", "패션 플랫폼", "리커머스"],
+    problemLede: "수많은 사용자가 무신사의 다양한 서비스를 탐색하고 다시 찾아오게 만드는 게 핵심 문제예요.",
+    problemRest: "멤버십, 커뮤니티, 리커머스 등 여러 서비스를 연결해 참여와 재방문 경험을 설계해요.",
+  },
+  "문토": {
+    companyUrl: "https://www.munto.kr/",
+    designBlogUrl: null,
+    domainPrimary: "커뮤니티 · 라이프스타일",
+    domainSecondary: "취향을 통해 나를 발견하고 사람들과 연결되도록 돕는 관심사 기반 소셜 밋업 플랫폼이에요. 누적 회원가입 130만 명을 기록했어요.",
+    domainKeywords: ["소셜 밋업", "커뮤니티 플랫폼", "브랜드 경험"],
+    problemLede: "취향이 비슷한 사람들이 부담 없이 만날 수 있는 신뢰할 수 있는 커뮤니티 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "브랜드의 첫인상부터 사용자 경험의 끝까지 일관되게 설계하는 게 중요해요.",
   },
 };
 
@@ -244,8 +684,8 @@ function ExpandableTile({
   );
 }
 
-export function CompanyAnalysisCard({ jobId }: { jobId: string }) {
-  const data = COMPANY_ANALYSIS[jobId];
+export function CompanyAnalysisCard({ companyName, stage }: { companyName: string; stage: string }) {
+  const data = COMPANY_ANALYSIS[companyName];
   if (!data) return null;
 
   return (
@@ -262,11 +702,11 @@ export function CompanyAnalysisCard({ jobId }: { jobId: string }) {
           iconColor="text-primary"
           label="스테이지"
           infoText="스타트업부터 대기업까지, 기업이 현재 어떤 단계에 있는지에 따라 요구되는 역량이 달라요."
-          value={data.stage}
-          tags={STAGE_KEYWORDS[data.stage]}
+          value={stage}
+          tags={STAGE_KEYWORDS[stage as Stage]}
         >
           <p className="text-sm leading-relaxed tracking-[-0.005em] text-neutral-700">
-            {STAGE_FIT[data.stage]}
+            {STAGE_FIT[stage as Stage]}
           </p>
         </ExpandableTile>
 

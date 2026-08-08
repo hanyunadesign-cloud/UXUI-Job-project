@@ -4,11 +4,12 @@ import { type ReactNode, type RefObject } from "react";
 import { clsx } from "clsx";
 import { CompanyAnalysisCard } from "@/components/CompanyAnalysisCard";
 
-// "공고 내용" / "기업 정보" 탭 — 시범 적용 대상 5개 공고에서 쓰인다.
+// "공고 내용" / "기업 정보" 탭.
 // tab/activeQuote는 AppealJobPanel이 관리한다 — "이렇게 어필하세요" 포인트를 클릭했을 때
 // 이 탭을 "공고 내용"으로 전환하고, 근거 문장을 찾아 밑줄+스크롤해야 해서 상태를 끌어올렸다.
 export function JobContentTabs({
-  jobId,
+  companyName,
+  stage,
   description,
   summary,
   tab,
@@ -16,7 +17,8 @@ export function JobContentTabs({
   activeQuote,
   quoteRef,
 }: {
-  jobId: string;
+  companyName: string;
+  stage: string;
   description: string;
   summary?: ReactNode;
   tab: "content" | "company";
@@ -87,7 +89,7 @@ export function JobContentTabs({
           className={clsx("col-start-1 row-start-1", tab !== "company" && "invisible")}
           aria-hidden={tab !== "company"}
         >
-          <CompanyAnalysisCard jobId={jobId} />
+          <CompanyAnalysisCard companyName={companyName} stage={stage} />
         </div>
       </div>
     </div>

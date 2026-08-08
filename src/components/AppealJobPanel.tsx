@@ -12,10 +12,14 @@ import { AppealPointsCard } from "@/components/AppealPointsCard";
 // 직접 참여하게 한다 — 안 그러면 이 컴포넌트 자체가 grid item 하나로 잡혀서 레이아웃이 깨진다.
 export function AppealJobPanel({
   jobId,
+  companyName,
+  stage,
   description,
   summary,
 }: {
   jobId: string;
+  companyName: string;
+  stage: string;
   description: string;
   summary?: ReactNode;
 }) {
@@ -51,7 +55,8 @@ export function AppealJobPanel({
   return (
     <div ref={containerRef} className="contents">
       <JobContentTabs
-        jobId={jobId}
+        companyName={companyName}
+        stage={stage}
         description={description}
         summary={summary}
         tab={tab}
