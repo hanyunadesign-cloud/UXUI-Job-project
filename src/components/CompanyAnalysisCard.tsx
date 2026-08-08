@@ -194,6 +194,10 @@ function ExpandableTile({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  // 태그가 3개면 타일 폭에서 2줄로 밀리는 경우가 있어서, 접힌 상태에선 앞 2개 + "···"만
+  // 보여주고 나머지는 펼쳤을 때(children 위에 전체 태그 목록으로) 보여준다.
+  const visibleTags = tags.slice(0, 2);
+  const hasMoreTags = tags.length > visibleTags.length;
 
   return (
     <div className="rounded-xl bg-neutral-50 p-[28px]">
@@ -211,15 +215,16 @@ function ExpandableTile({
             <InfoTip text={infoText} />
           </div>
           <p className="text-sm font-semibold tracking-[-0.005em] text-ink">{value}</p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {tags.map((tag) => (
+          <div className="mt-2 flex flex-nowrap items-center gap-1.5 overflow-hidden">
+            {visibleTags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
+                className="shrink-0 rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
               >
                 {tag}
               </span>
             ))}
+            {hasMoreTags && <span className="shrink-0 text-xs font-medium text-neutral-400">···</span>}
           </div>
         </div>
         <ChevronDown
@@ -236,7 +241,21 @@ function ExpandableTile({
           open ? "max-h-60" : "max-h-0"
         )}
       >
-        <div className="pt-5">{children}</div>
+        <div className="pt-5">
+          {hasMoreTags && (
+            <div className="mb-3 flex flex-wrap gap-1.5">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+          {children}
+        </div>
       </div>
     </div>
   );
