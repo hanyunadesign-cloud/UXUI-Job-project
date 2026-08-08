@@ -215,17 +215,21 @@ function ExpandableTile({
             <InfoTip text={infoText} />
           </div>
           <p className="text-sm font-semibold tracking-[-0.005em] text-ink">{value}</p>
-          <div className="mt-2 flex flex-nowrap items-center gap-1.5 overflow-hidden">
-            {visibleTags.map((tag) => (
-              <span
-                key={tag}
-                className="shrink-0 rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
-              >
-                {tag}
-              </span>
-            ))}
-            {hasMoreTags && <span className="shrink-0 text-xs font-medium text-neutral-400">···</span>}
-          </div>
+          {/* 펼쳤을 때는 아래 children 위에 전체 태그를 다시 보여주니, 여기 축약 줄은
+              접혀 있을 때만 보여야 중복이 안 생긴다. */}
+          {!open && (
+            <div className="mt-2 flex flex-nowrap items-center gap-1.5 overflow-hidden">
+              {visibleTags.map((tag) => (
+                <span
+                  key={tag}
+                  className="shrink-0 rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
+                >
+                  {tag}
+                </span>
+              ))}
+              {hasMoreTags && <span className="shrink-0 text-xs font-medium text-neutral-400">···</span>}
+            </div>
+          )}
         </div>
         <ChevronDown
           aria-hidden
