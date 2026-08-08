@@ -58,7 +58,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
   const hideTopBadges = HIDE_TOP_BADGES_JOB_IDS.has(job.id);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className={`flex flex-col ${hideTopBadges ? "gap-10" : "gap-8"}`}>
       <TrackPageView
         name="Job Detail Viewed"
         props={{ jobId: job.id, companyName: job.companyName, saved }}
