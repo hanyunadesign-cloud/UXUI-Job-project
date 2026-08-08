@@ -27,6 +27,12 @@ const APPEAL_JOB_IDS = new Set([
   "cmsjzdz1v000hmmwnyot0wp88", // 엑스에이아이(xAI)
 ]);
 
+// 상세 페이지 상단 배지 줄(직군/업종/스테이지/플랫폼)을 뺄지 시범 테스트 중 — 우선
+// 아정당 하나만 빼서 반응을 본다. 목록 페이지 카드에는 영향 없음(상세 페이지 전용).
+const HIDE_TOP_BADGES_JOB_IDS = new Set([
+  "cmsk1ir4u0002qae1xik22zn3", // 아정당
+]);
+
 export default async function JobDetailPage({ params }: { params: { id: string } }) {
   // getServerSession은 JWT를 로컬에서 검증할 뿐 DB를 안 타서 사실상 즉시 끝난다. 먼저
   // 받아두면, DB가 원격(서울) 리전이라 왕복이 느린 job/saved 조회 두 개를 병렬로 묶을 수 있다.
@@ -49,6 +55,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
 
   const saved = Boolean(savedRecord);
   const isAppealPointsPilot = APPEAL_JOB_IDS.has(job.id);
+  const hideTopBadges = HIDE_TOP_BADGES_JOB_IDS.has(job.id);
 
   return (
     <div className="flex flex-col gap-8">
@@ -81,16 +88,18 @@ export default async function JobDetailPage({ params }: { params: { id: string }
               <p className="text-sm text-neutral-500">{job.companyName}</p>
             )}
             <h1 className="text-2xl font-bold text-ink">{job.title}</h1>
-            <div className="flex flex-wrap gap-1.5">
-              <Badge>{job.role}</Badge>
-              {job.industries.map((industry) => (
-                <Badge key={industry}>{industry}</Badge>
-              ))}
-              <Badge>{job.stage}</Badge>
-              {job.platforms.map((platform) => (
-                <Badge key={platform}>{platform}</Badge>
-              ))}
-            </div>
+            {!hideTopBadges && (
+              <div className="flex flex-wrap gap-1.5">
+                <Badge>{job.role}</Badge>
+                {job.industries.map((industry) => (
+                  <Badge key={industry}>{industry}</Badge>
+                ))}
+                <Badge>{job.stage}</Badge>
+                {job.platforms.map((platform) => (
+                  <Badge key={platform}>{platform}</Badge>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-4">
