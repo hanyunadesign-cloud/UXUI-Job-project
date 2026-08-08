@@ -183,7 +183,6 @@ function ExpandableTile({
   value,
   tags,
   children,
-  tagsBelowContent = false,
 }: {
   icon: React.ReactNode;
   iconBg: string;
@@ -193,14 +192,8 @@ function ExpandableTile({
   value: string;
   tags: readonly string[];
   children: React.ReactNode;
-  // 시범: 태그를 접힌 상태에선 아예 안 보여주고, 펼쳤을 때 부연설명 아래에 표시한다.
-  tagsBelowContent?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  // 태그가 3개면 타일 폭에서 2줄로 밀리는 경우가 있어서, 접힌 상태에선 앞 2개 + "···"만
-  // 보여주고 나머지는 펼쳤을 때(children 위에 전체 태그 목록으로) 보여준다.
-  const visibleTags = tags.slice(0, 2);
-  const hasMoreTags = tags.length > visibleTags.length;
 
   return (
     <div className="rounded-xl bg-neutral-50 p-[28px]">
@@ -218,22 +211,6 @@ function ExpandableTile({
             <InfoTip text={infoText} />
           </div>
           <p className="text-sm font-semibold tracking-[-0.005em] text-ink">{value}</p>
-          {/* 펼쳤을 때는 아래 children 위(또는 아래)에 전체 태그를 다시 보여주니, 여기
-              축약 줄은 접혀 있을 때만 보여야 중복이 안 생긴다. tagsBelowContent면
-              접힌 상태에선 태그를 아예 안 보여준다. */}
-          {!open && !tagsBelowContent && (
-            <div className="mt-2 flex flex-nowrap items-center gap-1.5 overflow-hidden">
-              {visibleTags.map((tag) => (
-                <span
-                  key={tag}
-                  className="shrink-0 rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
-                >
-                  {tag}
-                </span>
-              ))}
-              {hasMoreTags && <span className="shrink-0 text-xs font-medium text-neutral-400">···</span>}
-            </div>
-          )}
         </div>
         <ChevronDown
           aria-hidden
@@ -250,50 +227,26 @@ function ExpandableTile({
         )}
       >
         <div className="pt-5">
-          {tagsBelowContent ? (
-            <>
-              {children}
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </>
-          ) : (
-            <>
-              {hasMoreTags && (
-                <div className="mb-3 flex flex-wrap gap-1.5">
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {children}
-            </>
-          )}
+          {children}
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-// 시범: 태그를 부연설명 아래로 옮기고 접힌 상태에선 숨기는 레이아웃 — 아정당 1건만 우선 적용.
-const TAGS_BELOW_CONTENT_JOB_IDS = new Set(["cmsk1ir4u0002qae1xik22zn3"]);
-
 export function CompanyAnalysisCard({ jobId }: { jobId: string }) {
   const data = COMPANY_ANALYSIS[jobId];
   if (!data) return null;
-  const tagsBelowContent = TAGS_BELOW_CONTENT_JOB_IDS.has(jobId);
 
   return (
     <div className="flex flex-col gap-5">
@@ -311,7 +264,6 @@ export function CompanyAnalysisCard({ jobId }: { jobId: string }) {
           infoText="스타트업부터 대기업까지, 기업이 현재 어떤 단계에 있는지에 따라 요구되는 역량이 달라요."
           value={data.stage}
           tags={STAGE_KEYWORDS[data.stage]}
-          tagsBelowContent={tagsBelowContent}
         >
           <p className="text-sm leading-relaxed tracking-[-0.005em] text-neutral-700">
             {STAGE_FIT[data.stage]}
@@ -326,7 +278,6 @@ export function CompanyAnalysisCard({ jobId }: { jobId: string }) {
           infoText="해당 기업이 어떤 산업군의 서비스를 운영 중인지 확인하세요."
           value={data.domainPrimary}
           tags={data.domainKeywords}
-          tagsBelowContent={tagsBelowContent}
         >
           <p className="text-sm leading-relaxed tracking-[-0.005em] text-neutral-700">
             {data.domainSecondary}
