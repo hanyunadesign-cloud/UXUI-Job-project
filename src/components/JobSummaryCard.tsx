@@ -20,7 +20,7 @@ export function JobSummaryCard({
     ["경력", job.experienceLevel],
     ["고용형태", job.employmentType],
     ["직군", job.role],
-    ["지역", job.location ?? "미표기"],
+    ["지역", job.location ?? "-"],
     ["마감일", deadlineLabel],
     ["기업 규모", job.stage],
   ];
