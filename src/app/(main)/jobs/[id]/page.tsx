@@ -11,8 +11,21 @@ import { AnalysisPanel } from "@/components/AnalysisPanel";
 import { BackButton } from "@/components/BackButton";
 import { TrackPageView } from "@/components/TrackPageView";
 import { MarkJobViewed } from "@/components/MarkJobViewed";
+import { JobSummaryCard } from "@/components/JobSummaryCard";
+import { AppealJobPanel } from "@/components/AppealJobPanel";
 
 export const dynamic = "force-dynamic";
+
+// "이렇게 어필하세요" + "공고 요약" + "기업 정보" 탭 — Vercel 시범 적용 대상 5개 공고.
+// 아직 Gemini 파이프라인에 연결 안 했고, 이 5건만 손으로 검증한 문구로 먼저 확인한다.
+// (AppealPointsCard.tsx/CompanyAnalysisCard.tsx의 콘텐츠 맵과 반드시 같은 id 목록을 유지)
+const APPEAL_JOB_IDS = new Set([
+  "cms6d6b7e00024l8qf69w38zy", // 토스인슈어런스
+  "cmsk1ir4u0002qae1xik22zn3", // 아정당
+  "cmsk1j36a0007qae1rernnein", // 네이버웹툰
+  "cmsjzgwqj000cx7fc1x7py9zs", // 한패스
+  "cmsjzdz1v000hmmwnyot0wp88", // 엑스에이아이(xAI)
+]);
 
 export default async function JobDetailPage({ params }: { params: { id: string } }) {
   // getServerSession은 JWT를 로컬에서 검증할 뿐 DB를 안 타서 사실상 즉시 끝난다. 먼저
@@ -35,6 +48,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
   if (!job) notFound();
 
   const saved = Boolean(savedRecord);
+  const isAppealPointsPilot = APPEAL_JOB_IDS.has(job.id);
 
   return (
     <div className="flex flex-col gap-8">
@@ -85,23 +99,48 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr]">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6">
-          <h2 className="mb-4 text-sm font-semibold text-ink">공고 내용</h2>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-700">
-            {job.description}
-          </p>
-        </div>
+      <div
+        className={`grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr] ${
+          isAppealPointsPilot ? "lg:gap-x-6" : ""
+        }`}
+      >
+        {isAppealPointsPilot ? (
+          <AppealJobPanel
+            jobId={job.id}
+            description={job.description}
+            summary={
+              <JobSummaryCard
+                job={{
+                  role: job.role,
+                  stage: job.stage,
+                  location: job.location,
+                  employmentType: job.employmentType,
+                  experienceLevel: job.experienceLevel,
+                  applicationDeadline: job.applicationDeadline,
+                }}
+              />
+            }
+          />
+        ) : (
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6">
+            <h2 className="mb-4 text-sm font-semibold text-ink">공고 내용</h2>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-700">
+              {job.description}
+            </p>
+          </div>
+        )}
 
-        <AnalysisPanel
-          jobId={job.id}
-          initialAnalysis={
-            job.analysis
-              ? { coreKeywords: job.analysis.coreKeywords, resumeTip: job.analysis.resumeTip }
-              : null
-          }
-          isLoggedIn={Boolean(userId)}
-        />
+        {isAppealPointsPilot ? null : (
+          <AnalysisPanel
+            jobId={job.id}
+            initialAnalysis={
+              job.analysis
+                ? { coreKeywords: job.analysis.coreKeywords, resumeTip: job.analysis.resumeTip }
+                : null
+            }
+            isLoggedIn={Boolean(userId)}
+          />
+        )}
       </div>
     </div>
   );
