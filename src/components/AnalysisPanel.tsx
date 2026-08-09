@@ -33,6 +33,7 @@ export function AnalysisPanel({
       const data: Analysis = await res.json();
       setAnalysis(data);
       setStatus("success");
+      trackEvent("AI Analysis Loaded", { jobId, cached: false, isRetry });
     } catch {
       setStatus("error");
       trackEvent("AI Analysis Failed", { jobId, isRetry });
@@ -40,7 +41,11 @@ export function AnalysisPanel({
   }, [jobId]);
 
   useEffect(() => {
-    if (!initialAnalysis) {
+    if (initialAnalysis) {
+      // 실패/재시도 이벤트만 있고 "성공(=분석을 실제로 봤다)" 이벤트가 없으면 재시도율의
+      // 분모(전체 시도 수)를 알 수 없다 — DB에 이미 캐시된 분석이 뜬 경우도 성공으로 센다.
+      trackEvent("AI Analysis Loaded", { jobId, cached: true });
+    } else {
       runAnalysis();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
