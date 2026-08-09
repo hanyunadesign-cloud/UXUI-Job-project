@@ -543,7 +543,8 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     domainKeywords: ["소셜 밋업", "커뮤니티 플랫폼", "브랜드 경험"],
     problemLede: "취향이 비슷한 사람들이 부담 없이 만날 수 있는 신뢰할 수 있는 커뮤니티 경험을 만드는 게 핵심 문제예요.",
     problemRest: "브랜드의 첫인상부터 사용자 경험의 끝까지 일관되게 설계하는 게 중요해요.",
-  },  "미소": {
+  },
+  "미소": {
     companyUrl: "https://miso.kr",
     designBlogUrl: null,
     domainPrimary: "O2O · 홈서비스",

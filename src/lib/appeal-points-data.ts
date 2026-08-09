@@ -560,7 +560,8 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "프로덕트 전략·로드맵 설계 참여", body: "비즈니스 목표 달성을 위한 프로덕트 방향성을 주도적으로 고민해본 경험을 보여주세요.", sourceQuote: "프로덕트 전략 및 로드맵 설계 - 비즈니스 목표를 달성하기 위한 프로덕트의 방향성을 주도적으로 고민" },
     { title: "전환을 만드는 비주얼 콘텐츠 제작", body: "상세페이지, 랜딩페이지, 인앱 배너 등 전환을 만드는 핵심 에셋을 리딩한 작업물을 보여주세요.", sourceQuote: "비주얼 콘텐츠 기획 및 제작 - 상세페이지·랜딩페이지·인앱 배너 등 전환을 만드는 핵심 에셋 리딩" },
     { title: "브랜드 아이덴티티 시각화 경험", body: "브랜드 아이덴티티를 시각화하고 전략을 수립해본 경험을 보여주세요.", sourceQuote: "브랜드 아이덴티티 시각화 및 전략 수립" },
-  ],  cmrdl1fpj000e5xp5m5vsfd0r: [
+  ],
+  cmrdl1fpj000e5xp5m5vsfd0r: [
     { title: "데이터 기반 소재 개선 경험", body: "유저 구매 경험을 높이기 위해 데이터를 근거로 광고 소재를 개선해본 과정을 구체적으로 보여주세요.", sourceQuote: "유저 구매 경험 증대를 위한 데이터 기반의 디자인 소재 개선 작업 진행" },
     { title: "다양한 제작 툴 활용 역량", body: "피그마부터 프리미어, 에프터이펙트까지 여러 툴을 넘나들며 결과물을 만든 경험을 포트폴리오에 담아주세요.", sourceQuote: "피그마, 프리미어, 에프터이펙트 등 제작 툴을 자유롭게 다룰 수 있는 분" },
     { title: "마케터와의 협업 경험", body: "퍼포먼스·콘텐츠 마케터와 유연하게 소통하며 광고 소재를 만들어낸 협업 사례를 보여주세요.", sourceQuote: "퍼포먼스 마케터와 콘텐츠 마케터와의 유연한 커뮤니케이션이 가능하신 분" },
@@ -869,6 +870,11 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "정량·정성 리서치 기반 우선순위화", body: "정량·정성 리서치로 문제를 분석하고 우선순위를 정해 A/B테스트로 검증한 경험을 보여주세요.", sourceQuote: "정량 데이터와 정성 유저 리서치로 문제를 분석·우선순위화하며, A/B테스트로 가설을 검증합니다" },
     { title: "프로덕트 설계 전 과정 참여 경험", body: "UX/UI 설계부터 프로토타이핑까지 프로덕트 설계 전 과정에 참여한 경험을 보여주세요.", sourceQuote: "UX/UI, 프로토타이핑 등 프로덕트 설계 전 과정" },
     { title: "디자인 시스템 관리·개선 경험", body: "통일된 프로덕트 경험을 위해 디자인 시스템을 관리하고 개선한 경험을 보여주세요.", sourceQuote: "통일된 프로덕트 경험을 위한 디자인 시스템 관리/개선" },
+  ],
+  cmskq0o820004612ctoqnkfd1: [
+    { title: "AI 작업 플로우 엔드투엔드 설계 경험", body: "의도 파악부터 작업 완료까지, 핸드오프·진행 상황 추적·에러 복구까지 포함한 전체 흐름을 설계해본 경험을 보여주세요.", sourceQuote: "Design complete user flows for AI-assisted tasks - from intent capture through to task completion, including handoff, progress tracking, and error recovery." },
+    { title: "다양한 AI 상태 UX 설계 경험", body: "로딩·진행·대기·완료·실패·복구 등 AI가 거치는 다양한 상태를 사용자에게 어떻게 보여줄지 설계해본 경험을 보여주세요.", sourceQuote: "Map and design the full range of AI states a user encounters - loading, thinking, acting, waiting, completing, stalling, failing, and recovering." },
+    { title: "AI 신뢰·제어 경험 설계 역량", body: "사용자가 AI를 신뢰하고 통제할 수 있다고 느끼게 만드는 피드백·투명성 설계 사례를 보여주세요.", sourceQuote: "Clear thinking about user trust, control, feedback, and transparency in AI-driven product experiences." },
   ],
 
 };
