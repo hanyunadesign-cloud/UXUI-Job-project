@@ -11,6 +11,7 @@ import { CompanyFollowCard } from "@/components/CompanyFollowCard";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
 import { TrackPageView } from "@/components/TrackPageView";
+import { getApplicationStatus } from "@/lib/dday";
 
 export const dynamic = "force-dynamic";
 
@@ -64,15 +65,28 @@ export default async function MyPage({
     : [];
   const logoByCompanyName = new Map(matchedCompanies.map((c) => [c.name, c.logo]));
 
+  // 원천 공고가 내려가서 archivedAt이 채워진 공고는 다른 목록(예: /jobs)과 동일하게 걸러낸다
+  // — "모든 목록 쿼리는 archivedAt: null 조건으로 걸러낸다"는 site-wide 컨벤션(ingest-jobs.ts
+  // 참고)을 저장한 공고 목록에도 동일하게 적용. SavedJob.job은 to-one 관계라 Prisma where로
+  // 직접 못 걸러서 include 후 여기서 필터링한다.
+  const liveSavedJobs = savedJobs.filter((sj) => sj.job.archivedAt === null);
+
   // 저장한 공고(우리 DB)와 링크로 추가한 공고(외부)를 최신순으로 한 그리드에 섞어서 보여준다.
+  // /jobs 목록과 동일하게, 지원마감된 공고는 저장 순서 유지한 채 뒤로 밀어서 일관되게 보여준다.
   const combinedSaved = [
-    ...savedJobs.map((sj) => ({ kind: "saved" as const, createdAt: sj.createdAt, data: sj.job })),
+    ...liveSavedJobs.map((sj) => ({ kind: "saved" as const, createdAt: sj.createdAt, data: sj.job })),
     ...externalJobs.map((ej) => ({
       kind: "external" as const,
       createdAt: ej.createdAt,
       data: { ...ej, companyLogo: logoByCompanyName.get(ej.companyName) ?? null },
     })),
   ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  const isClosedItem = (item: (typeof combinedSaved)[number]) =>
+    item.kind === "saved" && getApplicationStatus(item.data.applicationDeadline).closed;
+  const sortedCombinedSaved = [
+    ...combinedSaved.filter((item) => !isClosedItem(item)),
+    ...combinedSaved.filter(isClosedItem),
+  ];
 
   return (
     <div className="flex flex-col gap-10">
@@ -118,7 +132,7 @@ export default async function MyPage({
               />
             ) : (
               <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-                {combinedSaved.map((item) =>
+                {sortedCombinedSaved.map((item) =>
                   item.kind === "saved" ? (
                     <JobCard
                       key={`saved-${item.data.id}`}
