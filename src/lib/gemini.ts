@@ -245,13 +245,15 @@ const externalModel = genAI.getGenerativeModel({
     "domain_primary/domain_secondary/domain_keywords/problem_lede/problem_rest는 이 회사가 어떤 도메인의 " +
     "서비스를 하고 어떤 문제를 푸는지에 대한 내용입니다. 회사명이 알려진 곳이면 알고 있는 지식을 활용하고, " +
     "그렇지 않으면 원문에 드러난 내용(직무 설명, 회사 소개)만으로 담백하게 작성하세요. 과장하지 마세요.\n\n" +
-    "appeal_points는 이 공고에 지원할 때 이력서/포트폴리오에서 강조하면 좋을 점 최대 3개입니다. " +
-    "반드시 원문에 실제로 언급된 자격요건/업무 내용에 근거해야 하며, source_quote는 원문에서 그 근거가 " +
-    "되는 부분을 한 글자도 틀리지 않고 정확히 그대로 복사해야 합니다(나중에 원문에서 이 문장을 찾아 " +
-    "밑줄로 표시하는 데 그대로 쓰입니다 — 조금이라도 다르면 기능이 깨집니다). title은 명사구로 끝맺고" +
-    "(예: \"~한 경험\") 명령형 어미를 쓰지 마세요. body는 1~2문장, 무엇을 보여주면 좋을지 지시를 담아도 됩니다. " +
-    "원문에 실질적인 자격요건/업무 내용이 전혀 없으면(예: 이력서 제출 양식 안내뿐인 경우) appeal_points를 " +
-    "빈 배열로 두세요 — 억지로 만들어내지 마세요.",
+    "appeal_points는 이 공고에 지원할 때 이력서/포트폴리오에서 강조하면 좋을 점입니다. 최종적으로는 " +
+    "3개만 쓰이지만, source_quote가 한 글자라도 원문과 다르면 그 항목은 시스템이 통째로 버립니다 — " +
+    "그러니 자신 있는 근거가 있다면 4~5개까지 후보를 만드세요(3개만 만들었다가 그중 하나가 정확도 " +
+    "검증에 걸리면 2개만 남게 됩니다). 반드시 원문에 실제로 언급된 자격요건/업무 내용에 근거해야 하며, " +
+    "source_quote는 원문에서 그 근거가 되는 부분을 한 글자, 띄어쓰기, 문장부호까지 정확히 그대로 " +
+    "복사해야 합니다(나중에 원문에서 이 문장을 찾아 밑줄로 표시하는 데 그대로 쓰입니다). title은 " +
+    "명사구로 끝맺고(예: \"~한 경험\") 명령형 어미를 쓰지 마세요. body는 1~2문장, 무엇을 보여주면 " +
+    "좋을지 지시를 담아도 됩니다. 원문에 실질적인 자격요건/업무 내용이 전혀 없으면(예: 이력서 제출 " +
+    "양식 안내뿐인 경우) appeal_points를 빈 배열로 두세요 — 억지로 만들어내지 마세요.",
   generationConfig: {
     responseMimeType: "application/json",
     responseSchema: {
@@ -288,7 +290,10 @@ const externalModel = genAI.getGenerativeModel({
         problem_rest: { type: SchemaType.STRING, description: "핵심 문제를 보충하는 한두 문장" },
         appeal_points: {
           type: SchemaType.ARRAY,
-          maxItems: 3,
+          maxItems: 5,
+          description:
+            "3개만 최종 사용되지만, source_quote 정확도 검증에서 일부가 걸러질 수 있어 여유 있게 " +
+            "최대 5개까지 후보를 담아도 됨.",
           items: {
             type: SchemaType.OBJECT,
             properties: {
