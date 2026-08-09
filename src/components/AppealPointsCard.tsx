@@ -3,6 +3,7 @@
 import { Info } from "lucide-react";
 import { clsx } from "clsx";
 import { APPEAL_POINTS, type AppealPoint } from "@/lib/appeal-points-data";
+import { trackEvent } from "@/lib/analytics";
 
 export function AppealPointsCard({
   jobId,
@@ -57,7 +58,10 @@ export function AppealPointsCard({
               <p className="text-sm leading-relaxed tracking-[-0.005em] text-neutral-700">{point.body}</p>
               <button
                 type="button"
-                onClick={() => onSelectQuote(point.sourceQuote)}
+                onClick={() => {
+                  trackEvent("Appeal Point Clicked", { jobId, pointIndex: index, pointTitle: point.title });
+                  onSelectQuote(point.sourceQuote);
+                }}
                 className="mt-3 text-xs font-semibold text-primary hover:underline"
               >
                 공고 내용

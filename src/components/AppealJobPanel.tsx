@@ -5,6 +5,7 @@ import { JobContentTabs } from "@/components/JobContentTabs";
 import { AppealPointsCard } from "@/components/AppealPointsCard";
 import type { CompanyAnalysisData } from "@/components/CompanyAnalysisCard";
 import type { AppealPoint } from "@/lib/appeal-points-data";
+import { trackEvent } from "@/lib/analytics";
 
 // "이렇게 어필하세요" 포인트 클릭 → "공고 내용" 탭으로 전환 + 근거 문장 밑줄 + 스크럴 이동을
 // 위해 JobContentTabs/AppealPointsCard가 공유해야 하는 상태(탭, 활성 인용문)를 여기서 들고
@@ -60,6 +61,11 @@ export function AppealJobPanel({
     setActiveQuote(quote);
   };
 
+  const handleTabChange = (nextTab: "content" | "company") => {
+    trackEvent("Job Detail Tab Changed", { jobId, tab: nextTab });
+    setTab(nextTab);
+  };
+
   return (
     <div ref={containerRef} className="contents">
       <JobContentTabs
@@ -69,7 +75,7 @@ export function AppealJobPanel({
         description={description}
         summary={summary}
         tab={tab}
-        onTabChange={setTab}
+        onTabChange={handleTabChange}
         activeQuote={activeQuote}
         quoteRef={quoteRef}
       />

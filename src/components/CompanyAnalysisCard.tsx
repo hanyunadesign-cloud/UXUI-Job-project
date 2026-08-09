@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ExternalLink, Info, ChevronDown } from "lucide-react";
 import { clsx } from "clsx";
 import { STAGES, type Stage } from "@/lib/constants";
+import { trackEvent } from "@/lib/analytics";
 
 // "기업 정보" 탭 콘텐츠. 링크는 DB에 없는 필드라 AI 추정 대신 직접 웹 검색으로 확인한 값만
 // 쓴다. 확인 못 한 항목(디자인 블로그 등)은 지어내지 않고 null로 둬서 "확인 안 됨"으로 표시한다.
@@ -961,7 +962,15 @@ function CheckCircleIcon({ className }: { className?: string }) {
   );
 }
 
-function LinkChip({ href, label }: { href: string | null; label: string }) {
+function LinkChip({
+  href,
+  label,
+  onNavigate,
+}: {
+  href: string | null;
+  label: string;
+  onNavigate?: () => void;
+}) {
   if (!href) {
     return (
       <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-400">
@@ -974,6 +983,7 @@ function LinkChip({ href, label }: { href: string | null; label: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={onNavigate}
       className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-600 transition-colors hover:border-primary hover:text-primary"
     >
       {label}
@@ -993,6 +1003,7 @@ function ExpandableTile({
   value,
   tags,
   children,
+  onToggle,
 }: {
   icon: React.ReactNode;
   iconBg: string;
@@ -1002,6 +1013,7 @@ function ExpandableTile({
   value: string;
   tags: readonly string[];
   children: React.ReactNode;
+  onToggle?: (open: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -1009,7 +1021,12 @@ function ExpandableTile({
     <div className="rounded-xl bg-neutral-50 p-[28px]">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() =>
+          setOpen((v) => {
+            onToggle?.(!v);
+            return !v;
+          })
+        }
         className="flex w-full items-start justify-between gap-2 text-left"
       >
         <div>
@@ -1079,8 +1096,16 @@ export function CompanyAnalysisCard({
     <div className="flex flex-col gap-5">
       {!hideLinks && (
         <div className="flex flex-wrap gap-2">
-          <LinkChip href={data.companyUrl} label="홈페이지" />
-          <LinkChip href={data.designBlogUrl} label="디자인 블로그" />
+          <LinkChip
+            href={data.companyUrl}
+            label="홈페이지"
+            onNavigate={() => trackEvent("Company Info Link Clicked", { companyName, label: "홈페이지" })}
+          />
+          <LinkChip
+            href={data.designBlogUrl}
+            label="디자인 블로그"
+            onNavigate={() => trackEvent("Company Info Link Clicked", { companyName, label: "디자인 블로그" })}
+          />
         </div>
       )}
 
@@ -1094,6 +1119,9 @@ export function CompanyAnalysisCard({
             infoText="스타트업부터 대기업까지, 기업이 현재 어떤 단계에 있는지에 따라 요구되는 역량이 달라요."
             value={validStage}
             tags={STAGE_KEYWORDS[validStage]}
+            onToggle={(open) =>
+              trackEvent("Company Analysis Tile Toggled", { companyName, tile: "스테이지", open })
+            }
           >
             <p className="text-sm leading-relaxed tracking-[-0.005em] text-neutral-700">
               {STAGE_FIT[validStage]}
@@ -1109,6 +1137,9 @@ export function CompanyAnalysisCard({
           infoText="해당 기업이 어떤 산업군의 서비스를 운영 중인지 확인하세요."
           value={data.domainPrimary}
           tags={data.domainKeywords}
+          onToggle={(open) =>
+            trackEvent("Company Analysis Tile Toggled", { companyName, tile: "도메인", open })
+          }
         >
           <p className="text-sm leading-relaxed tracking-[-0.005em] text-neutral-700">
             {data.domainSecondary}

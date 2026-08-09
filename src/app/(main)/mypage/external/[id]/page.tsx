@@ -7,6 +7,7 @@ import { CompanyLogo } from "@/components/CompanyLogo";
 import { BackButton } from "@/components/BackButton";
 import { TrackPageView } from "@/components/TrackPageView";
 import { AppealJobPanel } from "@/components/AppealJobPanel";
+import { ExternalSourceLinkButton } from "@/components/ExternalSourceLinkButton";
 import type { CompanyAnalysisData } from "@/components/CompanyAnalysisCard";
 import type { AppealPoint } from "@/lib/appeal-points-data";
 
@@ -90,14 +91,11 @@ export default async function ExternalJobDetailPage({
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-4">
-          <a href={job.sourceUrl} target="_blank" rel="noopener noreferrer">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center rounded-[14px] bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-strong active:scale-[0.92]"
-            >
-              원문 보기
-            </button>
-          </a>
+          <ExternalSourceLinkButton
+            externalJobId={job.id}
+            companyName={job.companyName}
+            sourceUrl={job.sourceUrl}
+          />
         </div>
       </div>
 
