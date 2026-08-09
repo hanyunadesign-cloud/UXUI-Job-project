@@ -13,7 +13,7 @@ import { TrackPageView } from "@/components/TrackPageView";
 import { MarkJobViewed } from "@/components/MarkJobViewed";
 import { JobSummaryCard } from "@/components/JobSummaryCard";
 import { AppealJobPanel } from "@/components/AppealJobPanel";
-import { APPEAL_POINTS } from "@/components/AppealPointsCard";
+import { APPEAL_POINTS } from "@/lib/appeal-points-data";
 
 export const dynamic = "force-dynamic";
 
@@ -38,9 +38,12 @@ export default async function JobDetailPage({ params }: { params: { id: string }
   if (!job) notFound();
 
   const saved = Boolean(savedRecord);
-  // "이렇게 어필하세요" + "공고 요약" + "기업 정보" 탭은 AppealPointsCard.tsx에 해당 공고의
+  // "이렇게 어필하세요" + "공고 요약" + "기업 정보" 탭은 appeal-points-data.ts에 해당 공고의
   // 콘텐츠가 있을 때만 보여준다 — 공고 id 목록을 이 파일에 따로 유지하지 않고, 콘텐츠
-  // 존재 여부로 자동 판단한다(콘텐츠가 없는 공고는 기존 방식으로 표시).
+  // 존재 여부로 자동 판단한다(콘텐츠가 없는 공고는 기존 방식으로 표시). 이 데이터를
+  // "use client" 파일(AppealPointsCard.tsx)이 아니라 순수 모듈에서 가져오는 게 중요하다 —
+  // 서버 컴포넌트가 "use client" 모듈의 일반 값 export를 import하면 실제 값이 아니라
+  // Next.js 클라이언트 레퍼런스를 받게 돼서 모든 job.id가 truthy로 오판되는 버그가 있었다.
   const hasAppealContent = Boolean(APPEAL_POINTS[job.id]);
   // 상단 배지 줄(직군/업종/스테이지/플랫폼)은 "기업 정보" 탭 내용과 겹쳐서, 어필 포인트가
   // 있는 공고에서는 빼고 그만큼 헤더-본문 간격을 넓힌다.
