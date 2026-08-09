@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { JobContentTabs } from "@/components/JobContentTabs";
 import { AppealPointsCard } from "@/components/AppealPointsCard";
+import type { CompanyAnalysisData } from "@/components/CompanyAnalysisCard";
+import type { AppealPoint } from "@/lib/appeal-points-data";
 
 // "이렇게 어필하세요" 포인트 클릭 → "공고 내용" 탭으로 전환 + 근거 문장 밑줄 + 스크럴 이동을
 // 위해 JobContentTabs/AppealPointsCard가 공유해야 하는 상태(탭, 활성 인용문)를 여기서 들고
@@ -14,12 +16,18 @@ export function AppealJobPanel({
   jobId,
   companyName,
   stage,
+  companyData,
+  points,
   description,
   summary,
 }: {
   jobId: string;
   companyName: string;
   stage: string;
+  // 마이페이지 "링크로 추가" 공고용 — 저장 시점에 AI가 만든 기업 정보/어필 포인트를 직접
+  // 넘긴다. 넘기면 CompanyAnalysisCard/AppealPointsCard가 하드코딩 맵 대신 이 값을 쓴다.
+  companyData?: CompanyAnalysisData;
+  points?: AppealPoint[];
   description: string;
   summary?: ReactNode;
 }) {
@@ -57,6 +65,7 @@ export function AppealJobPanel({
       <JobContentTabs
         companyName={companyName}
         stage={stage}
+        companyData={companyData}
         description={description}
         summary={summary}
         tab={tab}
@@ -64,7 +73,12 @@ export function AppealJobPanel({
         activeQuote={activeQuote}
         quoteRef={quoteRef}
       />
-      <AppealPointsCard jobId={jobId} activeQuote={activeQuote} onSelectQuote={handleSelectQuote} />
+      <AppealPointsCard
+        jobId={jobId}
+        points={points}
+        activeQuote={activeQuote}
+        onSelectQuote={handleSelectQuote}
+      />
     </div>
   );
 }

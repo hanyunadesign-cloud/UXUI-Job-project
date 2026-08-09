@@ -2,19 +2,23 @@
 
 import { Info } from "lucide-react";
 import { clsx } from "clsx";
-import { APPEAL_POINTS } from "@/lib/appeal-points-data";
+import { APPEAL_POINTS, type AppealPoint } from "@/lib/appeal-points-data";
 
 export function AppealPointsCard({
   jobId,
   activeQuote,
   onSelectQuote,
+  points: directPoints,
 }: {
   jobId: string;
   activeQuote: string | null;
   onSelectQuote: (quote: string) => void;
+  // 마이페이지 "링크로 추가" 공고처럼 job.id가 APPEAL_POINTS에 없는 경우, 저장 시점에 AI가
+  // 만든 포인트를 여기로 직접 넘겨서 같은 카드 UI를 재사용한다.
+  points?: AppealPoint[];
 }) {
-  const points = APPEAL_POINTS[jobId];
-  if (!points) return null;
+  const points = directPoints ?? APPEAL_POINTS[jobId];
+  if (!points || points.length === 0) return null;
 
   return (
     // "공고 내용" 버튼을 누르면 스크롤이 아래로 이동하는데, sticky가 없으면 이 패널

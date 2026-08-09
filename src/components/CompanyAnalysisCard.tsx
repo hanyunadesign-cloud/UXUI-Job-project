@@ -10,7 +10,7 @@ import { STAGES, type Stage } from "@/lib/constants";
 // 채용공고 게재 부서 항목은 정보 가치가 낮아 제외했다. 회사명으로 조회한다 — 같은 회사의 여러
 // 공고가 도메인/문제 설명을 그대로 공유해서(스테이지는 공고별 job.stage를 별도 prop으로 받는다,
 // 아래 CompanyAnalysisCard 참고), 공고 id가 아니라 companyName이 키다.
-type CompanyAnalysisData = {
+export type CompanyAnalysisData = {
   companyUrl: string | null;
   designBlogUrl: string | null;
   domainPrimary: string;
@@ -1054,31 +1054,52 @@ function ExpandableTile({
   );
 }
 
-export function CompanyAnalysisCard({ companyName, stage }: { companyName: string; stage: string }) {
-  const data = COMPANY_ANALYSIS[companyName];
+export function CompanyAnalysisCard({
+  companyName,
+  stage,
+  data: directData,
+  hideLinks = false,
+}: {
+  companyName: string;
+  stage: string;
+  // 마이페이지 "링크로 추가" 공고처럼 회사명이 COMPANY_ANALYSIS에 없는 경우, 저장 시점에
+  // AI가 만든 데이터를 여기로 직접 넘겨서 같은 카드 UI를 재사용한다(링크 저장 상세페이지 참고).
+  data?: CompanyAnalysisData;
+  // AI가 생성한 데이터는 companyUrl/designBlogUrl을 알 수 없어(추측 금지 규칙) 항상 비어
+  // 있으므로, 그 경우 "확인 안 됨" 칩 두 개만 뜨는 걸 막기 위해 링크 줄 자체를 생략한다.
+  hideLinks?: boolean;
+}) {
+  const data = directData ?? COMPANY_ANALYSIS[companyName];
   if (!data) return null;
+  // 링크로 추가한 공고는 stage를 AI가 확신 못 하면 아예 안 준다(null/빈 문자열) — 그런
+  // 경우 스테이지 타일 자체를 생략한다(모르는 값을 억지로 4개 중 하나로 보여주지 않는다).
+  const validStage = (STAGES as readonly string[]).includes(stage) ? (stage as Stage) : null;
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap gap-2">
-        <LinkChip href={data.companyUrl} label="홈페이지" />
-        <LinkChip href={data.designBlogUrl} label="디자인 블로그" />
-      </div>
+      {!hideLinks && (
+        <div className="flex flex-wrap gap-2">
+          <LinkChip href={data.companyUrl} label="홈페이지" />
+          <LinkChip href={data.designBlogUrl} label="디자인 블로그" />
+        </div>
+      )}
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <ExpandableTile
-          icon={<BarChartIcon className="h-3.5 w-3.5" />}
-          iconBg="bg-blue-50"
-          iconColor="text-primary"
-          label="스테이지"
-          infoText="스타트업부터 대기업까지, 기업이 현재 어떤 단계에 있는지에 따라 요구되는 역량이 달라요."
-          value={stage}
-          tags={STAGE_KEYWORDS[stage as Stage]}
-        >
-          <p className="text-sm leading-relaxed tracking-[-0.005em] text-neutral-700">
-            {STAGE_FIT[stage as Stage]}
-          </p>
-        </ExpandableTile>
+      <div className={clsx("grid grid-cols-1 gap-3", validStage && "sm:grid-cols-2")}>
+        {validStage && (
+          <ExpandableTile
+            icon={<BarChartIcon className="h-3.5 w-3.5" />}
+            iconBg="bg-blue-50"
+            iconColor="text-primary"
+            label="스테이지"
+            infoText="스타트업부터 대기업까지, 기업이 현재 어떤 단계에 있는지에 따라 요구되는 역량이 달라요."
+            value={validStage}
+            tags={STAGE_KEYWORDS[validStage]}
+          >
+            <p className="text-sm leading-relaxed tracking-[-0.005em] text-neutral-700">
+              {STAGE_FIT[validStage]}
+            </p>
+          </ExpandableTile>
+        )}
 
         <ExpandableTile
           icon={<BriefcaseIcon className="h-3.5 w-3.5" />}

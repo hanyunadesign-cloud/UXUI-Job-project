@@ -2,7 +2,7 @@
 
 import { type ReactNode, type RefObject } from "react";
 import { clsx } from "clsx";
-import { CompanyAnalysisCard } from "@/components/CompanyAnalysisCard";
+import { CompanyAnalysisCard, type CompanyAnalysisData } from "@/components/CompanyAnalysisCard";
 
 // "공고 내용" / "기업 정보" 탭.
 // tab/activeQuote는 AppealJobPanel이 관리한다 — "이렇게 어필하세요" 포인트를 클릭했을 때
@@ -10,6 +10,7 @@ import { CompanyAnalysisCard } from "@/components/CompanyAnalysisCard";
 export function JobContentTabs({
   companyName,
   stage,
+  companyData,
   description,
   summary,
   tab,
@@ -19,6 +20,8 @@ export function JobContentTabs({
 }: {
   companyName: string;
   stage: string;
+  // 마이페이지 "링크로 추가" 공고용 — 저장 시점에 AI가 만든 기업 정보를 직접 넘긴다.
+  companyData?: CompanyAnalysisData;
   description: string;
   summary?: ReactNode;
   tab: "content" | "company";
@@ -89,7 +92,12 @@ export function JobContentTabs({
           className={clsx("col-start-1 row-start-1", tab !== "company" && "invisible")}
           aria-hidden={tab !== "company"}
         >
-          <CompanyAnalysisCard companyName={companyName} stage={stage} />
+          <CompanyAnalysisCard
+            companyName={companyName}
+            stage={stage}
+            data={companyData}
+            hideLinks={Boolean(companyData)}
+          />
         </div>
       </div>
     </div>

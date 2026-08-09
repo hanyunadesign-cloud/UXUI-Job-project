@@ -47,6 +47,13 @@ export async function POST(req: Request) {
     const pageText = await fetchExternalJobPageText(url);
     const analysis = await analyzeExternalJobPosting(pageText);
 
+    // AI가 만든 sourceQuote는 사람이 검증할 수 없어서, 저장 전에 실제로 원문(pageText)의
+    // 정확한 부분 문자열인지 코드로 다시 확인한다 — 안 맞는 항목은 조용히 제외한다(클릭 시
+    // 원문 하이라이트가 안 맞는 문장을 가리키는 것보다, 그 포인트를 아예 안 보여주는 게 낫다).
+    const verifiedAppealPoints = analysis.appealPoints
+      .filter((p) => pageText.includes(p.sourceQuote))
+      .slice(0, 3);
+
     const saved = await prisma.externalJobSave.create({
       data: {
         userId,
@@ -56,6 +63,13 @@ export async function POST(req: Request) {
         description: pageText,
         coreKeywords: analysis.coreKeywords,
         resumeTip: analysis.resumeTip,
+        stage: analysis.stage,
+        domainPrimary: analysis.domainPrimary,
+        domainSecondary: analysis.domainSecondary,
+        domainKeywords: analysis.domainKeywords,
+        problemLede: analysis.problemLede,
+        problemRest: analysis.problemRest,
+        appealPoints: verifiedAppealPoints,
       },
     });
 

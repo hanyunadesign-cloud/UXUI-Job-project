@@ -180,6 +180,20 @@ model ExternalJobSave {
   description  String   @db.Text
   coreKeywords String[]
   resumeTip    String   @db.Text
+  // 아래는 저장 시점에 같은 AI 응답(analyzeExternalJobPosting) 안에서 함께 받아오는 "기업
+  // 정보"/"이렇게 어필하세요" 콘텐츠 — 정식 Job과 달리 회사마다 손으로 리서치해서 채울 수
+  // 없어(임의의 외부 링크라) AI가 그 자리에서 생성한다. 스테이지는 외부 공고엔 원천적으로
+  // 없는 정보라 AI가 확신 없으면 null로 둔다(그러면 스테이지 타일 자체를 생략).
+  stage           String?
+  domainPrimary   String?
+  domainSecondary String?
+  domainKeywords  String[] @default([])
+  problemLede     String?
+  problemRest     String?
+  // AppealPoint[] 형태({ title, body, sourceQuote })의 JSON. 최대 3개. sourceQuote는 저장
+  // 시점에 description에 실제로 포함되는지 코드로 검증 후 안 맞는 항목은 걸러내고 저장한다
+  // (사람이 검증할 수 없는 AI 생성 데이터라 이 안전장치가 특히 중요).
+  appealPoints Json?
   createdAt    DateTime @default(now())
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

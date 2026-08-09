@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
-import { ROLES, PLATFORMS } from "@/lib/constants";
+import { ROLES, PLATFORMS, STAGES } from "@/lib/constants";
 
 const MAX_INPUT_CHARS = 3000;
 
@@ -207,11 +207,26 @@ export async function judgeJobRelevance(
   return { verdict: parsed.verdict as RelevanceVerdict, note: parsed.note };
 }
 
+export type ExternalAppealPoint = { title: string; body: string; sourceQuote: string };
+
 export type ExternalJobAnalysisResult = {
   title: string;
   companyName: string;
   coreKeywords: string[];
   resumeTip: string;
+  // 아래 5개는 "기업 정보" 탭용 — 정식 Job은 회사마다 사람이 리서치해서 채우지만, 임의의
+  // 외부 링크는 그럴 수 없어 이 응답 안에서 AI가 함께 만든다(Gemini 무료 티어 하루 20건
+  // 한도가 사이트 전체에서 빠듯해서 별도 호출을 추가하지 않고 기존 1회 호출에 얹었다).
+  stage: (typeof STAGES)[number] | null;
+  domainPrimary: string;
+  domainSecondary: string;
+  domainKeywords: string[];
+  problemLede: string;
+  problemRest: string;
+  // "이렇게 어필하세요" 3개 — sourceQuote는 pageText의 정확한 부분 문자열이어야 클릭 시
+  // 원문 하이라이트가 동작한다. 호출부(API route)에서 실제로 일치하는지 다시 검증해서
+  // 안 맞는 항목은 저장 전에 걸러낸다(사람이 검증 못 하는 AI 생성 데이터라 이중 방어).
+  appealPoints: ExternalAppealPoint[];
 };
 
 // 마이페이지 "링크로 추가" 기능용. analyzeJobDescription과 달리 title/companyName을 이미
@@ -221,9 +236,22 @@ const externalModel = genAI.getGenerativeModel({
   systemInstruction:
     "당신은 UXUI 디자이너 구직자를 돕는 커리어 코치입니다. 사용자가 붙여넣은 채용 공고 페이지의 원문(HTML에서 추출된 텍스트라 " +
     "메뉴/푸터 등 불필요한 텍스트가 섞여 있을 수 있음)만 근거로 분석하세요. 공고에 명시되지 않은 내용은 추측하거나 지어내지 마세요. " +
-    "간결하고 실용적인 톤을 유지하세요. resume_tip은 반드시 해요체(예: ~해요, ~예요, ~돼요, ~보여주세요)로 작성하고, " +
+    "간결하고 실용적인 톤을 유지하세요. 모든 텍스트 필드는 반드시 해요체(예: ~해요, ~예요, ~돼요, ~보여주세요)로 작성하고, " +
     "합쇼체(~습니다, ~하세요)는 쓰지 마세요. title/company_name은 원문에서 실제로 확인되는 값만 쓰고, 알 수 없으면 " +
-    "각각 \"채용공고\", \"알 수 없는 회사\"로 답하세요.",
+    "각각 \"채용공고\", \"알 수 없는 회사\"로 답하세요.\n\n" +
+    "stage는 회사명과 원문 맥락으로 미루어 " +
+    STAGES.join("/") +
+    " 중 확신 있게 판단되는 값만 고르고, 판단할 근거가 부족하면 이 필드를 아예 생략하세요(지어내지 마세요).\n\n" +
+    "domain_primary/domain_secondary/domain_keywords/problem_lede/problem_rest는 이 회사가 어떤 도메인의 " +
+    "서비스를 하고 어떤 문제를 푸는지에 대한 내용입니다. 회사명이 알려진 곳이면 알고 있는 지식을 활용하고, " +
+    "그렇지 않으면 원문에 드러난 내용(직무 설명, 회사 소개)만으로 담백하게 작성하세요. 과장하지 마세요.\n\n" +
+    "appeal_points는 이 공고에 지원할 때 이력서/포트폴리오에서 강조하면 좋을 점 최대 3개입니다. " +
+    "반드시 원문에 실제로 언급된 자격요건/업무 내용에 근거해야 하며, source_quote는 원문에서 그 근거가 " +
+    "되는 부분을 한 글자도 틀리지 않고 정확히 그대로 복사해야 합니다(나중에 원문에서 이 문장을 찾아 " +
+    "밑줄로 표시하는 데 그대로 쓰입니다 — 조금이라도 다르면 기능이 깨집니다). title은 명사구로 끝맺고" +
+    "(예: \"~한 경험\") 명령형 어미를 쓰지 마세요. body는 1~2문장, 무엇을 보여주면 좋을지 지시를 담아도 됩니다. " +
+    "원문에 실질적인 자격요건/업무 내용이 전혀 없으면(예: 이력서 제출 양식 안내뿐인 경우) appeal_points를 " +
+    "빈 배열로 두세요 — 억지로 만들어내지 마세요.",
   generationConfig: {
     responseMimeType: "application/json",
     responseSchema: {
@@ -241,8 +269,52 @@ const externalModel = genAI.getGenerativeModel({
           description:
             "포트폴리오/이력서에서 어필해야 할 포인트, 두 문장 이내. 반드시 해요체로 작성 (합쇼체 금지)",
         },
+        stage: {
+          type: SchemaType.STRING,
+          format: "enum",
+          enum: [...STAGES],
+          description: "회사 규모 스테이지. 확신 없으면 이 필드를 생략.",
+        },
+        domain_primary: { type: SchemaType.STRING, description: "\"OO · OO\" 형태 짧은 산업 라벨" },
+        domain_secondary: { type: SchemaType.STRING, description: "회사/서비스 설명 1~2문장, 해요체" },
+        domain_keywords: {
+          type: SchemaType.ARRAY,
+          items: { type: SchemaType.STRING },
+          minItems: 3,
+          maxItems: 3,
+          description: "짧은 명사구 키워드 정확히 3개",
+        },
+        problem_lede: { type: SchemaType.STRING, description: "이 회사가 푸는 핵심 문제 한 문장" },
+        problem_rest: { type: SchemaType.STRING, description: "핵심 문제를 보충하는 한두 문장" },
+        appeal_points: {
+          type: SchemaType.ARRAY,
+          maxItems: 3,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              title: { type: SchemaType.STRING },
+              body: { type: SchemaType.STRING },
+              source_quote: {
+                type: SchemaType.STRING,
+                description: "원문에서 정확히 그대로 복사한 부분 문자열",
+              },
+            },
+            required: ["title", "body", "source_quote"],
+          },
+        },
       },
-      required: ["title", "company_name", "core_keywords", "resume_tip"],
+      required: [
+        "title",
+        "company_name",
+        "core_keywords",
+        "resume_tip",
+        "domain_primary",
+        "domain_secondary",
+        "domain_keywords",
+        "problem_lede",
+        "problem_rest",
+        "appeal_points",
+      ],
     },
   },
 });
@@ -261,17 +333,48 @@ export async function analyzeExternalJobPosting(
     company_name?: string;
     core_keywords?: string[];
     resume_tip?: string;
+    stage?: string;
+    domain_primary?: string;
+    domain_secondary?: string;
+    domain_keywords?: string[];
+    problem_lede?: string;
+    problem_rest?: string;
+    appeal_points?: { title?: string; body?: string; source_quote?: string }[];
   };
 
-  if (!parsed.title || !parsed.company_name || !parsed.core_keywords || !parsed.resume_tip) {
+  if (
+    !parsed.title ||
+    !parsed.company_name ||
+    !parsed.core_keywords ||
+    !parsed.resume_tip ||
+    !parsed.domain_primary ||
+    !parsed.domain_secondary ||
+    !parsed.domain_keywords ||
+    !parsed.problem_lede ||
+    !parsed.problem_rest
+  ) {
     throw new Error("AI 분석 응답 형식이 올바르지 않습니다.");
   }
+
+  const stage = STAGES.find((s) => s === parsed.stage) ?? null;
+  const appealPoints = (parsed.appeal_points ?? [])
+    .filter((p): p is { title: string; body: string; source_quote: string } =>
+      Boolean(p.title && p.body && p.source_quote)
+    )
+    .map((p) => ({ title: p.title, body: p.body, sourceQuote: p.source_quote }));
 
   return {
     title: parsed.title,
     companyName: parsed.company_name,
     coreKeywords: parsed.core_keywords,
     resumeTip: parsed.resume_tip,
+    stage,
+    domainPrimary: parsed.domain_primary,
+    domainSecondary: parsed.domain_secondary,
+    domainKeywords: parsed.domain_keywords,
+    problemLede: parsed.problem_lede,
+    problemRest: parsed.problem_rest,
+    appealPoints,
   };
 }
 
