@@ -876,5 +876,35 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "다양한 AI 상태 UX 설계 경험", body: "로딩·진행·대기·완료·실패·복구 등 AI가 거치는 다양한 상태를 사용자에게 어떻게 보여줄지 설계해본 경험을 보여주세요.", sourceQuote: "Map and design the full range of AI states a user encounters - loading, thinking, acting, waiting, completing, stalling, failing, and recovering." },
     { title: "AI 신뢰·제어 경험 설계 역량", body: "사용자가 AI를 신뢰하고 통제할 수 있다고 느끼게 만드는 피드백·투명성 설계 사례를 보여주세요.", sourceQuote: "Clear thinking about user trust, control, feedback, and transparency in AI-driven product experiences." },
   ],
+  cmsnbgyge00021142gf732i23: [
+    { title: "가설-검증 반복 개선 경험", body: "문제 정의부터 가설 수립, 데이터 기반 실험, 검증까지 반복하며 서비스를 개선한 과정을 보여주세요.", sourceQuote: "고객의 문제 정의 가설 수립 솔루션 도출 데이터 기반 실험 및 개선 가설 검증 지속적인 반복을 통해 사용자의 문제를 해결하고 서비스를 개선해요." },
+    { title: "조형적으로 안정적인 UI 구성 경험", body: "조형적으로 안정적이고 직관적인 화면을 만든 프로젝트를 개선 전후(as-is/to-be) 비교로 보여주세요.", sourceQuote: "조형적 완성도가 뛰어난 App 및 Web UI를 구성할 수 있는 분이 필요해요." },
+    { title: "as-is/to-be 개선 포트폴리오", body: "제품 개선 프로젝트라면 개선 전후 화면을 비교할 수 있는 이미지를 포함해서 변화를 명확히 보여주세요.", sourceQuote: "제품 개선 프로젝트의 경우, 개선 전의 화면(as-is)과 개선 후의 화면(to-be)을 잘 확인할 수 있는 이미지가 있으면 더욱 좋아요." },
+  ],
+  cmsnbhydk00071142cz15ndk0: [
+    { title: "복잡한 정책을 화면 구조로 구체화", body: "복잡한 정책과 운영 조건을 사용자 플로우와 화면 구조로 구체화한 경험을 보여주세요.", sourceQuote: "복잡한 정책과 운영 조건을 사용자 플로우와 화면 구조로 구체화합니다." },
+    { title: "Figma 디자인 시스템 구축 경험", body: "Figma로 화면과 프로토타입을 설계하고 디자인 시스템을 구축·운영한 경험을 구체적으로 보여주세요.", sourceQuote: "Figma 기반 디자인 시스템 구축·운영 경험이 있는 분 : Figma를 기반으로 화면과 프로토타입을 설계하고, 디자인 시스템을 구축하거나 운영해 보신 분" },
+    { title: "프로덕트 설계·출시 경험", body: "기획부터 출시까지 제품 전체를 책임지고 설계해본 경험을 보여주세요.", sourceQuote: "모바일 앱과 웹 기반 프로덕트를 설계하고 실제 서비스 출시까지 연결해 보신 분" },
+  ],
+  cmsnbio4f000c1142at32083f: [
+    { title: "복약 경험 개선 UX·UI 설계", body: "사용자의 복약 경험을 더 편리하고 즐겁게 만든 모바일 앱 UX·UI 설계 사례를 보여주세요.", sourceQuote: "사용자의 복약 경험을 더 편리하고 즐겁게 만드는 모바일 앱 UX·UI를 설계해요" },
+    { title: "AI 도구 활용 프로토타입 경험", body: "Figma와 AI 도구를 활용해 빠르게 프로토타입을 만들고 검증한 경험을 보여주세요.", sourceQuote: "Figma로 디자인을 구체화하고 프로토타입을 만들며, AI를 비롯한 새로운 도구를 적극 활용해 다양한 가능성을 빠르게 탐색해요" },
+    { title: "표면 너머 원인을 찾는 문제 정의력", body: "사용자의 말과 행동, 피드백을 바탕으로 표면적 현상 너머의 원인을 파악하고 문제를 정의한 경험을 보여주세요.", sourceQuote: "사용자의 말과 행동, 피드백과 제품 데이터 등을 바탕으로 표면적인 현상 너머의 원인을 파악하고, 해결해야 할 사용자 문제를 명확히 정의할 수 있어요" },
+  ],
+  cmsnbjfl3000h114270uvw3ox: [
+    { title: "UX부터 UI까지 전체 프로세스 수행", body: "프로젝트의 UX 설계부터 UI 디자인까지 전반적인 디자인 프로세스를 수행한 경험을 보여주세요.", sourceQuote: "프로젝트의 UX 설계부터 UI 디자인까지 전반적인 디자인 프로세스 수행" },
+    { title: "디자인 시스템 구축·운영 경험", body: "디자인 시스템과 UI 가이드를 구축하고 운영한 경험을 구체적으로 보여주세요.", sourceQuote: "디자인 시스템 및 UI Guide 구축·운영" },
+    { title: "디자인 의도를 논리적으로 설명하는 역량", body: "본인의 디자인 의도와 근거를 논리적으로 설명한 경험을 포트폴리오에 담아주세요.", sourceQuote: "자신의 디자인 의도와 근거를 논리적으로 설명할 수 있는 분" },
+  ],
+  cmsnbkhcj000m1142w4nlcxcx: [
+    { title: "B2B SaaS UI/UX 전략 수립 경험", body: "B2B SaaS 프로덕트의 UI/UX 전략을 수립하고 실행한 경험을 보여주세요.", sourceQuote: "B2B SaaS 프로덕트의 UI/UX 전략 수립 및 실행 (라이브 커머스 위젯, 브랜드사용 대시보드 등)" },
+    { title: "글로벌 고객사향 디자인 시스템 운영", body: "여러 글로벌 고객사에 유연하게 적용되는 디자인 시스템을 구축·운영한 경험을 보여주세요.", sourceQuote: "Shoplive의 글로벌 고객사를 위해 유연하게 적용되는 디자인 시스템 구축 및 운영" },
+    { title: "프로덕트 리드 및 성과 검증 경험", body: "하나의 프로덕트나 기능을 처음부터 끝까지 리드하고 출시 후 성과로 검증한 경험을 보여주세요.", sourceQuote: "하나의 프로덕트/기능을 처음부터 끝까지 리드하고, 출시 후 성과로 검증하며 개선한 경험" },
+  ],
+  cmsnbky10000r1142d0nwpp9w: [
+    { title: "쇼핑 여정 UX 구조 개선 경험", body: "상품 탐색부터 구매 결정까지 이어지는 쇼핑 여정 전반의 UX 구조를 개선한 경험을 보여주세요.", sourceQuote: "상품 탐색부터 비교, 구매 결정까지 이어지는 쇼핑 여정 전반의 UX 구조 개선" },
+    { title: "크로스플랫폼 화면 설계 경험", body: "모바일웹·APP(iOS/AOS) 크로스플랫폼 화면을 설계하고 인터랙션을 정의한 경험을 보여주세요.", sourceQuote: "모바일웹·APP(iOS/AOS) 크로스플랫폼 화면 설계 및 인터랙션 정의" },
+    { title: "디자인 시스템 컴포넌트 운영 경험", body: "디자인 시스템을 구축하고 UI 컴포넌트를 설계·운영한 경험을 구체적으로 보여주세요.", sourceQuote: "디자인 시스템 구축 및 UI 컴포넌트 설계·운영" },
+  ],
 
 };

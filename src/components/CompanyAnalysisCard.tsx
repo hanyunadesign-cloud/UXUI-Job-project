@@ -914,6 +914,42 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "브랜드가 광고비에 의존하지 않고 스스로 성장할 수 있는 구조를 만드는 게 핵심 문제예요.",
     problemRest: "정량 데이터와 정성 리서치로 문제를 우선순위화하고, 콘텐츠 실험을 통해 브랜드 성장을 돕는 제품을 만들어요.",
   },
+  "지바이크": {
+    companyUrl: "https://gbike.io",
+    designBlogUrl: null,
+    domainPrimary: "모빌리티 · 공유경제",
+    domainSecondary: "전동킥보드·전기자전거 공유 서비스 'GCOO'를 5개국 140개 도시에서 운영하는 아시아 1위 퍼스널 모빌리티 기업이에요. 배터리 구독·교체 등 하드웨어와 연결된 신사업도 함께 만들어가고 있어요.",
+    domainKeywords: ["퍼스널 모빌리티", "O2O", "하드웨어 연동"],
+    problemLede: "화면 속 디자인이 실제 자전거·배터리·현장으로 이어지는 O2O 서비스 경험을 설계하는 게 핵심 문제예요.",
+    problemRest: "앱 화면부터 하드웨어 접점, 현장 콘텐츠까지 사용자가 마주치는 경험 전체를 처음부터 끝까지 책임져요.",
+  },
+  "피트크루": {
+    companyUrl: null,
+    designBlogUrl: null,
+    domainPrimary: "헬스케어 · 디지털 헬스",
+    domainSecondary: "만성질환자의 복약관리를 돕는 앱 'Pillo'를 만드는 회사예요. 북미 시장에서 가장 사랑받는 복약 관리 앱으로 자리잡았어요.",
+    domainKeywords: ["복약관리", "북미 시장", "모바일 앱"],
+    problemLede: "복약이라는 반복적이고 지루한 행동을 더 편리하고 즐겁게 만드는 게 핵심 문제예요.",
+    problemRest: "듀오링고처럼 유쾌한 톤으로, 설계부터 사용자에게 닿는 순간까지 경험 전체를 주도적으로 만들어가요.",
+  },
+  "샵라이브": {
+    companyUrl: "https://www.shoplive.cloud",
+    designBlogUrl: null,
+    domainPrimary: "B2B SaaS · 라이브커머스",
+    domainSecondary: "라이브 스트리밍·숏폼·Video AI 기반 비디오 커머스 플랫폼을 제공하는 글로벌 B2B SaaS 기업이에요. 무신사·삼성·LG 등 국내외 대기업과 협업하며 해외 시장으로도 빠르게 확장하고 있어요.",
+    domainKeywords: ["비디오 커머스", "B2B SaaS", "글로벌 확장"],
+    problemLede: "여러 글로벌 고객사에 일관되게 적용되는 비디오 커머스 경험을 설계하는 게 핵심 문제예요.",
+    problemRest: "전환율·재구매율 같은 핵심 지표에 임팩트를 주는 디자인 의사결정을 프로덕트 전반에서 주도해요.",
+  },
+  "커넥트웨이브": {
+    companyUrl: "https://connectwave.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "커머스 · 가격비교",
+    domainSecondary: "다나와·에누리 등 가격비교 서비스와 메이크샵 등 쇼핑몰 솔루션을 운영하는 데이터 커머스 기업이에요. 여러 커머스 플랫폼을 인수합병하며 종합 쇼핑·광고 플랫폼으로 성장해왔어요.",
+    domainKeywords: ["가격비교", "데이터 커머스", "대규모 트래픽"],
+    problemLede: "대규모 트래픽 속에서 상품 탐색부터 구매 결정까지 이어지는 쇼핑 여정을 매끄럽게 만드는 게 핵심 문제예요.",
+    problemRest: "모바일웹·앱을 아우르는 크로스플랫폼 화면과 디자인 시스템을 새롭게 정비해가고 있어요.",
+  },
 
 };
 
