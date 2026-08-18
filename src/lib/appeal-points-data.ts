@@ -906,5 +906,20 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "크로스플랫폼 화면 설계 경험", body: "모바일웹·APP(iOS/AOS) 크로스플랫폼 화면을 설계하고 인터랙션을 정의한 경험을 보여주세요.", sourceQuote: "모바일웹·APP(iOS/AOS) 크로스플랫폼 화면 설계 및 인터랙션 정의" },
     { title: "디자인 시스템 컴포넌트 운영 경험", body: "디자인 시스템을 구축하고 UI 컴포넌트를 설계·운영한 경험을 구체적으로 보여주세요.", sourceQuote: "디자인 시스템 구축 및 UI 컴포넌트 설계·운영" },
   ],
+  cmsm5q0ui0004n9n1rg7zyl0r: [
+    { title: "디자인 시스템 구축·운영 경험", body: "UI 컴포넌트와 디자인 시스템을 구축하고 운영한 경험을 구체적으로 보여주세요.", sourceQuote: "Build and maintain UI components and design systems." },
+    { title: "픽셀 퍼펙트 협업 경험", body: "제품·엔지니어링과 긴밀히 협업해 완성도 높은 화면을 구현한 경험을 보여주세요.", sourceQuote: "Work closely with product and engineering to deliver pixel-perfect experiences." },
+    { title: "비주얼 디자인 포트폴리오", body: "타이포그래피·레이아웃 등 비주얼 디자인 역량이 잘 드러나는 포트폴리오를 준비해주세요.", sourceQuote: "Strong portfolio demonstrating UI design work." },
+  ],
+  cmsqf7uvy00046n1lenb9sc0x: [
+    { title: "AI 인터랙션 프로토타이핑 경험", body: "스트리밍 응답, 멀티스텝 플로우 등 새로운 HCI 인터랙션 모델을 프로토타입으로 만든 경험을 보여주세요.", sourceQuote: "Create functional prototypes of new HCI interaction models, including streaming responses, multi-step task flows, real-time feedback loops, and system state visibility." },
+    { title: "프론트엔드 개발 역량", body: "React·TypeScript 등으로 실제 코드까지 구현한 경험을 강조해주세요.", sourceQuote: "Strong frontend engineering skills in React, TypeScript, or equivalent." },
+    { title: "디자인-엔지니어링 경계를 넘나든 경험", body: "명확한 핸드오프 없이 디자인과 개발의 경계에서 일한 경험을 보여주세요.", sourceQuote: "Comfort working at the boundary of design and engineering without clear handoffs." },
+  ],
+  cmsupj0fu0003y9300i1i62ez: [
+    { title: "엔드투엔드 디자인 프로세스 주도 경험", body: "인사이트 도출부터 와이어프레임, UI 디자인까지 전체 프로세스를 주도한 경험을 보여주세요.", sourceQuote: "인사이트 추출, 사용자 여정 생성, 와이어프레임부터 UI 디자인까지 디자인 프로세스를 엔드 투 엔드로 주도하는 능력 있으신 분" },
+    { title: "데이터 기반 UX 전략 수립 경험", body: "데이터에 기반해 문제를 정의하고 UX 전략을 수립한 사례를 구체적으로 보여주세요.", sourceQuote: "데이터에 기반한 문제 정의 및 UX 전략 수립" },
+    { title: "지표 기반 A/B 테스트 개선 경험", body: "지표를 기반으로 반복 개선하고 A/B 테스트를 수행해 제품을 최적화한 경험을 보여주세요.", sourceQuote: "지표 기반 반복 개선 및 A/B 테스트 수행을 통한 제품 최적화" },
+  ],
 
 };
