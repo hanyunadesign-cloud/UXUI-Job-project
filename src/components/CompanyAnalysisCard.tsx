@@ -554,6 +554,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "청소, 이사, 인테리어 같은 오프라인 서비스를 찾고 예약하는 과정의 번거로움과 신뢰 문제를 해결하는 게 핵심이에요.",
     problemRest: "제품을 살 때 아마존이나 쿠팡을 쓰듯, 오프라인 서비스도 앱으로 쉽고 빠르게 매칭받을 수 있게 만들어요.",
   },
+  "강남언니": {
+    companyUrl: "https://www.gangnamunni.com",
+    designBlogUrl: "https://blog.gangnamunni.com/blog/design/",
+    domainPrimary: "O2O · 미용의료",
+    domainSecondary: "성형외과·피부과 등 미용의료 병원의 실사용자 후기와 정보를 제공하는 국내 1위 미용의료 정보 플랫폼이에요. 한국·일본·태국 등에서 서비스하고 있어요.",
+    domainKeywords: ["O2O", "미용의료", "리뷰 플랫폼"],
+    problemLede: "공급자 중심이었던 미용의료 정보를 투명하게 만들어 고객이 신뢰하고 선택할 수 있게 하는 게 핵심 문제예요.",
+    problemRest: "병원 고객을 위한 파트너센터 경험부터 소비자를 위한 검색·예약 경험까지, 양면 시장을 함께 설계해요.",
+  },
   "블루엘리펀트": {
     companyUrl: "https://blueelephant.co",
     designBlogUrl: null,
@@ -733,6 +742,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     domainKeywords: ["플랫폼 디자인 시스템", "인터랙션 디자인", "대규모 서비스"],
     problemLede: "카카오톡을 비롯한 여러 서비스에서 일관되고 매끄러운 사용자 경험을 유지하는 게 핵심 문제예요.",
     problemRest: "공통 UX와 인터랙션 가이드라인을 정의하고 고도화해 서비스 전반의 완성도를 높여요.",
+  },
+  "카카오뱅크": {
+    companyUrl: "https://www.kakaobank.com",
+    designBlogUrl: null,
+    domainPrimary: "핀테크 · 인터넷은행",
+    domainSecondary: "카카오톡 접근성을 기반으로 한 국내 대표 인터넷전문은행이에요. 복잡한 은행 업무를 단순하고 직관적인 모바일 경험으로 바꿔요.",
+    domainKeywords: ["인터넷은행", "모바일뱅킹", "대중화된 금융"],
+    problemLede: "복잡하고 진입장벽 높았던 은행 업무를 누구나 쉽게 쓸 수 있는 경험으로 바꾸는 게 핵심 문제예요.",
+    problemRest: "낮은 진입장벽과 직관적인 UI로 금융을 대중화하는 제품을 만들어요.",
   },
   "카카오스타일": {
     companyUrl: "https://kakaostyle.com",
