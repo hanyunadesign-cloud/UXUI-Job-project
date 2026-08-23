@@ -1463,4 +1463,25 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
         "AI 기반의 새로운 서비스 아이디어와 트렌드에 관심이 있는 분",
     },
   ],
+  // Bjak - Product Designer (UX), HCI
+  cmt4phr9q0004lqcmmekfyjau: [
+    {
+      title: "AI 인터랙션 패턴 설계 경험",
+      body: "프롬프트·확인·정정·핸드오프·복구까지 AI와 사람이 상호작용하는 전체 흐름을 설계해본 경험을 보여주세요.",
+      sourceQuote:
+        "Create interaction patterns for human-AI workflows, including prompting, review, confirmation, correction, handoff, and recovery.",
+    },
+    {
+      title: "복잡한 AI 동작을 명확하게 푼 경험",
+      body: "AI가 무엇을 하는지, 무엇을 확신하지 못하는지를 사용자에게 명확히 보여주는 화면을 설계한 경험을 구체적으로 보여주세요.",
+      sourceQuote:
+        "Design interfaces that help users understand what the AI is doing, what it knows, what it is unsure about, and what will happen next.",
+    },
+    {
+      title: "빠른 반복으로 검증한 프로토타이핑",
+      body: "Figma로 빠르게 반복하며 아이디어를 검증한 프로세스를 포트폴리오에 담아주세요.",
+      sourceQuote:
+        "Proficiency in Figma and fast iteration workflows.",
+    },
+  ],
 };
