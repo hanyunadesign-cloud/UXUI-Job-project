@@ -45,6 +45,15 @@ const STAGE_KEYWORDS: Record<(typeof STAGES)[number], [string, string, string]> 
 
 // 회사명으로 조회한다. 회사명 문자열은 반드시 job.companyName과 정확히 일치해야 한다.
 const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
+  한화생명: {
+    companyUrl: "https://www.hanwhalife.com",
+    designBlogUrl: null,
+    domainPrimary: "금융 · 보험",
+    domainSecondary: "국내 대표 생명보험사예요. 이번 채용은 WM(자산관리) 전략팀에서 신규 금융 플랫폼의 모바일 UX·UI를 책임지는 자리예요.",
+    domainKeywords: ["금융 플랫폼", "자산관리", "디자인시스템"],
+    problemLede: "웹 중심으로 설계됐던 정보구조와 플로우를 모바일 기준으로 다시 설계하는 게 핵심 문제예요.",
+    problemRest: "차트·리포트 같은 데이터 중심 화면의 시각화부터 Figma 디자인시스템 구축까지, 금융 서비스 UX를 새로 세우는 역할이에요.",
+  },
   토스인슈어런스: {
     companyUrl: "https://tossinsu.com",
     designBlogUrl: "https://toss.tech/category/design",
