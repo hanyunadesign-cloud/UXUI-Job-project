@@ -725,6 +725,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "영상 제작의 높은 진입 장벽을 소프트웨어로 낮추는 게 핵심 문제예요.",
     problemRest: "누구나 좋은 퀄리티의 영상으로 자신의 이야기를 전달할 수 있게 만드는 프로덕트를 함께 만들어가요.",
   },
+  "엔라이즈": {
+    companyUrl: "https://www.wippy.io",
+    designBlogUrl: null,
+    domainPrimary: "소셜 · 데이팅",
+    domainSecondary: "동네 친구 매칭 서비스 '위피(WIPPY)'를 운영해요. 2019년부터 국내 소셜 데이팅 시장 점유율 1위를 유지하고 있고, 2024년부터 일본으로도 서비스를 확장했어요.",
+    domainKeywords: ["소셜 데이팅", "위치 기반 매칭", "글로벌 확장"],
+    problemLede: "새로운 사람과의 좋은 관계를 안전하고 건강하게 맺을 수 있도록 돕는 게 핵심 문제예요.",
+    problemRest: "위치·관심사 기반 매칭 경험을 한국과 일본 양쪽에서 함께 만들어가요.",
+  },
   "채널톡": {
     companyUrl: "https://channel.io",
     designBlogUrl: null,
