@@ -44,11 +44,16 @@ export default async function JobsPage({
     typeof searchParams.companyQuery === "string" ? searchParams.companyQuery.trim() : "";
   const sort = searchParams.sort === "deadline" ? "deadline" : "latest";
 
+  // 마감된 지 30일(D+30)이 지난 공고는 목록에서 완전히 숨긴다(정렬로 맨 뒤에 두는 것과 별개).
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
   // DB가 원격(서울) 리전에 있어 왕복 지연이 크므로, 서로 의존하지 않는 조회는 병렬로 묶는다.
   const [matchedJobs, savedJobsList] = await Promise.all([
     prisma.job.findMany({
       where: {
         archivedAt: null,
+        OR: [{ applicationDeadline: null }, { applicationDeadline: { gte: thirtyDaysAgo } }],
         ...(roles.length && { role: { in: roles } }),
         ...(platforms.length && { platforms: { hasSome: platforms } }),
         ...(industries.length && { industries: { hasSome: industries } }),
