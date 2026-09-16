@@ -20,6 +20,29 @@ function experienceLabel(min: number, max: number): string {
   return `${left} ~ ${max}년`;
 }
 
+// 브라우저에 마지막 필터 선택을 기억해뒀다가, 필터 없이 새로 들어왔을 때 복원하는 데 쓰는 키.
+// 키워드 검색(companyQuery)·정렬(sort)은 "필터"가 아니라 그때그때의 의도라 대상에서 뺀다.
+const FILTER_PARAM_KEYS = ["experienceMin", "experienceMax", "stage", "industry", "platform", "role"] as const;
+const FILTERS_STORAGE_KEY = "uxui-job:jobs-filters";
+
+function extractFilterParams(params: URLSearchParams): URLSearchParams {
+  const filtered = new URLSearchParams();
+  FILTER_PARAM_KEYS.forEach((key) => {
+    params.getAll(key).forEach((value) => filtered.append(key, value));
+  });
+  return filtered;
+}
+
+// 필터가 하나라도 있으면 저장하고, 전부 해제됐으면(초기화) 저장된 것도 같이 지운다.
+function persistFilters(params: URLSearchParams) {
+  const filtered = extractFilterParams(params);
+  if (filtered.toString()) {
+    localStorage.setItem(FILTERS_STORAGE_KEY, filtered.toString());
+  } else {
+    localStorage.removeItem(FILTERS_STORAGE_KEY);
+  }
+}
+
 const FILTER_GROUPS = [
   {
     key: "experience",
@@ -73,6 +96,21 @@ export function FilterBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // 필터 없이(공유 링크 등이 아닌 맨 URL로) 들어왔을 때만, 마지막으로 저장해둔 필터를
+  // 복원한다. 이미 URL에 필터가 담겨 있으면 그 값을 존중하고 덮어쓰지 않는다.
+  useEffect(() => {
+    const hasAnyFilterParam = FILTER_PARAM_KEYS.some((key) => searchParams.has(key));
+    if (hasAnyFilterParam) return;
+    const saved = localStorage.getItem(FILTERS_STORAGE_KEY);
+    if (!saved) return;
+    const params = new URLSearchParams(searchParams.toString());
+    new URLSearchParams(saved).forEach((value, key) => params.append(key, value));
+    router.replace(`${pathname}?${params.toString()}`);
+    // 마운트 시 1회만 복원한다 — searchParams를 의존성에 넣으면 사용자가 직접 필터를
+    // 초기화한 직후에도 다시 복원을 시도하게 된다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const openDropdown = (key: string) => {
     if (openGroup === key) {
       setOpenGroup(null);
@@ -93,6 +131,7 @@ export function FilterBar() {
     params.delete(key);
     values.forEach((v) => params.append(key, v));
     trackEvent("Job Filter Changed", { key, values });
+    persistFilters(params);
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -107,6 +146,7 @@ export function FilterBar() {
       params.set("experienceMax", String(max));
     }
     trackEvent("Job Filter Changed", { key: "experience", values: [`${min}-${max}`] });
+    persistFilters(params);
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -304,6 +344,7 @@ export function FilterBar() {
           onClick={() => {
             trackEvent("Job Filters Reset");
             setOpenGroup(null);
+            localStorage.removeItem(FILTERS_STORAGE_KEY);
             router.push(pathname);
           }}
           className="ml-1 text-xs font-medium text-neutral-400 underline underline-offset-2 hover:text-ink"
