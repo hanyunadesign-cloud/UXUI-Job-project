@@ -45,7 +45,7 @@ const STAGE_KEYWORDS: Record<(typeof STAGES)[number], [string, string, string]> 
 
 // 회사명으로 조회한다. 회사명 문자열은 반드시 job.companyName과 정확히 일치해야 한다.
 const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
-  콘텐츠웨이브: {
+  웨이브: {
     companyUrl: "https://www.wavve.com",
     designBlogUrl: null,
     domainPrimary: "OTT · 미디어",

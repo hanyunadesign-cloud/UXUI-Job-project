@@ -1647,7 +1647,7 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
         "뉴스레터, 링크드인, CRM 등 온드미디어 디자인 아웃풋을 제작해요",
     },
   ],
-  // 콘텐츠웨이브 - [product] UX/UI 디자이너
+  // 웨이브 - [product] UX/UI 디자이너
   cmu3ngnss0002h2fpwnhipy68: [
     {
       title: "다양한 화면을 아우른 디자인 시스템 경험",
