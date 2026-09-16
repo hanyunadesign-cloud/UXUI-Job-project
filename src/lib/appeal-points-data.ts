@@ -792,9 +792,9 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "기획부터 출시까지 참여 경험", body: "서비스나 기능을 기획 단계부터 출시까지 주도적으로 참여한 경험을 보여주세요.", sourceQuote: "하나의 서비스 또는 기능을 기획부터 출시까지 경험해본 분" },
   ],
   cmrehq5qx0005qjgckf4m1sm1: [
-    { title: "가설 수립·검증 통한 제품 개선", body: "데이터를 기반으로 문제를 정의하고 가설을 세워 검증한 제품 개선 경험을 보여주세요.", sourceQuote: "정량/정성 데이터를 기반으로 문제를 정의하고 가설 수립과 검증을 통해 제품을 개선합니다" },
-    { title: "구조적 사고 정리 능력", body: "문제 정의부터 스펙까지 구조적으로 정리한 사고 과정을 보여주세요.", sourceQuote: "뛰어난 추상화 능력을 바탕으로 Problem → Concept → Spec 흐름을 구조적으로 정리할 수 있으신 분" },
-    { title: "AI 활용 빠른 실험 경험", body: "AI를 활용해 빠르게 실험하고 반복하며 제품 완성도를 높인 경험을 보여주세요.", sourceQuote: "AI를 활용해 빠른 실험과 반복을 통해 제품 완성도를 높입니다" },
+    { title: "가설 수립·검증 통한 제품 개선", body: "데이터를 기반으로 문제를 정의하고 가설을 세워 검증한 제품 개선 경험을 보여주세요.", sourceQuote: "정량/정성 데이터를 기반으로 문제를 정의하고 가설 수립과 검증을 통해 제품을 개선합니다." },
+    { title: "구조적 사고 정리 능력", body: "문제 정의부터 스펙까지 구조적으로 정리한 사고 과정을 보여주세요.", sourceQuote: "뛰어난 추상화 능력으로 Problem → Concept → Spec 흐름을 구조적으로 정리할 수 있는 분" },
+    { title: "디자인부터 개발까지 전담한 경험", body: "디자인에서 멈추지 않고 AI를 활용해 직접 화면을 구현·배포까지 해본 경험을 보여주세요.", sourceQuote: "디자인에서 멈추지 않고, AI를 활용해 직접 만들어보는 것을 즐기시는 분" },
   ],
   cmrernd030000a37pmoxemnvj: [
     { title: "PDP·프로모션 에셋 제작 경험", body: "상세페이지와 프로모션 에셋을 기획부터 제작까지 담당한 경험을 보여주세요.", sourceQuote: "PDP(상세페이지) 및 온라인 프로모션 에셋 기획·디자인·개발" },
@@ -1645,6 +1645,162 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
       body: "뉴스레터, 링크드인, CRM 등 여러 채널에 맞춰 디자인 아웃풋을 제작해본 경험을 정리해주세요.",
       sourceQuote:
         "뉴스레터, 링크드인, CRM 등 온드미디어 디자인 아웃풋을 제작해요",
+    },
+  ],
+  // 콘텐츠웨이브 - [product] UX/UI 디자이너
+  cmu3ngnss0002h2fpwnhipy68: [
+    {
+      title: "다양한 화면을 아우른 디자인 시스템 경험",
+      body: "iOS/Android/Web/TV 등 여러 플랫폼을 아우르는 디자인 시스템을 구축·개선해본 경험을 보여주세요.",
+      sourceQuote:
+        "Wavve 서비스 UI/UX 디자인 (iOS/Android/Web/TV)",
+    },
+    {
+      title: "주요 기능 프로젝트 리딩 경험",
+      body: "여러 팀과 커뮤니케이션하며 주요 기능 프로젝트를 리딩해본 경험을 구체적으로 보여주세요.",
+      sourceQuote:
+        "주요 기능 프로젝트 디자인 및 커뮤니케이션 리딩",
+    },
+    {
+      title: "본인 기여도 명확한 프로젝트 경험",
+      body: "포트폴리오에는 본인의 기여도가 절반 이상인 프로젝트를 중심으로 담아주세요.",
+      sourceQuote:
+        "포트폴리오 제출 가능한 분 (본인의 기여도가 50% 이상인 프로젝트 위주로 구성)",
+    },
+  ],
+  // 화이트스캔 - UI/UX 프로덕트 디자이너 채용
+  cmu3ngxpa0007h2fp32g4kf04: [
+    {
+      title: "CSS·HTML 기반 UI 구현 역량",
+      body: "Figma로 만든 디자인을 CSS·HTML로 직접 구현하거나 협업해본 경험을 보여주세요.",
+      sourceQuote:
+        "CSS, HTML, Figma, Illustrator, Photoshop 사용 역량",
+    },
+    {
+      title: "스트레스 상황에서도 안정적인 작업 태도",
+      body: "일정이 빠듣하거나 변수가 많은 상황에서도 꼼꼼하게 작업을 마무리한 경험을 보여주세요.",
+      sourceQuote:
+        "계획성, 꼼꼼함, 메타인지, 성장지향성 스트레스관리",
+    },
+    {
+      title: "관련 전공·유관 경험 기반 실무력",
+      body: "관련 전공이나 유관 업무 경험을 바탕으로 실무에 빠르게 적응한 사례를 보여주세요.",
+      sourceQuote:
+        "관련 학과 전공자 유관업무 경력자",
+    },
+  ],
+  // 아이브코리아 - 개발실 서비스 UI/UX 디자이너
+  cmu3nhd7p000ch2fp9ge5ofta: [
+    {
+      title: "Figma·Sketch 병행 활용 역량",
+      body: "Figma와 Sketch를 함께 다뤄본 경험이 있다면 구체적으로 보여주세요.",
+      sourceQuote:
+        "Figma, Notion, Sketch, Photoshop 사용 역량",
+    },
+    {
+      title: "빠른 적응력을 보여주는 포트폴리오",
+      body: "새로운 환경이나 도구에 빠르게 적응해 성과를 낸 경험을 정리해주세요.",
+      sourceQuote:
+        "꼼꼼함, 적응성, 협동심, 계획성, 성실성",
+    },
+    {
+      title: "기여도 명확한 포트폴리오 구성",
+      body: "이력서와 포트폴리오를 함께 제출할 때, 각 프로젝트에서의 역할을 명확히 밝혀주세요.",
+      sourceQuote:
+        "잡코리아 이력서 포트폴리오 첨부",
+    },
+  ],
+  // 마이베네핏 - UX/UI 디자이너 모집
+  cmu3nhv75000hh2fpfqsam42q: [
+    {
+      title: "Unity 기반 UX 설계 경험",
+      body: "Unity 환경에서 UX를 설계해본 경험이 있다면 구체적인 사례로 보여주세요.",
+      sourceQuote:
+        "Unity, Adobe XD, Figma, Illustrator 활용",
+    },
+    {
+      title: "탄력근무 환경에서의 자기관리 능력",
+      body: "탄력근무제처럼 자율적인 환경에서 스스로 일정을 관리하며 성과를 낸 경험을 보여주세요.",
+      sourceQuote:
+        "탄력근무제 오전 08~10시 출근 및 8시간 근무",
+    },
+    {
+      title: "문서화·발표 역량을 갖춘 디자이너",
+      body: "디자인 결과물을 문서나 발표로 명확하게 전달해본 경험을 함께 보여주세요.",
+      sourceQuote:
+        "프리젠테이션 능력 우수자 문서작성 우수자",
+    },
+  ],
+  // 토스증권 - Design System Assistant
+  cmu3ni81a000mh2fpasxxx3wq: [
+    {
+      title: "Figma 기반 UI/UX 디자인 실무 경험",
+      body: "Figma를 활용해 UI/UX 디자인 업무를 수행한 실무 경험을 구체적으로 보여주세요.",
+      sourceQuote:
+        "담당업무 UI/UX 디자인",
+    },
+  ],
+  // 현대자동차 - [ICT] UI Designer
+  cmu3niszi000rh2fpv7xdmsd7: [
+    {
+      title: "멀티 플랫폼 UI 사용성 정립 경험",
+      body: "Android/iOS/Web/PC 등 여러 플랫폼에서 UI 사용성을 정립하고 방향성을 마련한 경험을 보여주세요.",
+      sourceQuote:
+        "Android, iOS, Web, PC 환경의 UI 사용성 정립 및 방향성 마련",
+    },
+    {
+      title: "접근성을 고려한 프로토타이핑 경험",
+      body: "다양한 사용자와 디바이스, 접근성을 고려해 프로토타입을 만들어본 경험을 보여주세요.",
+      sourceQuote:
+        "사용자·디바이스·접근성을 고려한 프로토타이핑",
+    },
+    {
+      title: "인하우스 서비스 런칭·운영 경험",
+      body: "인하우스에서 서비스를 직접 런칭하고 운영까지 경험해본 사례를 보여주세요.",
+      sourceQuote:
+        "인하우스 서비스 런칭 및 운영 경험",
+    },
+  ],
+  // 멜 - Product Design Assistant (단기 계약직)
+  cmu3nj39b000wh2fp7ita0l2a: [
+    {
+      title: "레퍼런스 기반 빠른 UI 제작 역량",
+      body: "기존 화면과 레퍼런스를 바탕으로 빠르고 정확하게 UI를 제작해본 경험을 보여주세요.",
+      sourceQuote:
+        "기존 제품 화면과 다양한 레퍼런스를 바탕으로 필요한 UI 제작",
+    },
+    {
+      title: "Figma Component·Auto Layout 활용 경험",
+      body: "Figma의 Component와 Auto Layout을 능숙하게 활용해본 경험을 구체적으로 보여주세요.",
+      sourceQuote:
+        "Figma Component 및 Auto Layout 활용 경험",
+    },
+    {
+      title: "Design QA 협업 경험",
+      body: "Product Manager와 협업하며 디자인 수정과 Design QA를 진행해본 경험을 보여주세요.",
+      sourceQuote:
+        "Product Manager와 협업하여 디자인 수정 및 Design QA 진행",
+    },
+  ],
+  // 케이존 - 프로덕트 디자이너 (1~5년차)
+  cmu3njtcs0011h2fpr20lu4pd: [
+    {
+      title: "AI 판단 과정을 신뢰 가능한 경험으로 설계",
+      body: "AI Agent의 판단과 실행 과정을 사용자가 이해하고 신뢰할 수 있게 설계한 경험을 보여주세요.",
+      sourceQuote:
+        "AI Agent의 판단과 실행 과정을 사용자가 이해하고 신뢰할 수 있는 경험으로 설계",
+    },
+    {
+      title: "이탈 최소화 User Flow 설계 경험",
+      body: "이탈을 최소화하는 User Flow와 정보 구조(IA)를 설계하고 사용성 테스트로 검증한 경험을 보여주세요.",
+      sourceQuote:
+        "이탈을 최소화하는 User Flow와 정보 구조(IA) 설계",
+    },
+    {
+      title: "퍼널·전환율 데이터 기반 개선 경험",
+      body: "퍼널과 전환율, 리텐션 지표를 확인하고 A/B 테스트로 개선 효과를 검증해본 경험을 보여주세요.",
+      sourceQuote:
+        "퍼널·전환율(CVR)·리텐션 지표 확인 및 A/B 테스트를 통한 개선 효과 검증",
     },
   ],
 };
