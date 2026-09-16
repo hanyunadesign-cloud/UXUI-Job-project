@@ -9,7 +9,8 @@ import { trackEvent } from "@/lib/analytics";
 const NAV_ITEMS = [
   { href: "/jobs", label: "채용" },
   { href: "/companies", label: "기업" },
-  { href: "/clubs", label: "IT 동아리" },
+  // 저장한 공고(외부 링크로 추가한 공고 포함)와 팔로잉 회사를 모아보는 마이페이지로 연결.
+  { href: "/mypage", label: "관심 공고" },
   { href: "/feedback", label: "서비스 의견" },
 ];
 
