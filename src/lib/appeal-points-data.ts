@@ -1857,4 +1857,193 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
         "AI 기술을 활용한 모델 생성 및 그래픽 디자인 작업 지원",
     },
   ],
+  // 당근 - Product Designer - 부동산
+  cmtyp96cw0002rygkuzzlwaf1: [
+    {
+      title: "복합 접점 탐색 경험 설계",
+      body: "단지·매물·지도·피드처럼 여러 접점이 얽힌 탐색 경험을 하나의 흐름으로 설계해본 사례를 보여주세요.",
+      sourceQuote:
+        "당근 부동산의 단지·매물·지도·피드 등 주요 접점의 사용자 경험을 설계해요.",
+    },
+    {
+      title: "의사결정 흐름 분석한 기회 발굴",
+      body: "사용자가 어떤 맥락에서 어떻게 결정을 내리는지 분석해 새로운 제품 기회를 찾아낸 과정을 보여주세요.",
+      sourceQuote:
+        "사용자의 탐색 맥락과 의사결정 흐름을 분석해 제품 기회를 발굴해요.",
+    },
+    {
+      title: "데이터 기반 가설 검증 경험",
+      body: "실제 행동 데이터와 리서치로 가설을 세우고 실험해 검증까지 이어간 과정을 수치와 함께 보여주세요.",
+      sourceQuote:
+        "실제 행동 데이터와 사용자 리서치를 바탕으로 가설을 세우고 실험해요.",
+    },
+  ],
+  // 당근 - Product Designer (인턴) - 로컬 잡스 (Trust & Safety)
+  cmu1k4hqv0002u9h2eohsnk5z: [
+    {
+      title: "신뢰 접점을 디자인한 경험",
+      body: "신원 인증, 신뢰 배지, 신고·검수 플로우처럼 유저가 신뢰를 직접 느끼는 접점을 디자인해본 경험을 구체적으로 보여주세요.",
+      sourceQuote:
+        "신원 인증, 신뢰 배지, 약속잡기, 신고·검수 플로우, 안전 안내와 사기 예방 경고 등 유저가 신뢰를 직접 느끼는 경험의 접점을 디자인해요",
+    },
+    {
+      title: "유저 문제를 재정의한 과정",
+      body: "정성적인 유저 보이스와 정량 데이터를 함께 보고, 개별 이슈를 넘어 유저 전체 경험 관점에서 문제를 다시 정의한 과정을 담아주세요.",
+      sourceQuote:
+        "유저 보이스와 정량 데이터를 통해 신뢰·안전 관련 사용자 문제를 발견하고, 개별 보이스에 대한 대응을 넘어 유저 전체 경험의 관점에서 문제를 다시 정의해요",
+    },
+    {
+      title: "신뢰와 성장의 균형 잡은 제안",
+      body: "위험은 명확히 알리면서도 서비스의 따뜻한 경험은 해치지 않은, 신뢰·안전·성장을 함께 고려한 디자인 결정 과정을 풀어서 쓰세요.",
+      sourceQuote:
+        "위험은 분명하게 알리면서도 서비스의 따뜻한 경험을 해치지 않도록, 신뢰와 안전 그리고 서비스의 성장까지 함께 고려한 균형 잡힌 디자인 안을 주도적으로 제안해요",
+    },
+  ],
+  // 쿠팡 - Staff Visual Designer (Coupang Eats)
+  cmtrk1vxm0003hn7wodibc2qz: [
+    {
+      title: "전사 비주얼 시스템 구축 경험",
+      body: "제품·브랜드·비즈니스 전반을 아우르는 비주얼 디자인 원칙과 가이드라인을 직접 구축해본 경험을 보여주세요.",
+      sourceQuote:
+        "비주얼 디자인 원칙, 에셋, 가이드라인을 구축해 제품, 브랜드, 비즈니스 전반에서 일관된 비주얼 디자인 시스템을 만듭니다.",
+    },
+    {
+      title: "복잡한 프로젝트 리드 경험",
+      body: "여러 직군과 협업하며 프로젝트를 운영하고 디자인 방향성을 주도적으로 이끈 경험을 구체적으로 보여주세요.",
+      sourceQuote:
+        "Product Designer, Product Manager, Engineer, Marketing, Business Strategy 등 다양한 이해관계자와 협업하며 복잡한 프로젝트를 운영 관리하고, 디자인 방향성과 의사결정을 리드합니다.",
+    },
+    {
+      title: "디자이너 성장 지원한 경험",
+      body: "디자인 리뷰나 멘토링으로 다른 디자이너의 성장을 도운 경험이 있다면 구체적인 사례로 풀어주세요.",
+      sourceQuote:
+        "디자인 리뷰, 멘토링, 프로젝트 리딩 등을 통해 다른 디자이너의 성장을 지원합니다.",
+    },
+  ],
+  // 쿠팡 - Senior Product Designer (Rocket Growth)
+  cmtvud5d70003kt5ynpkil5yb: [
+    {
+      title: "전략부터 출시까지 전 과정 주도",
+      body: "전략 수립부터 리서치, 설계, 테스트까지 프로덕트 디자인 전 과정을 직접 담당해본 경험을 보여주세요.",
+      sourceQuote:
+        "전략부터 리서치, 설계, 테스트, 디자인까지 프로덕트 디자인의 전 과정을 담당",
+    },
+    {
+      title: "판매자 관점 대변한 리서치",
+      body: "정성·정량 데이터로 판매자(B2B 유저)의 니즈를 파악하고 대변한 경험을 구체적으로 담아주세요.",
+      sourceQuote:
+        "다양한 정성적/정량적 데이터를 바탕으로 판매자의 입장에서 그들의 니즈를 대변",
+    },
+    {
+      title: "유관부서 리뷰 리딩 경험",
+      body: "빠른 실행을 위해 일정을 조율하고 유관부서 리뷰를 직접 리드해본 경험을 보여주세요.",
+      sourceQuote:
+        "빠른 업무 진행을 위한 계획과 조율, 그리고 의사결정을 위한 유관부서의 리뷰를 리딩",
+    },
+  ],
+  // Bjak - UX Designer, AI App
+  cmt668oz90004z5mdl5lk89pk: [
+    {
+      title: "AI 판단을 화면에 노출한 경험",
+      body: "AI가 뭘 하고 있는지, 어떤 결정을 내렸는지, 사용자가 뭘 확인·조정해야 하는지를 화면에 어떻게 드러낼지 설계해본 경험을 보여주세요.",
+      sourceQuote:
+        "Design how the app surfaces what the AI is doing, what decisions it has made, and what the user needs to confirm or adjust.",
+    },
+    {
+      title: "신뢰 이탈 지점을 찾은 리서치",
+      body: "사용자가 어디서 신뢰를 잃고 불확실함을 느끼는지 사용성 리서치로 짚어낸 경험을 구체적으로 보여주세요.",
+      sourceQuote:
+        "Conduct usability research to understand where users lose trust, feel uncertain, or disengage.",
+    },
+    {
+      title: "비결정적 시스템 UX 설계 역량",
+      body: "결과를 예측하기 어려운 비동기·비결정적 시스템을 사용자가 이해할 수 있게 설계해본 사례를 담아주세요.",
+      sourceQuote:
+        "Ability to design for systems that are asynchronous, non-deterministic, and context-dependent.",
+    },
+  ],
+  // Bjak - Interaction Designer, HCI
+  cmt7lok4i0004uwsv5fsru02z: [
+    {
+      title: "멀티스텝 AI 플로우 설계 경험",
+      body: "사용자가 작업을 시작·모니터링·일시정지·수정·완료하는 전체 흐름을 세밀하게 설계해본 경험을 보여주세요.",
+      sourceQuote:
+        "Design detailed interaction models for AI-driven flows, including how users initiate, monitor, pause, correct, and complete multi-step tasks.",
+    },
+    {
+      title: "휴먼인더루프 컨트롤 설계",
+      body: "사용자가 AI 결정을 검토하고 필요할 때 개입할 수 있으면서도 일일이 관리하지 않아도 되는 통제 장치를 설계한 경험을 담아주세요.",
+      sourceQuote:
+        "Design human-in-the-loop controls - how users review AI decisions, override actions, and stay informed without micromanaging.",
+    },
+    {
+      title: "개입 시점 판단한 인터랙션 감각",
+      body: "언제 사용자를 안내하고, 언제 확인을 구하고, 언제 그대로 둘지 판단한 기준을 구체적인 사례로 보여주세요.",
+      sourceQuote:
+        "Strong judgment on when users should be guided, interrupted, asked for confirmation, or left alone.",
+    },
+  ],
+  // Bjak - Visual Designer
+  cmt914i3x000699pul9mnftp7: [
+    {
+      title: "AI 신뢰 신호를 시각화한 경험",
+      body: "AI가 생성한 콘텐츠와 시스템 상태, 신뢰도를 사용자가 한눈에 구분할 수 있게 시각 패턴으로 풀어낸 경험을 보여주세요.",
+      sourceQuote:
+        "Create visual patterns that help users parse AI-generated content, distinguish system states, and understand confidence and reliability signals.",
+    },
+    {
+      title: "가변 콘텐츠 정보 위계 설계",
+      body: "내용이 계속 바뀌고 불확실한 AI 인터페이스에서 정보 밀도와 위계를 어떻게 잡았는지 구체적으로 보여주세요.",
+      sourceQuote:
+        "Design for information density and hierarchy in AI interfaces where content is dynamic, variable, and often uncertain.",
+    },
+    {
+      title: "다양한 상태의 비주얼 기준 정의",
+      body: "에러·빈 화면·로딩·작업 상태 등 다양한 상태의 비주얼 기준을 세워본 경험을 담아주세요.",
+      sourceQuote:
+        "Define visual standards for error states, empty states, loading states, task states, and AI-generated output.",
+    },
+  ],
+  // Bjak - Lead Graphic Designer
+  cmtbvzy720004iv2bagh8eo4s: [
+    {
+      title: "웹·모바일 비주얼 랭귀지 설계",
+      body: "웹과 모바일 전반의 비주얼 랭귀지와 디자인 시스템, UI 컴포넌트를 설계해본 경험을 보여주세요.",
+      sourceQuote:
+        "Design the visual language, design system, and UI components for A1's product across web and mobile.",
+    },
+    {
+      title: "비주얼로 AI 신뢰도 전달한 감각",
+      body: "색상·형태 같은 비주얼 요소로 AI의 동작과 신뢰도를 어떻게 전달했는지 사례로 풀어주세요.",
+      sourceQuote:
+        "Awareness of how visual cues communicate AI system behavior, trust, and confidence.",
+    },
+    {
+      title: "불확실한 요구사항 속 작업 경험",
+      body: "제품 요구사항이 계속 바뀌는 모호한 환경에서 작업을 진행해본 경험을 구체적으로 써주세요.",
+      sourceQuote:
+        "Comfort designing under ambiguity, with evolving product requirements.",
+    },
+  ],
+  // Bjak - Senior Graphic Designer
+  cmtbw06g90008iv2b25l0meaj: [
+    {
+      title: "속도·일관성 위한 시스템 운영",
+      body: "작업 속도와 일관성, 명료함을 함께 지원하는 디자인 시스템을 만들고 운영해본 경험을 보여주세요.",
+      sourceQuote:
+        "Build and maintain a design system that supports speed, consistency, and clarity.",
+    },
+    {
+      title: "가독성·대비 고려한 접근성 감각",
+      body: "접근성 기준을 이해하고 가독성과 대비를 고려해 디자인한 경험을 구체적으로 담아주세요.",
+      sourceQuote:
+        "Understanding of accessibility standards and how to design for legibility and contrast.",
+    },
+    {
+      title: "개발 정확도 높인 디자인 스펙",
+      body: "엔지니어가 정확히 구현할 수 있도록 비주얼 에셋과 디자인 스펙을 꼼꼼히 남긴 경험을 보여주세요.",
+      sourceQuote:
+        "Contribute visual assets and design specs that engineers can implement accurately.",
+    },
+  ],
 };
