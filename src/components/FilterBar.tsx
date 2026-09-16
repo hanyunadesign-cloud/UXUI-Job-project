@@ -142,6 +142,13 @@ export function FilterBar() {
         const isOpen = openGroup === group.key;
         const isActive = isExperience ? hasExperienceFilter : active.length > 0;
         const allValues = group.options.map((o) => o.value);
+        // 활성화되면 카테고리명("규모") 대신 실제로 고른 값을 버튼에 그대로 보여준다.
+        // 여러 개 골랐을 땐 첫 값 + "외 N"으로 요약한다.
+        const displayLabel = isExperience
+          ? experienceLabel(committedExpMin, committedExpMax)
+          : active.length > 1
+            ? `${active[0]} 외 ${active.length - 1}`
+            : active[0];
         // 두 핸들이 같은 값에 겹쳐 있을 때(0/최댓값 끝뿐 아니라 3~3년처럼 중간값도 포함),
         // 겹친 지점을 클릭/드래그하면 항상 위쪽 z-index의 input이 반응한다. 남은 여유
         // 공간이 더 넓은 쪽(왼쪽 끝에 가까우면 최댓값 핸들, 오른쪽 끝에 가까우면 최솟값
@@ -163,10 +170,7 @@ export function FilterBar() {
                   : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300"
               )}
             >
-              {group.label}
-              {isExperience
-                ? isActive && <span>{experienceLabel(committedExpMin, committedExpMax)}</span>
-                : active.length > 0 && <span>{active.length}</span>}
+              {isActive ? displayLabel : group.label}
               <ChevronDownIcon
                 aria-hidden
                 className={clsx("h-4 w-4 shrink-0 transition-transform", isOpen && "rotate-180")}
