@@ -1,5 +1,19 @@
 import { lookup } from "dns/promises";
 import * as cheerio from "cheerio";
+import { compile } from "html-to-text";
+
+// cheerio로 각 블록 태그 끝에 "\n" 텍스트 노드를 직접 끼워 넣는 예전 방식은, 제목 바로 뒤에
+// <span>으로 이어지는 라벨(예: "Product Designer구분")처럼 인라인 태그로 구분된 텍스트를
+// 못 갈라서 줄바꿈이 자주 깨졌다. html-to-text는 각 태그의 블록/인라인 성격을 이미 알고 있어
+// 이런 경우를 훨씬 안정적으로 처리한다 — 본문 텍스트 파싱은 직접 구현하지 않고 이 라이브러리에
+// 맡긴다.
+const convertHtmlToText = compile({
+  wordwrap: false,
+  selectors: [
+    { selector: "a", options: { ignoreHref: true } },
+    { selector: "img", format: "skip" },
+  ],
+});
 
 const FETCH_TIMEOUT_MS = 10_000;
 const MAX_RESPONSE_BYTES = 3_000_000; // 3MB
@@ -93,18 +107,12 @@ export async function fetchExternalJobPageText(url: URL): Promise<string> {
   }
 
   const html = Buffer.from(buf).toString("utf-8");
+  // nav/header/footer 등 공고 본문과 무관한 영역은 cheerio로 먼저 걷어낸 다음, 남은 HTML의
+  // 실제 텍스트 변환(블록/인라인 구분, 목록 등)은 html-to-text에 맡긴다.
   const $ = cheerio.load(html);
   $("script, style, nav, header, footer, svg, noscript, iframe").remove();
-  $("br").replaceWith("\n");
-  $("li").each((_, el) => {
-    $(el).prepend("- ");
-  });
-  $("p, div, li, h1, h2, h3, h4, h5, h6, ul, ol, hr, tr").each((_, el) => {
-    $(el).append("\n");
-  });
 
-  const text = $.root()
-    .text()
+  const text = convertHtmlToText($.html())
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean)
