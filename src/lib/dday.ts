@@ -25,7 +25,7 @@ export function getApplicationStatus(deadline: Date | null): ApplicationStatus {
   );
 
   if (diffDays < 0) {
-    return { label: "지원마감", urgent: false, closed: true };
+    return { label: `지원마감 · D+${-diffDays}`, urgent: false, closed: true };
   }
   if (diffDays === 0) {
     return { label: "오늘마감", urgent: true };
