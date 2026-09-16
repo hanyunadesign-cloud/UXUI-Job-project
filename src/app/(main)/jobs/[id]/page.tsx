@@ -14,6 +14,11 @@ import { MarkJobViewed } from "@/components/MarkJobViewed";
 import { JobSummaryCard } from "@/components/JobSummaryCard";
 import { AppealJobPanel } from "@/components/AppealJobPanel";
 import { APPEAL_POINTS } from "@/lib/appeal-points-data";
+import { JobFilterTags } from "@/components/JobFilterTags";
+
+// 로컬 전용 시안: 목록 페이지 필터 알약 스타일을 상세페이지에도 적용해보는 실험이라,
+// 다른 공고에 영향 없이 이 공고 하나에만 조건부로 켠다.
+const FILTER_TAGS_PROTOTYPE_JOB_ID = "cmu1k4hqv0002u9h2eohsnk5z";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +53,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
   // 상단 배지 줄(직군/업종/스테이지/플랫폼)은 "기업 정보" 탭 내용과 겹쳐서, 어필 포인트가
   // 있는 공고에서는 빼고 그만큼 헤더-본문 간격을 넓힌다.
   const hideTopBadges = hasAppealContent;
+  const isFilterTagsPrototype = job.id === FILTER_TAGS_PROTOTYPE_JOB_ID;
 
   return (
     <div className={`flex flex-col ${hideTopBadges ? "gap-10" : "gap-8"}`}>
@@ -80,17 +86,21 @@ export default async function JobDetailPage({ params }: { params: { id: string }
               <p className="text-sm text-neutral-500">{job.companyName}</p>
             )}
             <h1 className="text-2xl font-bold text-ink">{job.title}</h1>
-            {!hideTopBadges && (
-              <div className="flex flex-wrap gap-1.5">
-                <Badge>{job.role}</Badge>
-                {job.industries.map((industry) => (
-                  <Badge key={industry}>{industry}</Badge>
-                ))}
-                <Badge>{job.stage}</Badge>
-                {job.platforms.map((platform) => (
-                  <Badge key={platform}>{platform}</Badge>
-                ))}
-              </div>
+            {isFilterTagsPrototype ? (
+              <JobFilterTags industries={job.industries} platforms={job.platforms} />
+            ) : (
+              !hideTopBadges && (
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge>{job.role}</Badge>
+                  {job.industries.map((industry) => (
+                    <Badge key={industry}>{industry}</Badge>
+                  ))}
+                  <Badge>{job.stage}</Badge>
+                  {job.platforms.map((platform) => (
+                    <Badge key={platform}>{platform}</Badge>
+                  ))}
+                </div>
+              )
             )}
           </div>
         </div>
