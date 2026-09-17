@@ -75,14 +75,28 @@ export function JobCard({
 
       <div className="flex flex-col gap-3">
         {/* 제목: 최대 2줄 고정, 1줄짜리 제목도 동일한 자리를 차지 */}
-        <h3 className="text-h3 line-clamp-2 min-h-8 text-ink">
+        <h3
+          className={clsx(
+            "text-h3 line-clamp-2 text-ink",
+            source === "mypage_saved" ? "min-h-11" : "min-h-8"
+          )}
+        >
           {job.title}
         </h3>
 
-        {/* AI 업무 키워드: 카드에서는 2개까지만, 1줄로 고정(넘치면 말줄임). 메타 정보라 caption 톤 */}
-        <p className="text-caption line-clamp-1 min-h-4 text-neutral-500">
+        {/* AI 업무 키워드: 카드에서는 2개까지만, 1줄로 고정(넘치면 말줄임). 메타 정보라 caption 톤.
+            마이페이지에서는 링크로 추가한 카드(ExternalJobCard)와 나란히 놓이므로 그쪽과
+            높이를 맞춘다(마감 뱃지 줄 자리까지 포함한 min-h-16 + 아래 빈 자리). */}
+        <p
+          className={clsx(
+            "text-caption text-neutral-500",
+            source === "mypage_saved" ? "line-clamp-3 min-h-16" : "line-clamp-1 min-h-4"
+          )}
+        >
           {job.taskKeywords.slice(0, 2).join(" · ")}
         </p>
+
+        {source === "mypage_saved" && <div className="min-h-14" />}
       </div>
 
       {/* 하단 정보: 위 섹션이 모두 고정 높이라 자연스럽게 맞춰지지만, mt-auto로 이중 보장.

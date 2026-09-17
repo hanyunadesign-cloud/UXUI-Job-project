@@ -44,6 +44,15 @@ function LoginPageContent() {
         >
           구글 계정으로 로그인
         </Button>
+        <Button
+          variant="secondary"
+          className="px-6 py-3 text-sm"
+          onClick={() => {
+            signIn("local-test-login", { callbackUrl: `/?entrySource=${entrySource}` });
+          }}
+        >
+          테스트 로그인 (로컬 전용)
+        </Button>
         <button
           type="button"
           onClick={() => {

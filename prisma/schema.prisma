@@ -194,6 +194,9 @@ model ExternalJobSave {
   // 시점에 description에 실제로 포함되는지 코드로 검증 후 안 맞는 항목은 걸러내고 저장한다
   // (사람이 검증할 수 없는 AI 생성 데이터라 이 안전장치가 특히 중요).
   appealPoints Json?
+  // 저장 시점에 원문(description)에서 정식 Job과 동일한 extractApplicationDeadline()
+  // 정규식으로 뽑아낸 마감일. 못 찾으면 null(카드에는 마감일 정보 없이 표시).
+  applicationDeadline DateTime?
   createdAt    DateTime @default(now())
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

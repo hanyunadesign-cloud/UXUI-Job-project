@@ -53,15 +53,28 @@ export default async function JobsPage({
     prisma.job.findMany({
       where: {
         archivedAt: null,
-        OR: [{ applicationDeadline: null }, { applicationDeadline: { gte: thirtyDaysAgo } }],
+        AND: [
+          { OR: [{ applicationDeadline: null }, { applicationDeadline: { gte: thirtyDaysAgo } }] },
+          // 검색창 안내 문구가 "기업, 직무명을 검색하세요"라 회사명뿐 아니라 공고 제목도 같이 매칭한다.
+          ...(companyQuery
+            ? [
+                {
+                  OR: [
+                    { companyName: { contains: companyQuery, mode: "insensitive" as const } },
+                    { title: { contains: companyQuery, mode: "insensitive" as const } },
+                  ],
+                },
+              ]
+            : []),
+        ],
         ...(roles.length && { role: { in: roles } }),
         ...(platforms.length && { platforms: { hasSome: platforms } }),
         ...(industries.length && { industries: { hasSome: industries } }),
         ...(stages.length && { stage: { in: stages } }),
-        ...(companyQuery && { companyName: { contains: companyQuery, mode: "insensitive" } }),
       },
       include: { analysis: { select: { taskKeywords: true } } },
       orderBy: { postedAt: "desc" },
+      take: 9,
     }),
     userId
       ? prisma.savedJob.findMany({ where: { userId }, select: { jobId: true } })
@@ -120,10 +133,9 @@ export default async function JobsPage({
         ]}
       />
 
-      <div className="flex items-baseline gap-2">
-        <h1 className="text-xl font-bold text-ink">채용 공고</h1>
-        <p className="text-sm text-neutral-500">{jobs.length}개의 공고</p>
-      </div>
+      <h1 className="text-xl font-bold text-ink">
+        <span className="text-primary">{jobs.length}개</span>의 공고가 열려있어요
+      </h1>
 
       <FilterBar />
 

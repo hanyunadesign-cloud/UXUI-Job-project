@@ -3,12 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { ChevronDown, Check } from "lucide-react";
 import { ROLES, PLATFORMS, INDUSTRIES, STAGES, STAGE_DESCRIPTIONS } from "@/lib/constants";
 import { SLIDER_MAX_YEARS } from "@/lib/experience";
 import { SortDropdown } from "@/components/SortDropdown";
 import { SearchBar } from "@/components/SearchBar";
 import { trackEvent } from "@/lib/analytics";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 // 경력 슬라이더의 [최소, 최대] 값에 맞춰 버튼에 표시할 라벨을 만든다.
 function experienceLabel(min: number, max: number): string {
@@ -204,17 +205,14 @@ export function FilterBar() {
               type="button"
               onClick={() => openDropdown(group.key)}
               className={clsx(
-                "flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",
+                "flex h-8 items-center gap-1.5 rounded-lg border px-3 text-sm font-medium shadow-sm transition-colors active:scale-[0.95]",
                 isActive
                   ? "border-primary bg-blue-50 text-primary"
-                  : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300"
+                  : "border-transparent bg-white text-neutral-500 hover:bg-neutral-50 hover:text-ink"
               )}
             >
               {isActive ? displayLabel : group.label}
-              <ChevronDownIcon
-                aria-hidden
-                className={clsx("h-4 w-4 shrink-0 transition-transform", isOpen && "rotate-180")}
-              />
+              <ChevronDown className={ICON_SIZE.sm} strokeWidth={1.75} aria-hidden />
             </button>
 
             {isOpen && isExperience && (
@@ -309,7 +307,7 @@ export function FilterBar() {
                           )}
                         </span>
                         {isSelected && (
-                          <CheckIcon aria-hidden strokeWidth={2.5} className="h-3.5 w-3.5 shrink-0" />
+                          <Check aria-hidden strokeWidth={2.5} className="h-3.5 w-3.5 shrink-0" />
                         )}
                       </button>
                     );
@@ -354,7 +352,7 @@ export function FilterBar() {
       )}
 
       <div className="ml-auto flex items-center gap-2">
-        <SearchBar paramKey="companyQuery" placeholder="기업 검색" />
+        <SearchBar paramKey="companyQuery" placeholder="기업, 직무명을 검색해보세요" />
         <SortDropdown />
       </div>
     </div>

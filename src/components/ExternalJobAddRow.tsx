@@ -40,7 +40,7 @@ export function ExternalJobAddRow() {
   };
 
   return (
-    <div className="mb-4 flex h-16 items-center gap-2 rounded-2xl border border-neutral-200 bg-white pl-4 pr-2">
+    <div className="mb-4 flex h-16 items-center gap-2 rounded-2xl border border-neutral-200 bg-white pl-4 pr-3.5">
       <Link className={clsx(ICON_SIZE.sm, "shrink-0 text-neutral-400")} aria-hidden />
       <input
         type="text"
@@ -57,7 +57,7 @@ export function ExternalJobAddRow() {
         type="button"
         onClick={submit}
         disabled={isSubmitting || !url.trim()}
-        className="flex h-[47px] shrink-0 items-center justify-center rounded-[14px] bg-primary px-5 text-sm font-medium text-white transition-colors hover:bg-primary-strong active:scale-[0.95] disabled:cursor-not-allowed disabled:bg-neutral-300"
+        className="flex shrink-0 items-center justify-center rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-strong active:scale-[0.95] disabled:cursor-not-allowed disabled:bg-neutral-300"
       >
         {isSubmitting ? "분석 중..." : "분석하고 저장"}
       </button>

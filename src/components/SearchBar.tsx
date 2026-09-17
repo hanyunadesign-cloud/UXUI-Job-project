@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Search } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import { ICON_SIZE } from "@/lib/design-tokens";
 
 // 사진 속 검색바 스타일(화이트 pill, 우측 돋보기 아이콘)을 재사용하는 공용 검색창.
 // paramKey로 어떤 URL 쿼리 파라미터를 읽고 쓸지 결정해, 같은 컴포넌트를 여러 페이지에서
@@ -46,7 +47,7 @@ export function SearchBar({
   return (
     <div
       className={clsx(
-        "flex h-[47px] w-56 shrink-0 items-center gap-2 rounded-full border border-neutral-200 bg-white px-4",
+        "flex h-8 w-72 shrink-0 items-center gap-2 rounded-lg bg-white px-3 shadow-sm",
         className
       )}
     >
@@ -59,15 +60,15 @@ export function SearchBar({
         }}
         onBlur={submit}
         placeholder={placeholder}
-        className="w-full flex-1 bg-transparent text-sm text-ink placeholder:text-neutral-400 focus:outline-none"
+        className="w-full flex-1 bg-transparent text-sm font-medium text-ink placeholder:text-neutral-300 focus:outline-none"
       />
       <button
         type="button"
         onClick={submit}
         aria-label="검색"
-        className="shrink-0 text-neutral-400 transition-colors hover:text-ink"
+        className="shrink-0 text-neutral-300 transition-colors hover:text-ink"
       >
-        <MagnifyingGlassIcon className="h-4 w-4" aria-hidden />
+        <Search className={ICON_SIZE.sm} strokeWidth={1.75} aria-hidden />
       </button>
     </div>
   );

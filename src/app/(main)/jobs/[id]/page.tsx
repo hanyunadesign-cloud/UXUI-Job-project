@@ -11,6 +11,7 @@ import { AnalysisPanel } from "@/components/AnalysisPanel";
 import { BackButton } from "@/components/BackButton";
 import { TrackPageView } from "@/components/TrackPageView";
 import { MarkJobViewed } from "@/components/MarkJobViewed";
+import { RecentlyViewedTracker } from "@/components/RecentlyViewedTracker";
 import { JobSummaryCard } from "@/components/JobSummaryCard";
 import { AppealJobPanel } from "@/components/AppealJobPanel";
 import { APPEAL_POINTS } from "@/lib/appeal-points-data";
@@ -58,6 +59,14 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         scrollDepthEventName="Job Detail Scroll Depth"
       />
       <MarkJobViewed jobId={job.id} />
+      <RecentlyViewedTracker
+        job={{
+          id: job.id,
+          title: job.title,
+          companyName: job.companyName,
+          companyLogo: job.companyLogo,
+        }}
+      />
       <BackButton />
 
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">

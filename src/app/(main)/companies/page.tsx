@@ -65,6 +65,7 @@ export default async function CompaniesPage({
     prisma.company.findMany({
       include: { jobs: { select: { title: true, archivedAt: true, applicationDeadline: true } } },
       orderBy: { createdAt: "asc" },
+      take: 9,
     }),
     userId ? prisma.preference.findUnique({ where: { userId } }) : Promise.resolve(null),
     userId
