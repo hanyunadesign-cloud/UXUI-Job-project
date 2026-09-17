@@ -114,6 +114,12 @@ export function FilterBar({
   // 복원한다: 1) 유저가 이 기기에서 마지막으로 남긴 필터 상태(있으면, 빈 상태 포함)
   // > 2) 온보딩 관심사 설정(한 번도 만진 적 없을 때만). 이미 URL에 필터가 담겨
   // 있으면(공유 링크·직접 선택 등) 그 값을 존중하고 절대 덮어쓰지 않는다.
+  //
+  // searchParams(정확히는 그 문자열 표현)를 의존성에 넣어서, 같은 라우트 안에서
+  // 파라미터 없는 /jobs로 다시 이동할 때도(예: GNB "UXUI Job" 로고 클릭 — 컴포넌트가
+  // 리마운트되지 않고 그대로 재사용됨) 매번 복원 로직이 다시 돌게 한다. 무한 루프
+  // 걱정은 없다: 복원해서 파라미터가 채워지면 hasAnyFilterParam이 true가 되어 바로
+  // 반환하고, "필터 없음" 상태를 저장해둔 경우엔 빈 값 그대로 두고 끝난다.
   useEffect(() => {
     const hasAnyFilterParam = FILTER_PARAM_KEYS.some((key) => searchParams.has(key));
     if (hasAnyFilterParam) return;
@@ -144,10 +150,9 @@ export function FilterBar({
     defaultFilters.stage.forEach((v) => params.append("stage", v));
     persistFilters(params);
     router.replace(`${pathname}?${params.toString()}`);
-    // 마운트 시 1회만 복원한다 — searchParams를 의존성에 넣으면 사용자가 직접 필터를
-    // 초기화한 직후에도 다시 복원을 시도하게 된다.
+    // defaultFilters·router는 안정적인 값이라 재실행 기준에서 뺀다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams.toString(), pathname]);
 
   const openDropdown = (key: string) => {
     if (openGroup === key) {
