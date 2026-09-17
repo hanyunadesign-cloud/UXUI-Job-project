@@ -1041,6 +1041,36 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemRest: "모바일웹·앱을 아우르는 크로스플랫폼 화면과 디자인 시스템을 새롭게 정비해가고 있어요.",
   },
 
+  "CJ ENM": {
+    companyUrl: "https://www.cjenm.com",
+    designBlogUrl: null,
+    domainPrimary: "미디어 · 엔터테인먼트",
+    domainSecondary: "Mnet, tvN 같은 방송 채널과 Mnet Plus 같은 K-pop 플랫폼을 운영하는 종합 미디어 기업이에요. 콘텐츠와 커머스, 팬덤 비즈니스를 함께 만들어요.",
+    domainKeywords: ["K-pop 플랫폼", "미디어·콘텐츠", "팬덤 비즈니스"],
+    problemLede: "콘텐츠 소비를 넘어 팬덤이 실제로 참여하고 지불하는 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "방송·콘텐츠 자산을 프로덕트와 커머스로 확장하는 서비스를 만들어요.",
+  },
+
+  "메가존": {
+    companyUrl: "https://www.megazone.com",
+    designBlogUrl: null,
+    domainPrimary: "IT 서비스 · AI 컨설팅",
+    domainSecondary: "클라우드, 데이터, AI 기술을 결합해 기업의 업무를 실제 서비스로 구현하고 운영까지 책임지는 IT 컨설팅 그룹이에요.",
+    domainKeywords: ["클라우드·AI", "제조업 AX", "B2B 컨설팅"],
+    problemLede: "고객사마다 다른 데이터와 업무를 실제로 쓸 수 있는 AI 서비스로 옮기는 게 핵심 문제예요.",
+    problemRest: "데이터 진단부터 화면 설계, 구축·운영까지 하나의 흐름으로 만들어요.",
+  },
+
+  "바카티오": {
+    companyUrl: "https://finestays.com",
+    designBlogUrl: null,
+    domainPrimary: "여행 · 숙박 플랫폼",
+    domainSecondary: "프리미엄 독채 숙소 예약 플랫폼 '파인스테이'와 숙박업주를 위한 운영 도구 '파인호스트'를 만드는 숙박 테크 스타트업이에요.",
+    domainKeywords: ["숙박 예약", "호스트 운영툴", "프리미엄 스테이"],
+    problemLede: "게스트에게는 좋은 숙소를 쉽게 찾게 하고, 호스트에게는 운영 부담을 줄여주는 게 핵심 문제예요.",
+    problemRest: "예약 경험과 운영 관리 도구를 함께 만들어 숙박 시장 전체를 더 매끄럽게 연결해요.",
+  },
+
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
