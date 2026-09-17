@@ -4,11 +4,12 @@ import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Check } from "lucide-react";
 import { Button } from "@/components/Button";
-import { trackEvent } from "@/lib/analytics";
 
+// 이메일 채용공고 알림은 실제로 발송되지 않는 기능(다이제스트 발송 로직이 꺼져 있음)이라,
+// 여기서 신청을 받으면 안 지켜지는 약속을 하게 된다. 그래서 이 화면은 로그인 완료
+// 안내만 하고 끝낸다 — 이메일 알림 신청 UI는 절대 다시 넣지 않는다.
 export function OnboardingSuccessModal({ initialOpen }: { initialOpen: boolean }) {
   const [open, setOpen] = useState(initialOpen);
-  const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -23,21 +24,6 @@ export function OnboardingSuccessModal({ initialOpen }: { initialOpen: boolean }
     router.replace(query ? `${pathname}?${query}` : pathname);
   };
 
-  const choose = async (emailOptIn: boolean) => {
-    trackEvent("Onboarding Email Opt-in Chosen", { emailOptIn });
-    setSubmitting(true);
-    try {
-      await fetch("/api/onboarding", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emailOptIn }),
-      });
-    } finally {
-      setSubmitting(false);
-      close();
-    }
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
       <div className="flex w-full max-w-sm flex-col gap-6 rounded-2xl bg-white p-6 text-center shadow-sheet">
@@ -50,22 +36,7 @@ export function OnboardingSuccessModal({ initialOpen }: { initialOpen: boolean }
             관심 조건에 맞는 UXUI 채용공고를 지금부터 살펴보세요.
           </p>
         </div>
-        <div className="flex flex-col gap-3 border-t border-neutral-100 pt-6">
-          <p className="text-sm font-medium text-ink">이메일로 채용공고 알림을 받으시겠어요?</p>
-          <div className="flex justify-center gap-2">
-            <Button
-              variant="secondary"
-              onClick={() => choose(false)}
-              disabled={submitting}
-              className="flex-1"
-            >
-              괜찮아요
-            </Button>
-            <Button onClick={() => choose(true)} disabled={submitting} className="flex-1">
-              받을래요
-            </Button>
-          </div>
-        </div>
+        <Button onClick={close}>확인</Button>
       </div>
     </div>
   );
