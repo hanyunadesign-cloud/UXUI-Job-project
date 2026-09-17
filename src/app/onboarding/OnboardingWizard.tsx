@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
 import { Button } from "@/components/Button";
@@ -39,12 +39,23 @@ export function OnboardingWizard({
   const isLastStep = stepIndex === STEPS.length - 1;
   const selected = selections[step.key];
 
+  // 온보딩 퍼널의 시작(t0) — 스텝별 이탈률을 여기서부터 계산할 수 있게 마운트 시 1회.
+  useEffect(() => {
+    trackEvent("Onboarding Started", { isEditing: Boolean(isEditing) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const toggleOption = (option: string) => {
     setSelections((prev) => {
       const current = prev[step.key];
-      const next = current.includes(option)
-        ? current.filter((v) => v !== option)
-        : [...current, option];
+      const isAdding = !current.includes(option);
+      const next = isAdding ? [...current, option] : current.filter((v) => v !== option);
+      trackEvent("Onboarding Option Clicked", {
+        step: step.key,
+        stepIndex,
+        option,
+        checked: isAdding,
+      });
       return { ...prev, [step.key]: next };
     });
   };

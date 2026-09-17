@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/Button";
@@ -25,6 +25,14 @@ function LoginPageContent() {
   // 확인) / auth_gate(마이페이지·온보딩처럼 로그인 필요한 페이지 직접 접근) / unknown(그 외,
   // 예: 세션 만료로 NextAuth가 자체적으로 리다이렉트한 경우).
   const entrySource = searchParams.get("source") ?? "unknown";
+  const authError = searchParams.get("error");
+
+  // NextAuth는 로그인 실패 시 별도 에러 페이지 없이 이 로그인 페이지로 ?error=...를
+  // 붙여 리다이렉트한다 — 여태 이 값을 읽지 않아서 실패가 완전히 무음 처리되고 있었다.
+  useEffect(() => {
+    if (authError) trackEvent("Login Failed", { error: authError, entrySource });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authError]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-8 px-6 text-center">

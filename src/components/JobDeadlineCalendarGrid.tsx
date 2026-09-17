@@ -410,7 +410,10 @@ export function JobDeadlineCalendarGrid({
             <AddEntryForm
               key={addForm.day}
               defaultDate={`${year}-${pad2(month)}-${pad2(addForm.day)}`}
-              onCancel={closeOverlays}
+              onCancel={() => {
+                trackEvent("Calendar Add Entry Cancelled");
+                closeOverlays();
+              }}
               onSubmit={handleAddSubmit}
             />
           ) : selectedJob ? (
@@ -462,6 +465,7 @@ function UpcomingDeadlineList({ month, jobs }: { month: number; jobs: UpcomingDe
             <Link
               key={job.id}
               href={`/jobs/${job.id}`}
+              onClick={() => trackEvent("Calendar Upcoming Job Clicked", { jobId: job.id, month })}
               className="flex items-center gap-2.5 rounded-xl border border-neutral-100 p-2.5 transition-colors hover:bg-neutral-50"
             >
               <CompanyLogo
@@ -514,6 +518,7 @@ function JobPreview({
               href={job.url}
               target="_blank"
               rel="noreferrer"
+              onClick={() => trackEvent("Calendar Custom Entry Link Clicked", { entryId: job.id })}
               className="truncate text-xs text-primary hover:underline"
             >
               {job.url}
@@ -547,6 +552,7 @@ function JobPreview({
           <p className="text-xs text-neutral-600">{job.deadlineLabel}</p>
           <Link
             href={`/jobs/${job.id}`}
+            onClick={() => trackEvent("Calendar Job Preview Detail Clicked", { jobId: job.id })}
             className="w-full rounded-lg bg-primary py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-primary-strong"
           >
             공고 자세히 보기

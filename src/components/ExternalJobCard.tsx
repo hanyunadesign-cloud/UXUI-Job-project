@@ -86,7 +86,11 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
         </div>
       </div>
 
-      <Link href={`/mypage/external/${job.id}`} className="flex flex-col gap-3">
+      <Link
+        href={`/mypage/external/${job.id}`}
+        className="flex flex-col gap-3"
+        onClick={() => trackEvent("External Job Card Clicked", { jobId: job.id, companyName: job.companyName })}
+      >
         <h3 className="text-h3 line-clamp-2 min-h-11 text-ink">
           {job.title}
         </h3>

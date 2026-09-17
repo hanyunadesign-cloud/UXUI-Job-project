@@ -159,6 +159,7 @@ export function FilterBar({
       setOpenGroup(null);
       return;
     }
+    trackEvent("Job Filter Dropdown Opened", { key });
     if (key === "experience") {
       setExpStaged([committedExpMin, committedExpMax]);
     } else {
@@ -195,7 +196,9 @@ export function FilterBar({
 
   const toggleStaged = (key: string, value: string) => {
     setStaged((prev) => {
-      const next = prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value];
+      const isAdding = !prev.includes(value);
+      const next = isAdding ? [...prev, value] : prev.filter((v) => v !== value);
+      trackEvent("Job Filter Option Clicked", { key, value, checked: isAdding });
       commitToUrl(key, next);
       return next;
     });
@@ -203,7 +206,9 @@ export function FilterBar({
 
   const toggleSelectAll = (key: string, allValues: string[]) => {
     setStaged((prev) => {
-      const next = prev.length === allValues.length ? [] : allValues;
+      const checked = prev.length !== allValues.length;
+      const next = checked ? allValues : [];
+      trackEvent("Job Filter Select All Clicked", { key, checked });
       commitToUrl(key, next);
       return next;
     });
@@ -281,6 +286,12 @@ export function FilterBar({
                       onChange={(e) =>
                         setExpStaged(([, max]) => [Math.min(Number(e.target.value), max), max])
                       }
+                      onPointerUp={() =>
+                        trackEvent("Job Filter Experience Slider Dragged", {
+                          min: expStaged[0],
+                          max: expStaged[1],
+                        })
+                      }
                       aria-label="최소 경력"
                       className={clsx("dual-range-thumb", expMinOnTop ? "z-20" : "z-10")}
                     />
@@ -292,6 +303,12 @@ export function FilterBar({
                       value={expStaged[1]}
                       onChange={(e) =>
                         setExpStaged(([min]) => [min, Math.max(Number(e.target.value), min)])
+                      }
+                      onPointerUp={() =>
+                        trackEvent("Job Filter Experience Slider Dragged", {
+                          min: expStaged[0],
+                          max: expStaged[1],
+                        })
                       }
                       aria-label="최대 경력"
                       className={clsx("dual-range-thumb", expMinOnTop ? "z-10" : "z-20")}

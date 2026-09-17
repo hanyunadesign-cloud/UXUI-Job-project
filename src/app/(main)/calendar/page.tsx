@@ -142,7 +142,12 @@ export default async function CalendarPage({
 
   return (
     <div className="flex w-full flex-col gap-5">
-      <TrackPageView name="Calendar Viewed" props={{ year, month }} />
+      <TrackPageView
+        name="Calendar Viewed"
+        props={{ year, month }}
+        dwellEventName="Calendar Time Spent"
+        scrollDepthEventName="Calendar Scroll Depth"
+      />
 
       <JobDeadlineCalendarGrid
         year={year}

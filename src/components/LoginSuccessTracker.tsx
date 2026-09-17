@@ -16,6 +16,9 @@ export function LoginSuccessTracker({ isNewUser }: { isNewUser: boolean }) {
   useEffect(() => {
     const entrySource = searchParams.get("entrySource") ?? "unknown";
     trackEvent("Login Succeeded", { isNewUser, entrySource });
+    // 최초 가입자만 별도 이벤트로도 남긴다 — "Login Succeeded"의 isNewUser 속성으로
+    // 걸러내는 대신, GA4/Mixpanel에서 가입 전용 퍼널을 바로 만들 수 있게 한다.
+    if (isNewUser) trackEvent("Signup Completed", { entrySource });
     const params = new URLSearchParams(searchParams.toString());
     params.delete("loginSuccess");
     params.delete("isNewUser");
