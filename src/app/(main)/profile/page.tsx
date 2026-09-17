@@ -50,7 +50,15 @@ export default async function ProfilePage() {
             ))}
           </div>
         ) : (
-          <p className="text-xs text-neutral-400">아직 설정한 관심사가 없어요.</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-neutral-400">아직 설정한 관심사가 없어요.</p>
+            <Link
+              href="/onboarding"
+              className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-primary-strong transition-colors hover:bg-blue-100"
+            >
+              설정하러 가기
+            </Link>
+          </div>
         )}
       </div>
 

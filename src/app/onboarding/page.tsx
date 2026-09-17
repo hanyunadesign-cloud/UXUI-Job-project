@@ -18,7 +18,15 @@ export default async function OnboardingPage({
 
   const userId = (session.user as { id: string }).id;
   const existing = await prisma.preference.findUnique({ where: { userId } });
-  if (existing) redirect("/jobs");
+  // 온보딩 도중 아무 항목도 고르지 않고 끝내버린 유저는 실질적으로 아직 온보딩을
+  // 안 한 것과 같으니, 마이페이지 "설정하러 가기"로 다시 들어올 수 있게 통과시킨다.
+  const hasRealPreference =
+    existing &&
+    (existing.roles.length > 0 ||
+      existing.platforms.length > 0 ||
+      existing.industries.length > 0 ||
+      existing.stages.length > 0);
+  if (hasRealPreference) redirect("/jobs");
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
