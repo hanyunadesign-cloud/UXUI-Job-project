@@ -20,6 +20,11 @@ const APPLICATION_PERIOD_PATTERNS = [
   /\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}.{0,12}?까지/,
   /\d{4}년\s?\d{1,2}월\s?\d{1,2}일.{0,12}?까지/,
   /\d{1,2}월\s?\d{1,2}일\s?까지/,
+  // "9월 27일 일요일 23시 59분 마감"처럼 "까지"가 아니라 "마감"으로 끝나는 경우도 있다.
+  // 요일/시각 표기가 "까지"보다 길게 끼어드는 편이라 20자까지 허용한다.
+  /\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}.{0,20}?마감/,
+  /\d{4}년\s?\d{1,2}월\s?\d{1,2}일.{0,20}?마감/,
+  /\d{1,2}월\s?\d{1,2}일.{0,20}?마감/,
   // "~2026.08.21(금) 23:59"처럼 "까지"도 없이 "~"만 붙은 채로 끝나는 경우("~"가 "이 날짜까지"의
   // 줄임 표기로 흔히 쓰인다). "까지"는 있어도 되고 없어도 된다.
   /~\s?\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}(?:.{0,12}?까지)?/,
@@ -77,6 +82,21 @@ export function extractApplicationDeadline(description: string): Date | null {
   if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
 
   m = description.match(/(\d{1,2})월\s?(\d{1,2})일\s?까지/);
+  if (m) {
+    const month = Number(m[1]);
+    const day = Number(m[2]);
+    return new Date(inferYear(month, day, now), month - 1, day);
+  }
+
+  // "9월 27일 일요일 23시 59분 마감"처럼 "까지"가 아니라 "마감"으로 끝나는 경우도 있다.
+  // 요일/시각 표기가 "까지"보다 길게 끼어드는 편이라 20자까지 허용한다.
+  m = description.match(/(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2}).{0,20}?마감/);
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+
+  m = description.match(/(\d{4})년\s?(\d{1,2})월\s?(\d{1,2})일.{0,20}?마감/);
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+
+  m = description.match(/(\d{1,2})월\s?(\d{1,2})일.{0,20}?마감/);
   if (m) {
     const month = Number(m[1]);
     const day = Number(m[2]);
