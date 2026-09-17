@@ -72,7 +72,13 @@ const FILTER_GROUPS = [
   },
 ] as const;
 
-export function FilterBar() {
+export function FilterBar({
+  defaultFilters,
+}: {
+  // 로그인 유저의 온보딩 관심사 설정값. URL에도 저장된 필터도 없을 때만 최후순위로
+  // 적용되는 기본값이다(공유 링크·직접 선택·이전에 저장한 필터가 항상 우선한다).
+  defaultFilters?: { role: string[]; platform: string[]; industry: string[]; stage: string[] };
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -97,15 +103,34 @@ export function FilterBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 필터 없이(공유 링크 등이 아닌 맨 URL로) 들어왔을 때만, 마지막으로 저장해둔 필터를
-  // 복원한다. 이미 URL에 필터가 담겨 있으면 그 값을 존중하고 덮어쓰지 않는다.
+  // 필터 없이(공유 링크 등이 아닌 맨 URL로) 들어왔을 때만, 우선순위대로 기본값을
+  // 복원한다: 1) 이전에 저장해둔 필터 > 2) 온보딩 관심사 설정. 이미 URL에 필터가
+  // 담겨 있으면(공유 링크·직접 선택 등) 그 값을 존중하고 절대 덮어쓰지 않는다.
   useEffect(() => {
     const hasAnyFilterParam = FILTER_PARAM_KEYS.some((key) => searchParams.has(key));
     if (hasAnyFilterParam) return;
+
     const saved = localStorage.getItem(FILTERS_STORAGE_KEY);
-    if (!saved) return;
+    if (saved) {
+      const params = new URLSearchParams(searchParams.toString());
+      new URLSearchParams(saved).forEach((value, key) => params.append(key, value));
+      router.replace(`${pathname}?${params.toString()}`);
+      return;
+    }
+
+    if (!defaultFilters) return;
+    const hasAnyDefault =
+      defaultFilters.role.length > 0 ||
+      defaultFilters.platform.length > 0 ||
+      defaultFilters.industry.length > 0 ||
+      defaultFilters.stage.length > 0;
+    if (!hasAnyDefault) return;
+
     const params = new URLSearchParams(searchParams.toString());
-    new URLSearchParams(saved).forEach((value, key) => params.append(key, value));
+    defaultFilters.role.forEach((v) => params.append("role", v));
+    defaultFilters.platform.forEach((v) => params.append("platform", v));
+    defaultFilters.industry.forEach((v) => params.append("industry", v));
+    defaultFilters.stage.forEach((v) => params.append("stage", v));
     router.replace(`${pathname}?${params.toString()}`);
     // 마운트 시 1회만 복원한다 — searchParams를 의존성에 넣으면 사용자가 직접 필터를
     // 초기화한 직후에도 다시 복원을 시도하게 된다.

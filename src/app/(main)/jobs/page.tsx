@@ -49,7 +49,7 @@ export default async function JobsPage({
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
   // DB가 원격(서울) 리전에 있어 왕복 지연이 크므로, 서로 의존하지 않는 조회는 병렬로 묶는다.
-  const [matchedJobs, savedJobsList] = await Promise.all([
+  const [matchedJobs, savedJobsList, preference] = await Promise.all([
     prisma.job.findMany({
       where: {
         archivedAt: null,
@@ -78,6 +78,7 @@ export default async function JobsPage({
     userId
       ? prisma.savedJob.findMany({ where: { userId }, select: { jobId: true } })
       : Promise.resolve([]),
+    userId ? prisma.preference.findUnique({ where: { userId } }) : Promise.resolve(null),
   ]);
 
   // experienceLevel은 "3~10년" 같은 자유 형식 텍스트라 Prisma where로 바로 못 걸러서,
@@ -136,7 +137,18 @@ export default async function JobsPage({
         <span className="text-primary">{jobs.length}개</span>의 공고가 열려있어요
       </h1>
 
-      <FilterBar />
+      <FilterBar
+        defaultFilters={
+          preference
+            ? {
+                role: preference.roles,
+                platform: preference.platforms,
+                industry: preference.industries,
+                stage: preference.stages,
+              }
+            : undefined
+        }
+      />
 
       {sortedJobs.length === 0 ? (
         <EmptyState

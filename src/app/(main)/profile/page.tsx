@@ -34,7 +34,17 @@ export default async function ProfilePage() {
       <h1 className="text-xl font-bold text-ink">마이페이지</h1>
 
       <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5">
-        <h2 className="text-sm font-semibold text-ink">관심사 설정</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-ink">관심사 설정</h2>
+          {preferenceGroups.length > 0 && (
+            <Link
+              href="/onboarding?edit=1"
+              className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-primary-strong transition-colors hover:bg-blue-100"
+            >
+              재설정
+            </Link>
+          )}
+        </div>
 
         {preferenceGroups.length > 0 ? (
           <div className="flex flex-col gap-3">
@@ -53,7 +63,7 @@ export default async function ProfilePage() {
           <div className="flex items-center justify-between">
             <p className="text-xs text-neutral-400">아직 설정한 관심사가 없어요.</p>
             <Link
-              href="/onboarding"
+              href="/onboarding?edit=1"
               className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-primary-strong transition-colors hover:bg-blue-100"
             >
               설정하러 가기
