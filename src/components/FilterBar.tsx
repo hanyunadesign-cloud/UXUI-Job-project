@@ -21,8 +21,18 @@ function experienceLabel(min: number, max: number): string {
   return `${left} ~ ${max}년`;
 }
 
-// 브라우저에 마지막 필터 선택을 기억해뒀다가, 필터 없이 새로 들어왔을 때 복원하는 데 쓰는 키.
-// 키워드 검색(companyQuery)·정렬(sort)은 "필터"가 아니라 그때그때의 의도라 대상에서 뺀다.
+// 유저가 마지막으로 직접 조정(선택/삭제/초기화)한 필터 상태를 기억해뒀다가, 필터 없이
+// 다시 들어왔을 때(다른 탭 다녀오기, 사이트 재방문 등) 복원하는 데 쓰는 키. localStorage라
+// 브라우저를 닫거나 다른 날 다시 와도 유지된다. 키워드 검색(companyQuery)·정렬(sort)은
+// "필터"가 아니라 그때그때의 의도라 대상에서 뺀다.
+//
+// 저장값은 항상 이 키가 "존재하는지 여부"로 두 가지를 구분한다:
+//   - 키가 없음(null)            → 유저가 이 기기에서 필터를 한 번도 만진 적 없음
+//                                    → 온보딩 관심사 기본값을 적용(있으면)
+//   - 키가 있음(빈 문자열 포함)   → 유저가 마지막으로 남긴 상태 그대로 복원(빈 문자열이면
+//                                    "마지막에 필터를 초기화했다"는 뜻 → 필터 없이 보여줌)
+// 그래서 초기화 시에도 removeItem이 아니라 빈 문자열을 저장해야, 다음에 다시 왔을 때
+// 온보딩 기본값이 부활하지 않고 "필터 없음" 상태가 그대로 유지된다.
 const FILTER_PARAM_KEYS = ["experienceMin", "experienceMax", "stage", "industry", "platform", "role"] as const;
 const FILTERS_STORAGE_KEY = "uxui-job:jobs-filters";
 
@@ -34,14 +44,11 @@ function extractFilterParams(params: URLSearchParams): URLSearchParams {
   return filtered;
 }
 
-// 필터가 하나라도 있으면 저장하고, 전부 해제됐으면(초기화) 저장된 것도 같이 지운다.
+// 항상 저장한다(필터가 하나도 없어도 빈 문자열로 저장) — "초기화했다"는 사실 자체를
+// 남겨야 다음 방문에서 온보딩 기본값이 되살아나지 않는다.
 function persistFilters(params: URLSearchParams) {
   const filtered = extractFilterParams(params);
-  if (filtered.toString()) {
-    localStorage.setItem(FILTERS_STORAGE_KEY, filtered.toString());
-  } else {
-    localStorage.removeItem(FILTERS_STORAGE_KEY);
-  }
+  localStorage.setItem(FILTERS_STORAGE_KEY, filtered.toString());
 }
 
 const FILTER_GROUPS = [
@@ -72,7 +79,13 @@ const FILTER_GROUPS = [
   },
 ] as const;
 
-export function FilterBar() {
+export function FilterBar({
+  defaultFilters,
+}: {
+  // 로그인 유저의 온보딩 관심사 설정값. URL에도 저장된 필터도 없을 때만 최후순위로
+  // 적용되는 기본값이다(공유 링크·직접 선택·이전에 저장한 필터가 항상 우선한다).
+  defaultFilters?: { role: string[]; platform: string[]; industry: string[]; stage: string[] };
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -97,20 +110,49 @@ export function FilterBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 필터 없이(공유 링크 등이 아닌 맨 URL로) 들어왔을 때만, 마지막으로 저장해둔 필터를
-  // 복원한다. 이미 URL에 필터가 담겨 있으면 그 값을 존중하고 덮어쓰지 않는다.
+  // 필터 없이(공유 링크 등이 아닌 맨 URL로) 들어왔을 때만, 우선순위대로 기본값을
+  // 복원한다: 1) 유저가 이 기기에서 마지막으로 남긴 필터 상태(있으면, 빈 상태 포함)
+  // > 2) 온보딩 관심사 설정(한 번도 만진 적 없을 때만). 이미 URL에 필터가 담겨
+  // 있으면(공유 링크·직접 선택 등) 그 값을 존중하고 절대 덮어쓰지 않는다.
+  //
+  // searchParams(정확히는 그 문자열 표현)를 의존성에 넣어서, 같은 라우트 안에서
+  // 파라미터 없는 /jobs로 다시 이동할 때도(예: GNB "UXUI Job" 로고 클릭 — 컴포넌트가
+  // 리마운트되지 않고 그대로 재사용됨) 매번 복원 로직이 다시 돌게 한다. 무한 루프
+  // 걱정은 없다: 복원해서 파라미터가 채워지면 hasAnyFilterParam이 true가 되어 바로
+  // 반환하고, "필터 없음" 상태를 저장해둔 경우엔 빈 값 그대로 두고 끝난다.
   useEffect(() => {
     const hasAnyFilterParam = FILTER_PARAM_KEYS.some((key) => searchParams.has(key));
     if (hasAnyFilterParam) return;
+
+    // null이 아니면(빈 문자열이라도) 유저가 이미 한 번 이상 필터를 만졌다는 뜻이라,
+    // 그 상태를 그대로 복원한다 — 온보딩 기본값으로 되돌리지 않는다.
     const saved = localStorage.getItem(FILTERS_STORAGE_KEY);
-    if (!saved) return;
+    if (saved !== null) {
+      if (!saved) return; // 마지막 상태가 "필터 없음"이었으면 그대로 둔다.
+      const params = new URLSearchParams(searchParams.toString());
+      new URLSearchParams(saved).forEach((value, key) => params.append(key, value));
+      router.replace(`${pathname}?${params.toString()}`);
+      return;
+    }
+
+    if (!defaultFilters) return;
+    const hasAnyDefault =
+      defaultFilters.role.length > 0 ||
+      defaultFilters.platform.length > 0 ||
+      defaultFilters.industry.length > 0 ||
+      defaultFilters.stage.length > 0;
+    if (!hasAnyDefault) return;
+
     const params = new URLSearchParams(searchParams.toString());
-    new URLSearchParams(saved).forEach((value, key) => params.append(key, value));
+    defaultFilters.role.forEach((v) => params.append("role", v));
+    defaultFilters.platform.forEach((v) => params.append("platform", v));
+    defaultFilters.industry.forEach((v) => params.append("industry", v));
+    defaultFilters.stage.forEach((v) => params.append("stage", v));
+    persistFilters(params);
     router.replace(`${pathname}?${params.toString()}`);
-    // 마운트 시 1회만 복원한다 — searchParams를 의존성에 넣으면 사용자가 직접 필터를
-    // 초기화한 직후에도 다시 복원을 시도하게 된다.
+    // defaultFilters·router는 안정적인 값이라 재실행 기준에서 뺀다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams.toString(), pathname]);
 
   const openDropdown = (key: string) => {
     if (openGroup === key) {
@@ -342,7 +384,9 @@ export function FilterBar() {
           onClick={() => {
             trackEvent("Job Filters Reset");
             setOpenGroup(null);
-            localStorage.removeItem(FILTERS_STORAGE_KEY);
+            // 빈 문자열로 "명시적으로 초기화했다"를 남긴다 — 그래야 다음 방문에서
+            // 온보딩 기본값이 되살아나지 않고 "필터 없음" 상태가 그대로 유지된다.
+            localStorage.setItem(FILTERS_STORAGE_KEY, "");
             router.push(pathname);
           }}
           className="ml-1 text-xs font-medium text-neutral-400 underline underline-offset-2 hover:text-ink"

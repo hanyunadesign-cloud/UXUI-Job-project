@@ -19,39 +19,58 @@ export default async function ProfilePage() {
   const userId = (session.user as { id: string }).id;
   const preference = await prisma.preference.findUnique({ where: { userId } });
 
+  const preferenceGroups = preference
+    ? [
+        { label: "관심 직무", values: preference.roles },
+        { label: "매체", values: preference.platforms },
+        { label: "산업", values: preference.industries },
+        { label: "규모", values: preference.stages },
+      ].filter((group) => group.values.length > 0)
+    : [];
+
   return (
     <div className="flex flex-col gap-8">
       <TrackPageView name="Profile Page Viewed" dwellEventName="Profile Page Time Spent" />
       <h1 className="text-xl font-bold text-ink">마이페이지</h1>
 
-      {preference ? (
-        <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5">
+      <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5">
+        <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-ink">관심사 설정</h2>
-
-          <div className="flex flex-col gap-3">
-            {[
-              { label: "관심 직무", values: preference.roles },
-              { label: "매체", values: preference.platforms },
-              { label: "산업", values: preference.industries },
-              { label: "규모", values: preference.stages },
-            ].map(
-              ({ label, values }) =>
-                values.length > 0 && (
-                  <div key={label} className="flex items-start gap-3">
-                    <p className="w-16 shrink-0 pt-1 text-xs text-neutral-400">{label}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {values.map((value) => (
-                        <Badge key={value}>{value}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                )
-            )}
-          </div>
+          {preferenceGroups.length > 0 && (
+            <Link
+              href="/onboarding?edit=1"
+              className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-primary-strong transition-colors hover:bg-blue-100"
+            >
+              재설정
+            </Link>
+          )}
         </div>
-      ) : (
-        <p className="text-sm text-neutral-500">아직 관심사 설정 정보가 없어요.</p>
-      )}
+
+        {preferenceGroups.length > 0 ? (
+          <div className="flex flex-col gap-3">
+            {preferenceGroups.map(({ label, values }) => (
+              <div key={label} className="flex items-start gap-3">
+                <p className="w-16 shrink-0 pt-1 text-xs text-neutral-400">{label}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {values.map((value) => (
+                    <Badge key={value}>{value}</Badge>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-neutral-400">아직 설정한 관심사가 없어요.</p>
+            <Link
+              href="/onboarding?edit=1"
+              className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-primary-strong transition-colors hover:bg-blue-100"
+            >
+              설정하러 가기
+            </Link>
+          </div>
+        )}
+      </div>
 
       <RecentlyViewedJobs />
 

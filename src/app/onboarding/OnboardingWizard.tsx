@@ -23,10 +23,16 @@ const EMPTY_SELECTIONS: Selections = {
   stages: [],
 };
 
-export function OnboardingWizard() {
+export function OnboardingWizard({
+  initialSelections,
+  isEditing,
+}: {
+  initialSelections?: Selections;
+  isEditing?: boolean;
+}) {
   const router = useRouter();
   const [stepIndex, setStepIndex] = useState(0);
-  const [selections, setSelections] = useState<Selections>(EMPTY_SELECTIONS);
+  const [selections, setSelections] = useState<Selections>(initialSelections ?? EMPTY_SELECTIONS);
   const [submitting, setSubmitting] = useState(false);
 
   const step = STEPS[stepIndex];
@@ -70,7 +76,7 @@ export function OnboardingWizard() {
         industries: selections.industries,
         stages: selections.stages,
       });
-      router.push("/jobs?onboarded=1");
+      router.push(isEditing ? "/profile" : "/jobs?onboarded=1");
     } finally {
       setSubmitting(false);
     }
@@ -82,6 +88,13 @@ export function OnboardingWizard() {
   };
 
   const handleSkipAll = async () => {
+    // 이미 설정해둔 관심사를 고치러 들어온 경우엔, 저장 없이 그냥 원래 있던 값을
+    // 지키며 마이페이지로 돌아간다 — 빈 값으로 덮어써 버리면 안 된다.
+    if (isEditing) {
+      trackEvent("Onboarding Edit Cancelled");
+      router.push("/profile");
+      return;
+    }
     setSubmitting(true);
     try {
       await savePreference(EMPTY_SELECTIONS);
@@ -144,7 +157,7 @@ export function OnboardingWizard() {
               disabled={submitting}
               className="!px-0 !py-0"
             >
-              나중에 설정하기
+              {isEditing ? "취소" : "나중에 설정하기"}
             </Button>
           ) : (
             <Button variant="tertiary" onClick={handlePrev} disabled={submitting}>
