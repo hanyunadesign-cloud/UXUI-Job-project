@@ -75,6 +75,7 @@ export function OnboardingWizard({
         platforms: selections.platforms,
         industries: selections.industries,
         stages: selections.stages,
+        isEditing,
       });
       router.push(isEditing ? "/profile" : "/jobs?onboarded=1");
     } finally {

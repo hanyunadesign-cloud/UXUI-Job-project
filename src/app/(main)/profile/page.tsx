@@ -7,6 +7,7 @@ import { Badge } from "@/components/Badge";
 import { LogoutButton } from "@/components/LogoutButton";
 import { RecentlyViewedJobs } from "@/components/RecentlyViewedJobs";
 import { TrackPageView } from "@/components/TrackPageView";
+import { PreferenceEditLink } from "@/components/PreferenceEditLink";
 
 // 로컬 미니 시안 전용: "마이페이지"는 관심사 설정/알림 같은 계정 설정 전용 페이지다.
 // 저장한 공고 목록은 GNB "저장 공고"(/mypage)에서 따로 본다 — 서로 다른 탭.
@@ -37,12 +38,7 @@ export default async function ProfilePage() {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-ink">관심사 설정</h2>
           {preferenceGroups.length > 0 && (
-            <Link
-              href="/onboarding?edit=1"
-              className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-primary-strong transition-colors hover:bg-blue-100"
-            >
-              재설정
-            </Link>
+            <PreferenceEditLink label="재설정" hasExistingPreference />
           )}
         </div>
 
@@ -62,12 +58,7 @@ export default async function ProfilePage() {
         ) : (
           <div className="flex items-center justify-between">
             <p className="text-xs text-neutral-400">아직 설정한 관심사가 없어요.</p>
-            <Link
-              href="/onboarding?edit=1"
-              className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-primary-strong transition-colors hover:bg-blue-100"
-            >
-              설정하러 가기
-            </Link>
+            <PreferenceEditLink label="설정하러 가기" hasExistingPreference={false} />
           </div>
         )}
       </div>

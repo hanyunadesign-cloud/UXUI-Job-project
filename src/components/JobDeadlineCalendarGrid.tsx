@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Plus, ChevronDown } from "lucide-react";
 import { clsx } from "clsx";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { ICON_SIZE } from "@/lib/design-tokens";
+import { trackEvent } from "@/lib/analytics";
 
 // 로컬 미니 시안 전용 — 배포판(origin/main)에는 없음.
 
@@ -156,6 +157,7 @@ export function JobDeadlineCalendarGrid({
   }
 
   function expandDay(day: number) {
+    trackEvent("Calendar Day Expanded", { year, month, day });
     setExpandedDays((prev) => {
       const next = new Set(prev);
       next.add(day);
@@ -164,11 +166,19 @@ export function JobDeadlineCalendarGrid({
   }
 
   function openAddForm(day: number) {
+    trackEvent("Calendar Add Entry Opened", { year, month, day });
     setSelectedJob(null);
     setAddForm({ day });
   }
 
   function openJobPreview(job: CalendarJobSummary, day: number) {
+    trackEvent("Calendar Job Preview Opened", {
+      jobId: job.isCustom ? null : job.id,
+      isCustom: Boolean(job.isCustom),
+      year,
+      month,
+      day,
+    });
     setAddForm(null);
     setSelectedJob({ job, day });
   }
@@ -184,6 +194,7 @@ export function JobDeadlineCalendarGrid({
       month: entryMonth,
       day: entryDay,
     };
+    trackEvent("Calendar Custom Entry Added", { year: entryYear, month: entryMonth, day: entryDay });
     const next = [...customEntries, entry];
     setCustomEntries(next);
     saveCustomEntries(next);
@@ -191,6 +202,7 @@ export function JobDeadlineCalendarGrid({
   }
 
   function handleDeleteCustom(id: string) {
+    trackEvent("Calendar Custom Entry Deleted");
     const next = customEntries.filter((e) => e.id !== id);
     setCustomEntries(next);
     saveCustomEntries(next);
@@ -210,6 +222,7 @@ export function JobDeadlineCalendarGrid({
             <Link
               href={`/calendar?month=${prevMonthParam}`}
               aria-label="이전 달"
+              onClick={() => trackEvent("Calendar Month Navigated", { from: `${year}-${pad2(month)}`, to: prevMonthParam, direction: "prev" })}
               className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
             >
               <ChevronLeft className={ICON_SIZE.sm} strokeWidth={1.75} aria-hidden />
@@ -217,6 +230,7 @@ export function JobDeadlineCalendarGrid({
             <Link
               href={`/calendar?month=${nextMonthParam}`}
               aria-label="다음 달"
+              onClick={() => trackEvent("Calendar Month Navigated", { from: `${year}-${pad2(month)}`, to: nextMonthParam, direction: "next" })}
               className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
             >
               <ChevronRight className={ICON_SIZE.sm} strokeWidth={1.75} aria-hidden />
@@ -227,7 +241,10 @@ export function JobDeadlineCalendarGrid({
         <div ref={filterRef} className="relative">
           <button
             type="button"
-            onClick={() => setFilterOpen((v) => !v)}
+            onClick={() => {
+              trackEvent("Calendar Filter Dropdown Toggled", { open: !filterOpen });
+              setFilterOpen((v) => !v);
+            }}
             className="grid h-8 rounded-lg bg-white px-3 text-sm font-medium text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
           >
             {/* 정렬 버튼과 동일한 사이징 트릭: 가장 긴 라벨 기준으로 너비를 고정해
@@ -251,6 +268,7 @@ export function JobDeadlineCalendarGrid({
                   key={opt.value}
                   type="button"
                   onClick={() => {
+                    trackEvent("Calendar Filter Changed", { value: opt.value });
                     setViewFilter(opt.value);
                     setFilterOpen(false);
                   }}
