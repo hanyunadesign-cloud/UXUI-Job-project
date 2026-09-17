@@ -1071,6 +1071,16 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemRest: "예약 경험과 운영 관리 도구를 함께 만들어 숙박 시장 전체를 더 매끄럽게 연결해요.",
   },
 
+  "하나카드": {
+    companyUrl: "https://www.hanacard.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "핀테크 · 카드사",
+    domainSecondary: "하나금융그룹의 카드사로, 하나머니 앱/웹 등 디지털 채널에서 결제·카드 서비스를 제공해요.",
+    domainKeywords: ["카드·결제", "하나머니", "디지털 채널"],
+    problemLede: "카드 결제라는 익숙한 서비스를 디지털 채널에서 더 편리하고 경쟁력 있게 만드는 게 핵심 문제예요.",
+    problemRest: "채널별 UX를 분석하고 전략을 세워 하나머니 앱/웹 경험을 계속 개선해요.",
+  },
+
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
