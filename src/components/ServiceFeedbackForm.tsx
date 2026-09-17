@@ -68,7 +68,10 @@ export function ServiceFeedbackForm() {
             <button
               key={option}
               type="button"
-              onClick={() => setCategory(isSelected ? null : option)}
+              onClick={() => {
+                trackEvent("Service Feedback Category Selected", { category: option, checked: !isSelected });
+                setCategory(isSelected ? null : option);
+              }}
               aria-pressed={isSelected}
               className={clsx(
                 "rounded-full border px-4 py-2 text-sm font-medium transition-colors active:scale-[0.95]",

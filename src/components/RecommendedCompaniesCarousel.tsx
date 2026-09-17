@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ICON_SIZE } from "@/lib/design-tokens";
 import { CompanyCard, type CompanyCardData } from "@/components/CompanyCard";
+import { trackEvent } from "@/lib/analytics";
 
 // 기존 그리드(2열 → sm 3열 → lg 4열)와 같은 개수가 한 화면에 딱 맞게 보이도록,
 // 카드 너비를 "(100% - 그 개수만큼의 gap) / 개수"로 계산해 잘린 카드가 안 보이게 한다.
@@ -24,6 +25,7 @@ export function RecommendedCompaniesCarousel({
   const scroll = (direction: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
+    trackEvent("Recommended Companies Carousel Scrolled", { direction });
     const amount = el.clientWidth * 0.8;
     el.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" });
   };

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Check } from "lucide-react";
 import { Button } from "@/components/Button";
+import { trackEvent } from "@/lib/analytics";
 
 // 이메일 채용공고 알림은 실제로 발송되지 않는 기능(다이제스트 발송 로직이 꺼져 있음)이라,
 // 여기서 신청을 받으면 안 지켜지는 약속을 하게 된다. 그래서 이 화면은 로그인 완료
@@ -17,6 +18,7 @@ export function OnboardingSuccessModal({ initialOpen }: { initialOpen: boolean }
   if (!open) return null;
 
   const close = () => {
+    trackEvent("Onboarding Success Modal Confirmed");
     setOpen(false);
     const params = new URLSearchParams(searchParams.toString());
     params.delete("onboarded");

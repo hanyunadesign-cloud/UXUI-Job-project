@@ -42,7 +42,10 @@ export function ProfileMenu() {
     <div ref={containerRef} className="relative">
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => {
+          trackEvent("Profile Menu Toggled", { open: !isOpen });
+          setIsOpen((prev) => !prev);
+        }}
         aria-label="마이페이지 메뉴"
         className="block shrink-0 overflow-hidden rounded-full ring-offset-2 transition-shadow hover:ring-2 hover:ring-neutral-200"
       >

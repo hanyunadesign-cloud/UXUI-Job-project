@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -15,6 +14,7 @@ import { RecentlyViewedTracker } from "@/components/RecentlyViewedTracker";
 import { JobSummaryCard } from "@/components/JobSummaryCard";
 import { AppealJobPanel } from "@/components/AppealJobPanel";
 import { APPEAL_POINTS } from "@/lib/appeal-points-data";
+import { TrackedLink } from "@/components/TrackedLink";
 
 export const dynamic = "force-dynamic";
 
@@ -79,12 +79,14 @@ export default async function JobDetailPage({ params }: { params: { id: string }
           />
           <div className="flex flex-col gap-2">
             {job.companyId ? (
-              <Link
+              <TrackedLink
                 href={`/companies/${job.companyId}`}
+                eventName="Job Detail Company Link Clicked"
+                eventProps={{ jobId: job.id, companyId: job.companyId, companyName: job.companyName }}
                 className="w-fit text-sm text-neutral-500 hover:text-ink hover:underline"
               >
                 {job.companyName}
-              </Link>
+              </TrackedLink>
             ) : (
               <p className="text-sm text-neutral-500">{job.companyName}</p>
             )}

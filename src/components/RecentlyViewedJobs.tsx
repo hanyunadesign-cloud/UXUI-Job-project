@@ -5,6 +5,7 @@ import Link from "next/link";
 import { clsx } from "clsx";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { type RecentlyViewedJob } from "@/components/RecentlyViewedTracker";
+import { trackEvent } from "@/lib/analytics";
 
 const STORAGE_KEY = "uxui-job:recently-viewed-jobs";
 const SKELETON_ROWS = 3;
@@ -38,6 +39,7 @@ export function RecentlyViewedJobs() {
               <Link
                 key={job.id}
                 href={`/jobs/${job.id}`}
+                onClick={() => trackEvent("Recently Viewed Job Clicked", { jobId: job.id })}
                 className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-neutral-50"
               >
                 <CompanyLogo
@@ -69,7 +71,10 @@ export function RecentlyViewedJobs() {
             <button
               key={p}
               type="button"
-              onClick={() => setPage(p)}
+              onClick={() => {
+                trackEvent("Recently Viewed Pagination Clicked", { page: p });
+                setPage(p);
+              }}
               className={clsx(
                 "flex h-7 w-7 items-center justify-center rounded-lg text-xs font-medium transition-colors",
                 p === page ? "bg-primary text-white" : "text-neutral-400 hover:bg-neutral-50 hover:text-ink"

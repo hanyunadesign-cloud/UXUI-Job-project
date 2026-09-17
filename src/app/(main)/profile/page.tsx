@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -8,6 +7,7 @@ import { LogoutButton } from "@/components/LogoutButton";
 import { RecentlyViewedJobs } from "@/components/RecentlyViewedJobs";
 import { TrackPageView } from "@/components/TrackPageView";
 import { PreferenceEditLink } from "@/components/PreferenceEditLink";
+import { TrackedLink } from "@/components/TrackedLink";
 
 // 로컬 미니 시안 전용: "마이페이지"는 관심사 설정/알림 같은 계정 설정 전용 페이지다.
 // 저장한 공고 목록은 GNB "저장 공고"(/mypage)에서 따로 본다 — 서로 다른 탭.
@@ -31,7 +31,11 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <TrackPageView name="Profile Page Viewed" dwellEventName="Profile Page Time Spent" />
+      <TrackPageView
+        name="Profile Page Viewed"
+        dwellEventName="Profile Page Time Spent"
+        scrollDepthEventName="Profile Page Scroll Depth"
+      />
       <h1 className="text-xl font-bold text-ink">마이페이지</h1>
 
       <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5">
@@ -70,12 +74,13 @@ export default async function ProfilePage() {
           <p className="text-sm font-semibold text-ink">서비스 의견</p>
           <p className="text-xs text-neutral-400">불편했던 점이나 바라는 기능을 남겨주세요.</p>
         </div>
-        <Link
+        <TrackedLink
           href="/feedback"
+          eventName="Profile Feedback Link Clicked"
           className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-primary-strong transition-colors hover:bg-blue-100"
         >
           의견 보내기
-        </Link>
+        </TrackedLink>
       </div>
 
       <LogoutButton />

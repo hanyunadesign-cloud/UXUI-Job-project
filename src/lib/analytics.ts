@@ -20,6 +20,7 @@ function ensureMixpanel() {
   });
   mixpanelReady = true;
   registerVisitCount();
+  registerFirstTouchAttribution();
 }
 
 const VISIT_COUNT_KEY = "uxui_visit_count";
@@ -60,6 +61,51 @@ function registerVisitCount() {
   } catch {
     // 시크릿 모드 등 storage 접근이 막힌 환경이면 건너뛴다.
   }
+}
+
+const FIRST_TOUCH_KEY = "uxui_first_touch";
+
+// "이 방문자가 원래 어디서(광고/SNS/검색 등) 들어왔는지" — entrySource(로그인 페이지로
+// 온 앱 내부 경로)와는 완전히 다른 값이다. referrer/UTM은 방문자가 다른 페이지로
+// 이동하는 순간 사라지므로, 최초 방문 시점에 한 번만 캡처해서 절대 덮어쓰지 않고
+// super property로 영구 등록한다(true first-touch attribution) — registerVisitCount와
+// 동일하게 localStorage 가드로 "이미 있으면 그 값 그대로 재적용"만 한다.
+function registerFirstTouchAttribution() {
+  try {
+    const stored = localStorage.getItem(FIRST_TOUCH_KEY);
+    if (stored) {
+      const attribution = JSON.parse(stored) as Record<string, string>;
+      mixpanel.register(attribution);
+      gtag("set", "user_properties", snakeCaseKeys(attribution));
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const attribution: Record<string, string> = {
+      firstReferrer: document.referrer || "direct",
+      firstLandingPage: window.location.pathname,
+    };
+    const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+    for (const key of utmKeys) {
+      const value = params.get(key);
+      if (value) attribution[key.replace(/_([a-z])/g, (_, c) => c.toUpperCase())] = value;
+    }
+
+    localStorage.setItem(FIRST_TOUCH_KEY, JSON.stringify(attribution));
+    mixpanel.register(attribution);
+    gtag("set", "user_properties", snakeCaseKeys(attribution));
+  } catch {
+    // 시크릿 모드 등 storage 접근이 막힌 환경이면 건너뛴다.
+  }
+}
+
+function snakeCaseKeys(obj: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [
+      key.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`),
+      value,
+    ])
+  );
 }
 
 // @next/third-parties의 <GoogleAnalytics>가 gtag.js를 로드하면 window.gtag가 생긴다.
