@@ -25,6 +25,32 @@ function toNumber(value: string | string[] | undefined, fallback: number): numbe
   return Number.isFinite(n) ? n : fallback;
 }
 
+// 마감일 없는(상시채용) 공고들은 같은 회사끼리 연속 등록된 경우가 많아서, 마감임박순
+// 정렬에서 그냥 두면 한 회사 공고가 줄줄이 뭉쳐 보인다. 회사별 큐를 만들어 한 바퀴씩
+// 돌아가며 하나씩 뽑아 섞는다 — 각 회사 내부의 상대 순서(최신순)는 그대로 유지한 채
+// 회사 간 순서만 균등하게 분산시키는 라운드로빈 방식.
+function interleaveByCompany<T extends { companyName: string }>(items: T[]): T[] {
+  const queues = new Map<string, T[]>();
+  for (const item of items) {
+    const queue = queues.get(item.companyName);
+    if (queue) queue.push(item);
+    else queues.set(item.companyName, [item]);
+  }
+
+  const result: T[] = [];
+  let remaining = items.length;
+  while (remaining > 0) {
+    for (const queue of queues.values()) {
+      const next = queue.shift();
+      if (next) {
+        result.push(next);
+        remaining -= 1;
+      }
+    }
+  }
+  return result;
+}
+
 export default async function JobsPage({
   searchParams,
 }: {
@@ -92,13 +118,13 @@ export default async function JobsPage({
   let sortedJobs = jobs;
 
   if (sort === "deadline") {
-    // 마감일이 빠른 순, 마감일이 없는(상시채용) 공고는 맨 뒤로.
-    sortedJobs = [...jobs].sort((a, b) => {
-      if (!a.applicationDeadline && !b.applicationDeadline) return 0;
-      if (!a.applicationDeadline) return 1;
-      if (!b.applicationDeadline) return -1;
-      return a.applicationDeadline.getTime() - b.applicationDeadline.getTime();
-    });
+    // 마감일이 빠른 순, 마감일이 없는(상시채용) 공고는 맨 뒤로 — 상시채용 그룹 안에서는
+    // 회사별로 뭉치지 않게 interleaveByCompany로 섞는다.
+    const withDeadline = jobs
+      .filter((job) => job.applicationDeadline)
+      .sort((a, b) => a.applicationDeadline!.getTime() - b.applicationDeadline!.getTime());
+    const withoutDeadline = interleaveByCompany(jobs.filter((job) => !job.applicationDeadline));
+    sortedJobs = [...withDeadline, ...withoutDeadline];
   }
   // sort === "latest"는 jobs가 이미 postedAt desc로 조회돼 있어 별도 재정렬 없이 그대로 쓴다.
 
