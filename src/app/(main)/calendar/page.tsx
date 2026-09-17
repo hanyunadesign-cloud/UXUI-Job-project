@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getApplicationStatus } from "@/lib/dday";
+import { kstDateParts, kstMidnight, kstWeekday } from "@/lib/kst";
 import { TrackPageView } from "@/components/TrackPageView";
 import {
   JobDeadlineCalendarGrid,
@@ -25,7 +26,8 @@ function parseMonthParam(value: string | undefined, now: Date): { year: number; 
     const month = Number(match[2]);
     if (month >= 1 && month <= 12) return { year, month };
   }
-  return { year: now.getFullYear(), month: now.getMonth() + 1 };
+  const today = kstDateParts(now);
+  return { year: today.year, month: today.month };
 }
 
 export default async function CalendarPage({
@@ -39,8 +41,13 @@ export default async function CalendarPage({
   const now = new Date();
   const { year, month } = parseMonthParam(searchParams.month, now);
 
-  const monthStart = new Date(year, month - 1, 1);
-  const monthEnd = new Date(year, month, 0, 23, 59, 59, 999);
+  // 이번 달의 시작/끝을 KST 기준 절대 시각으로 만든다 — 마감일이 KST 자정 기준으로
+  // 저장돼 있으므로, 쿼리 경계도 같은 기준이어야 달 경계 근처 공고가 안 빠진다.
+  const monthStart = kstMidnight(year, month, 1);
+  const nextMonthForBoundary = month === 12 ? { year: year + 1, month: 1 } : { year, month: month + 1 };
+  const monthEnd = new Date(
+    kstMidnight(nextMonthForBoundary.year, nextMonthForBoundary.month, 1).getTime() - 1
+  );
 
   const [jobs, savedJobsList] = await Promise.all([
     prisma.job.findMany({
@@ -74,7 +81,7 @@ export default async function CalendarPage({
 
   const jobsByDay: Record<number, CalendarJobSummary[]> = {};
   for (const job of activeJobs) {
-    const day = job.applicationDeadline!.getDate();
+    const day = kstDateParts(job.applicationDeadline!).day;
     const summary: CalendarJobSummary = {
       id: job.id,
       title: job.title,
@@ -98,8 +105,8 @@ export default async function CalendarPage({
     urgent: getApplicationStatus(job.applicationDeadline).urgent,
   }));
 
-  const firstWeekday = monthStart.getDay();
-  const daysInMonth = monthEnd.getDate();
+  const firstWeekday = kstWeekday(monthStart);
+  const daysInMonth = kstDateParts(monthEnd).day;
   const prevMonthLastDate = new Date(year, month - 1, 0).getDate();
 
   const prevMonthDate = new Date(year, month - 2, 1);
@@ -107,8 +114,9 @@ export default async function CalendarPage({
   const prevMonthParam = `${prevMonthDate.getFullYear()}-${pad2(prevMonthDate.getMonth() + 1)}`;
   const nextMonthParam = `${nextMonthDate.getFullYear()}-${pad2(nextMonthDate.getMonth() + 1)}`;
 
-  const isCurrentMonth = now.getFullYear() === year && now.getMonth() + 1 === month;
-  const todayDate = isCurrentMonth ? now.getDate() : null;
+  const nowKst = kstDateParts(now);
+  const isCurrentMonth = nowKst.year === year && nowKst.month === month;
+  const todayDate = isCurrentMonth ? nowKst.day : null;
 
   // 앞뒤 달 삐져나온 날짜도 옅게 같이 보여준다(빈 칸으로 안 비우고).
   const cells: WeekCell[] = [

@@ -1,6 +1,7 @@
 import { prisma } from "./prisma";
 import { analyzeJobDescription, classifyJobPosting, reflowJobDescriptionParagraphs } from "./gemini";
 import { findOrCreateCompanyId } from "./company";
+import { kstDateParts, kstMidnight } from "./kst";
 import type { Job } from "@prisma/client";
 
 // ingest-jobs.ts(그린하우스/애시비 자동 수집)와 candidate-jobs API(스케줄 에이전트가 발견한
@@ -43,12 +44,13 @@ export function extractApplicationPeriod(description: string): string {
 
 // 연도가 없는 "MM월 DD일" 표기는 이미 지난 날짜면 마감일이 과거일 수 없으므로 내년으로 간주한다.
 function inferYear(month: number, day: number, now: Date): number {
-  const year = now.getFullYear();
-  const candidate = new Date(year, month - 1, day);
-  if (candidate.getTime() < now.getTime() - 24 * 60 * 60 * 1000) {
-    return year + 1;
+  const today = kstDateParts(now);
+  const candidate = kstMidnight(today.year, month, day);
+  const startOfToday = kstMidnight(today.year, today.month, today.day);
+  if (candidate.getTime() < startOfToday.getTime() - 24 * 60 * 60 * 1000) {
+    return today.year + 1;
   }
-  return year;
+  return today.year;
 }
 
 export function extractApplicationDeadline(description: string): Date | null {
@@ -59,65 +61,65 @@ export function extractApplicationDeadline(description: string): Date | null {
   let m = description.match(
     /\d{4}[.\-\/]\s?\d{1,2}[.\-\/]\s?\d{1,2}.{0,12}?[~\-–]\s?(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2})/
   );
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   m = description.match(
     /(?:\d{4}년\s?)?\d{1,2}월\s?\d{1,2}일.{0,12}?[~\-–]\s?(\d{4})년\s?(\d{1,2})월\s?(\d{1,2})일/
   );
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   m = description.match(/\d{1,2}월\s?\d{1,2}일\s?[~\-–]\s?(\d{1,2})월\s?(\d{1,2})일/);
   if (m) {
     const month = Number(m[1]);
     const day = Number(m[2]);
-    return new Date(inferYear(month, day, now), month - 1, day);
+    return kstMidnight(inferYear(month, day, now), month, day);
   }
 
   // 날짜와 "까지" 사이에 "(화) 24시" 같은 요일/시각 표기가 끼어드는 경우가 흔해서 약간의
   // 간격을 허용한다(너무 넓게 잡으면 엉뚱한 "까지"와 묶일 수 있어 12자로 제한).
   m = description.match(/(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2}).{0,12}?까지/);
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   m = description.match(/(\d{4})년\s?(\d{1,2})월\s?(\d{1,2})일.{0,12}?까지/);
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   m = description.match(/(\d{1,2})월\s?(\d{1,2})일\s?까지/);
   if (m) {
     const month = Number(m[1]);
     const day = Number(m[2]);
-    return new Date(inferYear(month, day, now), month - 1, day);
+    return kstMidnight(inferYear(month, day, now), month, day);
   }
 
   // "9월 27일 일요일 23시 59분 마감"처럼 "까지"가 아니라 "마감"으로 끝나는 경우도 있다.
   // 요일/시각 표기가 "까지"보다 길게 끼어드는 편이라 20자까지 허용한다.
   m = description.match(/(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2}).{0,20}?마감/);
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   m = description.match(/(\d{4})년\s?(\d{1,2})월\s?(\d{1,2})일.{0,20}?마감/);
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   m = description.match(/(\d{1,2})월\s?(\d{1,2})일.{0,20}?마감/);
   if (m) {
     const month = Number(m[1]);
     const day = Number(m[2]);
-    return new Date(inferYear(month, day, now), month - 1, day);
+    return kstMidnight(inferYear(month, day, now), month, day);
   }
 
   // "~2026.08.21(금) 23:59"처럼 "까지"도 없이 "~"만 붙은 채로 끝나는 경우("~"가 "이 날짜까지"의
   // 줄임 표기로 흔히 쓰인다). "까지"는 있어도 되고 없어도 된다.
   m = description.match(/~\s?(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2})/);
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   // "접수 마감일: 2026/08/17"처럼 범위나 "까지" 없이 마감 라벨 바로 뒤에 날짜만 오는 경우.
   m = description.match(
     /(?:접수\s?마감일?|모집\s?마감일?|마감일자|마감일)\s*[:：]?\s*(\d{4})[.\-\/]\s?(\d{1,2})[.\-\/]\s?(\d{1,2})/
   );
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   m = description.match(
     /(?:접수\s?마감일?|모집\s?마감일?|마감일자|마감일)\s*[:：]?\s*(\d{4})년\s?(\d{1,2})월\s?(\d{1,2})일/
   );
-  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (m) return kstMidnight(Number(m[1]), Number(m[2]), Number(m[3]));
 
   return null;
 }
