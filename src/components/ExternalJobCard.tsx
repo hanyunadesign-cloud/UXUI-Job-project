@@ -4,11 +4,13 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Bookmark } from "lucide-react";
+import { clsx } from "clsx";
 import { Badge } from "@/components/Badge";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
 import { ICON_SIZE } from "@/lib/design-tokens";
+import { getApplicationStatus } from "@/lib/dday";
 
 export type ExternalJobCardData = {
   id: string;
@@ -18,6 +20,7 @@ export type ExternalJobCardData = {
   sourceUrl: string;
   coreKeywords: string[];
   createdAt: Date;
+  applicationDeadline: Date | null;
 };
 
 function hostnameOf(url: string): string {
@@ -28,13 +31,9 @@ function hostnameOf(url: string): string {
   }
 }
 
-function formatSavedDate(date: Date): string {
-  return `${date.getMonth() + 1}/${date.getDate()} 저장`;
-}
-
-// 일반 JobCard와 구조/치수를 그대로 맞춰서 같은 그리드에 섞여도 이질감이 없게 한다.
-// 다른 점은 두 가지뿐: 우상단이 저장 토글이 아니라 항상 채워진 상태의 삭제 버튼이고,
-// 뱃지 줄에 실제 데이터(플랫폼/산업/규모) 대신 출처를 표시하는 "링크 저장" 뱃지 하나만 온다.
+// 일반 JobCard와 구조/치수를 그대로 맞춰서(각 영역 min-h까지 동일하게) 같은 그리드에
+// 섞여도 카드 높이가 흔들리지 않게 한다. 다른 점은 우상단이 저장 토글이 아니라 항상
+// 채워진 상태의 삭제 버튼이라는 것뿐이다.
 export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
   const router = useRouter();
   const showToast = useToast();
@@ -60,8 +59,10 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
 
   if (removed) return null;
 
+  const status = getApplicationStatus(job.applicationDeadline);
+
   return (
-    <div className="relative flex h-full flex-col gap-3 rounded-2xl border border-neutral-200 bg-white p-4 transition-colors hover:border-neutral-300">
+    <div className="relative flex h-full flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]">
       <button
         type="button"
         onClick={remove}
@@ -86,11 +87,11 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
       </div>
 
       <Link href={`/mypage/external/${job.id}`} className="flex flex-col gap-3">
-        <h3 className="line-clamp-2 min-h-11 text-base font-bold leading-snug text-ink">
+        <h3 className="text-h3 line-clamp-2 min-h-11 text-ink">
           {job.title}
         </h3>
 
-        <p className="line-clamp-3 min-h-16 text-sm text-neutral-500">
+        <p className="text-caption line-clamp-3 min-h-16 text-neutral-500">
           {job.coreKeywords.length > 0 ? job.coreKeywords.join(" · ") : ""}
         </p>
 
@@ -101,7 +102,16 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
 
       <div className="mt-auto flex items-center justify-between border-t border-neutral-100 pt-3">
         <p className="text-xs text-neutral-400">링크로 추가</p>
-        <p className="text-xs text-neutral-400">{formatSavedDate(job.createdAt)}</p>
+        <p
+          className={clsx(
+            "text-xs",
+            status.urgent && "font-semibold text-negative",
+            status.closed && "text-neutral-300",
+            !status.urgent && !status.closed && "text-neutral-400"
+          )}
+        >
+          {status.label}
+        </p>
       </div>
     </div>
   );

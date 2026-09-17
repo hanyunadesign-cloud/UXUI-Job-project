@@ -59,7 +59,7 @@ export function ProfileMenu() {
       {isOpen && (
         <div className="absolute right-0 top-[calc(100%+8px)] z-20 flex w-40 flex-col gap-0.5 rounded-2xl border border-neutral-200 bg-white p-2 shadow-dropdown">
           <Link
-            href="/mypage"
+            href="/profile"
             onClick={() => {
               trackEvent("My Page Link Clicked");
               setIsOpen(false);

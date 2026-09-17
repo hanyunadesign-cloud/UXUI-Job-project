@@ -6,11 +6,11 @@ import { clsx } from "clsx";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { trackEvent } from "@/lib/analytics";
 
+// 로컬 미니 시안 전용 GNB 구성 — 기업/IT 동아리 대신 저장 공고·채용 일정을 넣었다.
 const NAV_ITEMS = [
-  { href: "/jobs", label: "채용" },
-  { href: "/companies", label: "기업" },
-  { href: "/clubs", label: "IT 동아리" },
-  { href: "/feedback", label: "서비스 의견" },
+  { href: "/jobs", label: "채용 공고" },
+  { href: "/mypage", label: "저장 공고" },
+  { href: "/calendar", label: "채용 일정" },
 ];
 
 export function Header() {

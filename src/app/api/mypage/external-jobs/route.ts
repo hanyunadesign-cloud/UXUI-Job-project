@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { assertPublicUrl, fetchExternalJobPageText } from "@/lib/external-job";
 import { analyzeExternalJobPosting } from "@/lib/gemini";
+import { extractApplicationDeadline } from "@/lib/job-intake";
 
 // Gemini 무료 티어 할당량이 사이트 전체에서 하루 20건으로 빠듯해서, 이 기능만으로 소진되지
 // 않도록 유저당 하루 한도를 별도로 둔다. 총 저장 개수도 무한정 쌓이지 않게 제한한다.
@@ -70,6 +71,8 @@ export async function POST(req: Request) {
         problemLede: analysis.problemLede,
         problemRest: analysis.problemRest,
         appealPoints: verifiedAppealPoints,
+        // 정식 Job 수집 파이프라인과 동일한 정규식으로, AI 호출 추가 없이 원문에서 마감일을 뽑는다.
+        applicationDeadline: extractApplicationDeadline(pageText),
       },
     });
 
