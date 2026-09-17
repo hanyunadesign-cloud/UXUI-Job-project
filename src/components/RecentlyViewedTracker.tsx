@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 const STORAGE_KEY = "uxui-job:recently-viewed-jobs";
-const MAX_ENTRIES = 10;
+const MAX_ENTRIES = 18;
 
 export type RecentlyViewedJob = {
   id: string;
