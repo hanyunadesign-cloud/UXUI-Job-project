@@ -1,6 +1,6 @@
 import { kstDateParts, kstMidnight } from "./kst";
 
-const URGENT_THRESHOLD_DAYS = 10;
+const URGENT_THRESHOLD_DAYS = 15;
 
 export type ApplicationStatus = {
   label: string;
@@ -9,7 +9,7 @@ export type ApplicationStatus = {
   closed?: boolean;
 };
 
-// deadline이 없으면 상시채용. 있으면 D-10 이내는 D-n으로 강조, 그보다 여유 있으면 ~M/D로 표기.
+// deadline이 없으면 상시채용. 있으면 D-15 이내는 D-n으로 강조, 그보다 여유 있으면 ~M/D로 표기.
 // 날짜 비교는 항상 한국 시간(KST) 기준으로 한다 — 서버 런타임의 기본 타임존(로컬은 보통
 // Asia/Seoul, Vercel 프로덕션은 보통 UTC)에 따라 .getDate() 결과가 갈려서, 같은 공고를
 // 페이지마다 다른 날짜로 보여주는 문제가 있었다.
