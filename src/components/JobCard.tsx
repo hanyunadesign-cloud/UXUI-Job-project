@@ -56,7 +56,7 @@ export function JobCard({
       {/* SaveButton의 p-1.5(6px) 내부 패딩을 미리 빼서, 아이콘 실제 가장자리가
           카드의 다른 콘텐츠와 동일한 16px 인셋에 오도록 한다 (16 - 6 = 10px). */}
       <div className="absolute right-2.5 top-2.5">
-        <SaveButton jobId={job.id} initialSaved={saved} isLoggedIn={isLoggedIn} size="sm" />
+        <SaveButton jobId={job.id} initialSaved={saved} isLoggedIn={isLoggedIn} size="sm" source={source} />
       </div>
 
       {/* 프로필 행: 기업 로고/기업명은 클릭해도 아무 데도 이동하지 않는 순수 표시 정보다 */}

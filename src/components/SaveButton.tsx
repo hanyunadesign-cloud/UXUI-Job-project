@@ -13,11 +13,16 @@ export function SaveButton({
   initialSaved,
   isLoggedIn,
   size = "md",
+  source = "job_detail",
 }: {
   jobId: string;
   initialSaved: boolean;
   isLoggedIn: boolean;
   size?: "sm" | "md";
+  // 이 버튼이 어느 화면에서 눌렸는지 — "상세페이지에서 저장한 건수만" 같은 분석 요청에
+  // 답하려면 Job Saved 이벤트에 이 값이 있어야 한다. 기본값은 상세페이지(jobs/[id])
+  // 단독 버튼 자리이고, 목록/마이페이지 카드에서는 JobCard가 명시적으로 넘겨준다.
+  source?: "job_detail" | "jobs_list" | "mypage_saved" | "company_detail";
 }) {
   const [saved, setSaved] = useState(initialSaved);
   const [isPending, startTransition] = useTransition();
@@ -32,7 +37,7 @@ export function SaveButton({
     requireLogin(isLoggedIn, () => {
       const next = !saved;
       setSaved(next);
-      trackEvent(next ? "Job Saved" : "Job Unsaved", { jobId });
+      trackEvent(next ? "Job Saved" : "Job Unsaved", { jobId, source });
       showToast(
         next ? "공고가 저장되었습니다" : "공고가 해제되었습니다",
         next ? { label: "보러가기", href: "/mypage" } : undefined
@@ -47,7 +52,7 @@ export function SaveButton({
           if (!res.ok) throw new Error("failed");
         } catch {
           setSaved(!next);
-          trackEvent("Job Save Failed", { jobId, action: next ? "save" : "unsave" });
+          trackEvent("Job Save Failed", { jobId, action: next ? "save" : "unsave", source });
         }
       });
     });
