@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { trackPageView, identifyUser, resetAnalyticsUser } from "@/lib/analytics";
@@ -20,6 +20,7 @@ function PageViewTracker() {
 
 function IdentifyOnAuth() {
   const { data: session, status } = useSession();
+  const prevStatusRef = useRef(status);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -30,7 +31,13 @@ function IdentifyOnAuth() {
   }, [status]);
 
   useEffect(() => {
-    if (status === "unauthenticated") resetAnalyticsUser();
+    // "unauthenticated"는 로그아웃 직후뿐 아니라, 한 번도 로그인 안 한 게스트가 처음
+    // 접속했을 때(loading -> unauthenticated)도 잡힌다. 실제로 로그인 상태였다가
+    // 로그아웃으로 전환된 경우에만 리셋해야, 게스트의 방문 기록이 매번 끊기지 않는다.
+    if (prevStatusRef.current === "authenticated" && status === "unauthenticated") {
+      resetAnalyticsUser();
+    }
+    prevStatusRef.current = status;
   }, [status]);
 
   return null;

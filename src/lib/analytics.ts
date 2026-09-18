@@ -135,18 +135,43 @@ export function trackPageView(path: string) {
   // GA4는 <GoogleAnalytics>가 라우트 변경마다 page_view를 자동으로 보내주므로 별도 호출 불필요.
 }
 
-// 로그인한 유저를 이후 이벤트와 연결한다. 로그아웃 시에는 reset()으로 다음 방문자와
-// 세션이 섞이지 않게 한다.
+const ALIASED_KEY = "uxui_mixpanel_aliased";
+
+// 로그인한 유저를 이후 이벤트와 연결한다. identify()만 부르면 로그인 "전" 익명
+// distinct_id(게스트로 공고 둘러본 기록)와 로그인 "후" userId가 서로 다른 사람으로
+// 잡혀서, "공고 상세 조회 → 저장" 같은 퍼널이 실제로는 같은 사람인데도 연결이 안
+// 되는 문제가 있었다(저장은 로그인이 필수라 이 케이스가 특히 많이 생김). alias()로
+// 이번 익명 세션을 userId에 한 번 합쳐준 뒤 identify()한다 — ALIASED_KEY로 "이번
+// 익명 distinct_id는 이미 합쳤다"를 기억해서 같은 세션에서 여러 번 로그인/네비게이션
+// 해도 alias()를 중복 호출하지 않는다. resetAnalyticsUser()가 익명 ID를 새로 발급할
+// 때 이 플래그도 같이 지워서, 다음 로그인 때 그 "새" 익명 ID를 다시 합쳐준다.
 export function identifyUser(userId: string, traits?: Record<string, unknown>) {
   ensureMixpanel();
   if (mixpanelReady) {
+    try {
+      if (!localStorage.getItem(ALIASED_KEY)) {
+        mixpanel.alias(userId);
+        localStorage.setItem(ALIASED_KEY, "1");
+      }
+    } catch {
+      // storage 접근 불가 환경이면 alias 없이 identify만 진행한다.
+    }
     mixpanel.identify(userId);
     if (traits) mixpanel.people.set(traits);
   }
   gtag("set", "user_id", userId);
 }
 
+// 실제 로그아웃 시에만 호출해야 한다 — 게스트가 처음 접속했을 때도 세션 상태가
+// "unauthenticated"로 잡히는데, 그때마다 이걸 부르면 같은 방문 안에서도 익명 ID가
+// 계속 리셋돼 방문 기록이 끊긴다(호출부인 MixpanelBoot.tsx에서 "로그인 상태였다가
+// 로그아웃"으로 전환된 경우만 걸러서 호출하도록 되어 있다).
 export function resetAnalyticsUser() {
   ensureMixpanel();
   if (mixpanelReady) mixpanel.reset();
+  try {
+    localStorage.removeItem(ALIASED_KEY);
+  } catch {
+    // storage 접근 불가 환경이면 건너뛴다.
+  }
 }
