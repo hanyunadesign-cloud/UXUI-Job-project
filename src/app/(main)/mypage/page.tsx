@@ -21,32 +21,22 @@ export default async function MyPage() {
   const session = await getServerSession(authOptions);
   const userId = (session?.user as { id?: string } | undefined)?.id;
 
-  if (!userId) {
-    return (
-      <div className="flex flex-col gap-8">
-        <TrackPageView
-          name="Mypage Viewed"
-          props={{ guest: true }}
-          dwellEventName="Mypage Time Spent"
-          scrollDepthEventName="Mypage Scroll Depth"
-        />
-        <h1 className="text-xl font-bold text-ink">저장 공고</h1>
-        <GuestSavedJobsList />
-      </div>
-    );
-  }
-
-  const [savedJobs, externalJobs] = await Promise.all([
-    prisma.savedJob.findMany({
-      where: { userId },
-      include: { job: { include: { analysis: { select: { taskKeywords: true } } } } },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.externalJobSave.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-    }),
-  ]);
+  // 게스트는 DB에 저장 기록이 없으니 빈 배열로 두고, 아래 렌더링에서
+  // GuestSavedJobsList(클라이언트, localStorage 기반)가 그 자리를 대신 채운다 —
+  // 로그인 여부와 무관하게 페이지 레이아웃 자체는 항상 같은 구조를 유지한다.
+  const [savedJobs, externalJobs] = userId
+    ? await Promise.all([
+        prisma.savedJob.findMany({
+          where: { userId },
+          include: { job: { include: { analysis: { select: { taskKeywords: true } } } } },
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.externalJobSave.findMany({
+          where: { userId },
+          orderBy: { createdAt: "desc" },
+        }),
+      ])
+    : [[], []];
 
   // 링크로 추가한 공고는 회사 로고를 따로 안 갖고 있어서, 회사명이 우리 DB의 Company와
   // 겹치면 그 로고를 빌려와 보여준다(안 겹치면 이니셜로 폴백).
@@ -86,29 +76,31 @@ export default async function MyPage() {
     <div className="flex flex-col gap-8">
       <TrackPageView
         name="Mypage Viewed"
+        props={{ guest: !userId }}
         dwellEventName="Mypage Time Spent"
         scrollDepthEventName="Mypage Scroll Depth"
       />
-      <div className="flex items-baseline gap-2">
-        <h1 className="text-xl font-bold text-ink">저장 공고</h1>
-        <p className="text-sm text-neutral-500">{combinedSaved.length}개 저장됨</p>
-      </div>
+      <h1 className="text-xl font-bold text-ink">저장 공고</h1>
 
-      <ExternalJobAddRow />
+      <ExternalJobAddRow isLoggedIn={Boolean(userId)} />
 
-      {combinedSaved.length === 0 ? (
-          <EmptyState
-            title="아직 저장한 공고가 없어요"
-            description="마음에 드는 공고를 저장하거나, 다른 사이트 공고 링크를 붙여넣어 모아보세요."
-            action={
-              <Link href="/jobs">
-                <Button variant="secondary" className="mt-2">
-                  채용공고 보러가기
-                </Button>
-              </Link>
-            }
-          />
-        ) : (
+      {!userId ? (
+        <GuestSavedJobsList />
+      ) : combinedSaved.length === 0 ? (
+        <EmptyState
+          title="아직 저장한 공고가 없어요"
+          description="마음에 드는 공고를 저장하거나, 다른 사이트 공고 링크를 붙여넣어 모아보세요."
+          action={
+            <Link href="/jobs">
+              <Button variant="secondary" className="mt-2">
+                채용공고 보러가기
+              </Button>
+            </Link>
+          }
+        />
+      ) : (
+        <>
+          <p className="text-sm text-neutral-500">{combinedSaved.length}개 저장됨</p>
           <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {sortedCombinedSaved.map((item) =>
               item.kind === "saved" ? (
@@ -124,7 +116,8 @@ export default async function MyPage() {
               )
             )}
           </div>
-        )}
+        </>
+      )}
     </div>
   );
 }

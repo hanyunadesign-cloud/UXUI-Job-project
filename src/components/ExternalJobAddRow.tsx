@@ -7,14 +7,16 @@ import { Link } from "lucide-react";
 import { ICON_SIZE } from "@/lib/design-tokens";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
+import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 
-export function ExternalJobAddRow() {
+export function ExternalJobAddRow({ isLoggedIn }: { isLoggedIn: boolean }) {
   const router = useRouter();
   const showToast = useToast();
+  const { requireLogin, modal } = useLoginPrompt();
   const [url, setUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = async () => {
+  const doSubmit = async () => {
     if (!url.trim() || isSubmitting) return;
     setIsSubmitting(true);
     try {
@@ -39,6 +41,11 @@ export function ExternalJobAddRow() {
     }
   };
 
+  // 이 기능은 게스트에게 숨기지 않고 그대로 노출한다. 대신 게스트가 실제로 쓰려고
+  // 하면(제출 시점) 로그인 유도 모달을 띄운다 — 입력창 자체를 막지 않아 뭘 할 수
+  // 있는 기능인지는 보이게 하고, 실행 직전에만 로그인을 요구한다.
+  const submit = () => requireLogin(isLoggedIn, doSubmit);
+
   return (
     <div className="mb-4 flex h-16 items-center gap-2 rounded-2xl border border-neutral-200 bg-white pl-4 pr-3.5">
       <Link className={clsx(ICON_SIZE.sm, "shrink-0 text-neutral-400")} aria-hidden />
@@ -61,6 +68,7 @@ export function ExternalJobAddRow() {
       >
         {isSubmitting ? "분석 중..." : "분석하고 저장"}
       </button>
+      {modal}
     </div>
   );
 }
