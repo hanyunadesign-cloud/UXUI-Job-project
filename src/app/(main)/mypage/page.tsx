@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -9,17 +8,33 @@ import { ExternalJobAddRow } from "@/components/ExternalJobAddRow";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
 import { TrackPageView } from "@/components/TrackPageView";
+import { GuestSavedJobsList } from "@/components/GuestSavedJobsList";
 import { getApplicationStatus } from "@/lib/dday";
 
-// 로컬 미니 시안 전용: GNB "저장 공고" 탭 전용 페이지. 여기는 저장한 공고만 보여주고,
-// 관심사 설정/이메일 알림 같은 "마이페이지" 성격의 내용은 별도 페이지(/profile)에 있다.
+// GNB "저장 공고" 탭 전용 페이지. 여기는 저장한 공고만 보여주고, 관심사 설정/이메일
+// 알림 같은 "마이페이지" 성격의 내용은 별도 페이지(/profile)에 있다. 공고 저장 자체가
+// 게스트도 가능해졌으므로, 비로그인 상태에서도 열리고 그때는 localStorage 기반
+// GuestSavedJobsList로 보여준다(링크로 추가한 공고 저장은 여전히 로그인 전용).
 export const dynamic = "force-dynamic";
 
 export default async function MyPage() {
   const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/login?source=auth_gate");
+  const userId = (session?.user as { id?: string } | undefined)?.id;
 
-  const userId = (session.user as { id: string }).id;
+  if (!userId) {
+    return (
+      <div className="flex flex-col gap-8">
+        <TrackPageView
+          name="Mypage Viewed"
+          props={{ guest: true }}
+          dwellEventName="Mypage Time Spent"
+          scrollDepthEventName="Mypage Scroll Depth"
+        />
+        <h1 className="text-xl font-bold text-ink">저장 공고</h1>
+        <GuestSavedJobsList />
+      </div>
+    );
+  }
 
   const [savedJobs, externalJobs] = await Promise.all([
     prisma.savedJob.findMany({
