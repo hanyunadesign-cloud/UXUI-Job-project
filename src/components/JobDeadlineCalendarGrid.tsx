@@ -7,8 +7,7 @@ import { clsx } from "clsx";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { ICON_SIZE } from "@/lib/design-tokens";
 import { trackEvent } from "@/lib/analytics";
-
-// 로컬 미니 시안 전용 — 배포판(origin/main)에는 없음.
+import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 
 export type CalendarJobSummary = {
   id: string;
@@ -133,6 +132,7 @@ export function JobDeadlineCalendarGrid({
   const [expandedDays, setExpandedDays] = useState<Set<number>>(new Set());
   const [selectedJob, setSelectedJob] = useState<SelectedJob | null>(null);
   const [addForm, setAddForm] = useState<AddForm | null>(null);
+  const { requireLogin, modal: loginModal } = useLoginPrompt();
 
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -166,9 +166,13 @@ export function JobDeadlineCalendarGrid({
   }
 
   function openAddForm(day: number) {
-    trackEvent("Calendar Add Entry Opened", { year, month, day });
-    setSelectedJob(null);
-    setAddForm({ day });
+    // 개인 일정은 로컬(localStorage)에만 남지만, 기기를 바꾸면 사라지는 데이터라
+    // 계정에 귀속시켜 관리하도록 로그인을 요구한다(공고 저장과는 다른 정책).
+    requireLogin(isLoggedIn, () => {
+      trackEvent("Calendar Add Entry Opened", { year, month, day });
+      setSelectedJob(null);
+      setAddForm({ day });
+    });
   }
 
   function openJobPreview(job: CalendarJobSummary, day: number) {
@@ -436,6 +440,7 @@ export function JobDeadlineCalendarGrid({
       >
         <Plus className={ICON_SIZE.md} aria-hidden />
       </button>
+      {loginModal}
     </div>
   );
 }

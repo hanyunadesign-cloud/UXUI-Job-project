@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { clsx } from "clsx";
 import { Bookmark } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
 import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 import { ICON_SIZE } from "@/lib/design-tokens";
+import { getGuestSavedJobIds, toggleGuestSavedJobId } from "@/lib/guestSaves";
 
 export function SaveButton({
   jobId,
@@ -29,11 +30,34 @@ export function SaveButton({
   const showToast = useToast();
   const { requireLogin, modal } = useLoginPrompt();
 
+  // 서버는 게스트의 localStorage를 알 수 없어 initialSaved가 항상 false로 내려온다.
+  // 마운트 시 클라이언트에서 한 번 더 확인해서 이미 저장해둔 상태면 채워준다.
+  useEffect(() => {
+    if (isLoggedIn) return;
+    setSaved(getGuestSavedJobIds().includes(jobId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn, jobId]);
+
   // 카드 전체가 상세 페이지로 가는 Link이기도 해서, 저장 버튼 클릭이 그 Link로 버블링되어
   // 같이 이동해버리지 않도록 막는다.
   const toggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // 게스트는 로그인 유도 없이 바로 저장(localStorage) — 저장 자체는 누구나, 목록 확인은
+    // 로그인 후 마이페이지에서. 로그인하면 이 목록이 계정으로 병합된다(MixpanelBoot 참고).
+    if (!isLoggedIn) {
+      const next = !saved;
+      setSaved(next);
+      trackEvent(next ? "Job Saved" : "Job Unsaved", { jobId, source, guest: true });
+      showToast(
+        next ? "공고가 저장되었습니다" : "공고가 해제되었습니다",
+        next ? { label: "보러가기", href: "/mypage" } : undefined
+      );
+      toggleGuestSavedJobId(jobId, next);
+      return;
+    }
+
     requireLogin(isLoggedIn, () => {
       const next = !saved;
       setSaved(next);

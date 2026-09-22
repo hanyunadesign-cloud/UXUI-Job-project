@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { trackPageView, identifyUser, resetAnalyticsUser } from "@/lib/analytics";
+import { getGuestSavedJobIds, clearGuestSavedJobIds } from "@/lib/guestSaves";
 
 function PageViewTracker() {
   const pathname = usePathname();
@@ -28,6 +29,25 @@ function IdentifyOnAuth() {
     if (!user.id) return;
     identifyUser(user.id, { $email: user.email ?? undefined, $name: user.name ?? undefined });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  // 게스트로 저장해둔 공고를 계정으로 병합한다. 병합 성공 시 localStorage를 비우므로
+  // 이후 렌더에서는 빈 배열이라 바로 리턴 — 로그인 상태에서 매번 실행돼도 멱등하다.
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    const guestIds = getGuestSavedJobIds();
+    if (guestIds.length === 0) return;
+    fetch("/api/saved-jobs/merge", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jobIds: guestIds }),
+    })
+      .then((res) => {
+        if (res.ok) clearGuestSavedJobIds();
+      })
+      .catch(() => {
+        // 실패하면 다음 로그인 상태 렌더에서 다시 시도된다(비우지 않았으므로).
+      });
   }, [status]);
 
   useEffect(() => {
