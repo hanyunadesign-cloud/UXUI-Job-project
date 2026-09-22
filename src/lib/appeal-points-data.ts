@@ -2360,4 +2360,10 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
       sourceQuote: "글로벌 디자인 시스템 및 UI 라이브러리 구축·운영",
     },
   ],
+  // pxd - Product Design Intern
+  cmucxz9fa0001vfw5n45ha7a0: [
+    { title: "디자인 시스템 기반 UI 구현 경험", body: "구축된 디자인 시스템과 컴포넌트를 활용해 Web/App 화면을 직접 디자인해본 경험을 보여주세요.", sourceQuote: "구축된 디자인 시스템과 컴포넌트를 활용한 Web/App UI 화면 디자인" },
+    { title: "기획 의도 이해 기반 UI 구현 경험", body: "기획 의도와 사용자 경험을 이해하고 직관적인 UI로 구현해본 경험을 구체적으로 보여주세요.", sourceQuote: "기획 의도와 사용자 경험을 이해하여 직관적이고 완성도 높은 UI 구현" },
+    { title: "생성형 AI 활용 디자인 경험", body: "생성형 AI나 다양한 디자인 도구를 활용해 아이디어를 탐색하고 시안을 제작해본 경험을 보여주세요.", sourceQuote: "생성형 AI 및 다양한 디자인 도구를 활용한 아이디어 탐색 및 시안 제작" },
+  ],
 };
