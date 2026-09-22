@@ -138,6 +138,18 @@ model JobAnalysis {
   resumeTip    String   @db.Text
   // 공고 목록 카드에 보여줄, 이 직무가 주로 하는 업무를 나타내는 단어 (최대 4개)
   taskKeywords String[]
+  // 아래 5개는 "이렇게 어필하세요"/"기업 정보" 탭용 AI 생성 데이터. 이 공고 id가
+  // src/lib/appeal-points-data.ts(손으로 검증한 콘텐츠)에 없을 때만 폴백으로 쓰인다 —
+  // 자동 수집 파이프라인(ingest-jobs.ts)이 사람 개입 없이 채워서, 당근/쿠팡/미소/Bjak처럼
+  // 자동 수집되는 공고도 구버전 AnalysisPanel로 떨어지지 않고 새 패널을 쓰게 한다.
+  // appealPoints는 AppealPoint[] 형태({ title, body, sourceQuote })의 JSON — sourceQuote는
+  // 저장 시점에 description에 실제로 포함되는지 코드로 검증 후 안 맞는 항목은 걸러내고 저장한다.
+  domainPrimary   String?
+  domainSecondary String?
+  domainKeywords  String[] @default([])
+  problemLede     String?
+  problemRest     String?
+  appealPoints    Json?
   createdAt    DateTime @default(now())
   job          Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
 }

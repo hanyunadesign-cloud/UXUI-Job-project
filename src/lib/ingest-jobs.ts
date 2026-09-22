@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { prisma } from "./prisma";
-import { analyzeJobDescription, judgeJobRelevance, reflowJobDescriptionParagraphs } from "./gemini";
+import { analyzeJobForPanel, judgeJobRelevance, reflowJobDescriptionParagraphs } from "./gemini";
 import { findOrCreateCompanyId } from "./company";
 import { notifyFollowersOfNewJobs } from "./notifications";
 import {
@@ -394,23 +394,53 @@ export async function ingestJobs(): Promise<{
       count += 1;
 
       // 카드 목록에 바로 핵심 업무 키워드를 보여줄 수 있도록, 상세페이지 방문을 기다리지 않고
-      // 수집 시점에 미리 AI 분석을 돌려 캐시(JobAnalysis)를 채워둔다.
-      // 이미 캐시가 있으면 무료 티어의 하루 요청 한도를 아끼기 위해 재호출하지 않는다.
+      // 수집 시점에 미리 AI 분석을 돌려 캐시(JobAnalysis)를 채워둔다. appealPoints가 이미 있으면
+      // (구버전 캐시가 아니라 이 파이프라인으로 채워진 최신 캐시면) 무료 티어 하루 요청 한도를
+      // 아끼기 위해 재호출하지 않는다 — appealPoints가 없는 캐시(과거 analyzeJobDescription만
+      // 쓰던 시절 생성된 것)는 "이렇게 어필하세요"/"기업 정보" 탭이 구버전 AnalysisPanel로
+      // 떨어지는 원인이라, 매일 배치에서 조금씩 다시 채워 나간다(재현 방지).
       const existingAnalysis = await prisma.jobAnalysis.findUnique({
         where: { jobId: savedJob.id },
       });
 
-      if (existingAnalysis) {
+      if (existingAnalysis?.appealPoints) {
         console.log(`  ↳ AI 분석 캐시 이미 있음, 스킵`);
       } else {
         try {
-          const analysis = await analyzeJobDescription(job.description);
+          const analysis = await analyzeJobForPanel(job.title, source.companyName, job.description);
+          // AI가 만든 sourceQuote는 사람이 검증할 수 없어서, 저장 전에 실제로 공고 원문의
+          // 정확한 부분 문자열인지 코드로 다시 확인한다 — 안 맞는 항목은 조용히 제외한다.
+          const verifiedAppealPoints = analysis.appealPoints
+            .filter((p) => job.description.includes(p.sourceQuote))
+            .slice(0, 3);
+
           await prisma.jobAnalysis.upsert({
             where: { jobId: savedJob.id },
-            create: { jobId: savedJob.id, ...analysis },
-            update: analysis,
+            create: {
+              jobId: savedJob.id,
+              coreKeywords: analysis.coreKeywords,
+              resumeTip: analysis.resumeTip,
+              taskKeywords: analysis.taskKeywords,
+              domainPrimary: analysis.domainPrimary,
+              domainSecondary: analysis.domainSecondary,
+              domainKeywords: analysis.domainKeywords,
+              problemLede: analysis.problemLede,
+              problemRest: analysis.problemRest,
+              appealPoints: verifiedAppealPoints,
+            },
+            update: {
+              coreKeywords: analysis.coreKeywords,
+              resumeTip: analysis.resumeTip,
+              taskKeywords: analysis.taskKeywords,
+              domainPrimary: analysis.domainPrimary,
+              domainSecondary: analysis.domainSecondary,
+              domainKeywords: analysis.domainKeywords,
+              problemLede: analysis.problemLede,
+              problemRest: analysis.problemRest,
+              appealPoints: verifiedAppealPoints,
+            },
           });
-          console.log(`  ↳ AI 분석 완료`);
+          console.log(`  ↳ AI 분석 완료 (어필 포인트 ${verifiedAppealPoints.length}개)`);
         } catch (error) {
           console.warn(`  ↳ AI 분석 실패 (상세페이지 방문 시 재시도됨):`, error);
         }

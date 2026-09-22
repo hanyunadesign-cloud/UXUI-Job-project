@@ -76,6 +76,164 @@ export async function analyzeJobDescription(
   };
 }
 
+export type IngestedAppealPoint = { title: string; body: string; sourceQuote: string };
+
+export type IngestedJobPanelResult = JobAnalysisResult & {
+  // "이렇게 어필하세요"/"기업 정보" 탭용. 자동 수집 공고(당근/쿠팡/미소/Bjak)는 사람이 직접
+  // 검증해서 src/lib/appeal-points-data.ts에 채워줄 수 없으니, 여기서 AI가 함께 만들어서
+  // JobAnalysis에 캐시해둔다 — 그래야 자동 수집 공고도 구버전 AnalysisPanel로 떨어지지 않고
+  // 새 패널(AppealJobPanel)을 쓸 수 있다. sourceQuote 검증은 호출부에서 한다.
+  domainPrimary: string;
+  domainSecondary: string;
+  domainKeywords: string[];
+  problemLede: string;
+  problemRest: string;
+  appealPoints: IngestedAppealPoint[];
+};
+
+// analyzeJobDescription과 스키마가 겹치지만 별도 모델로 분리했다 — 회사명을 이미 알고 있어서
+// analyzeExternalJobPosting처럼 title/company_name/stage를 추출할 필요가 없고, 그만큼 스키마를
+// 가볍게 유지해 응답 안정성을 높인다. Gemini 무료 티어 하루 호출 한도가 빠듯해서(사이트 전체
+// 20건) 기존 analyzeJobDescription 호출을 대체하는 용도로 쓴다 — 호출 횟수를 늘리지 않는다.
+const panelModel = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash",
+  systemInstruction:
+    "당신은 UXUI 디자이너 구직자를 돕는 커리어 코치입니다. 주어진 채용 공고 원문(회사명 포함)만 근거로 " +
+    "분석하세요. 공고에 명시되지 않은 내용은 추측하거나 지어내지 마세요. 간결하고 실용적인 톤을 유지하세요. " +
+    "모든 텍스트 필드는 반드시 해요체(예: ~해요, ~예요, ~돼요, ~보여주세요)로 작성하고, 합쇼체(~습니다, " +
+    "~하세요)는 쓰지 마세요.\n\n" +
+    "task_keywords는 개수를 채우기 위한 형식적인 단어를 넣지 말고, 이 공고에서 실제로 대표성이 있는 핵심 " +
+    "업무만 골라 그 공고에 맞는 개수(2~4개)로 뽑으세요.\n\n" +
+    "domain_primary/domain_secondary/domain_keywords/problem_lede/problem_rest는 이 회사가 어떤 도메인의 " +
+    "서비스를 하고 어떤 문제를 푸는지에 대한 내용입니다. 회사명이 알려진 곳이면 알고 있는 지식을 활용하고, " +
+    "그렇지 않으면 원문에 드러난 내용(직무 설명, 회사 소개)만으로 담백하게 작성하세요. 과장하지 마세요.\n\n" +
+    "appeal_points는 이 공고에 지원할 때 이력서/포트폴리오에서 강조하면 좋을 점입니다. 최종적으로는 " +
+    "3개만 쓰이지만, source_quote가 한 글자라도 원문과 다르면 그 항목은 시스템이 통째로 버립니다 — " +
+    "그러니 자신 있는 근거가 있다면 4~5개까지 후보를 만드세요. 반드시 원문에 실제로 언급된 자격요건/업무 " +
+    "내용에 근거해야 하며, source_quote는 원문에서 그 근거가 되는 부분을 한 글자, 띄어쓰기, 문장부호까지 " +
+    "정확히 그대로 복사해야 합니다. title은 명사구로 끝맺고(예: \"~한 경험\") 명령형 어미를 쓰지 마세요. " +
+    "body는 1~2문장. 원문에 실질적인 자격요건/업무 내용이 전혀 없으면 appeal_points를 빈 배열로 두세요.",
+  generationConfig: {
+    responseMimeType: "application/json",
+    responseSchema: {
+      type: SchemaType.OBJECT,
+      properties: {
+        core_keywords: {
+          type: SchemaType.ARRAY,
+          items: { type: SchemaType.STRING },
+          description: "공고에서 요구하는 핵심 역량 키워드 목록 (3~6개)",
+        },
+        resume_tip: {
+          type: SchemaType.STRING,
+          description:
+            "포트폴리오/이력서에서 어필해야 할 포인트, 두 문장 이내. 반드시 해요체로 작성 (합쇼체 금지)",
+        },
+        task_keywords: {
+          type: SchemaType.ARRAY,
+          items: { type: SchemaType.STRING },
+          minItems: 2,
+          maxItems: 4,
+          description: "이 직무가 실제로 대표하는 핵심 업무만 나타내는 짧은 단어 목록 (2~4개).",
+        },
+        domain_primary: { type: SchemaType.STRING, description: "\"OO · OO\" 형태 짧은 산업 라벨" },
+        domain_secondary: { type: SchemaType.STRING, description: "회사/서비스 설명 1~2문장, 해요체" },
+        domain_keywords: {
+          type: SchemaType.ARRAY,
+          items: { type: SchemaType.STRING },
+          minItems: 3,
+          maxItems: 3,
+          description: "짧은 명사구 키워드 정확히 3개",
+        },
+        problem_lede: { type: SchemaType.STRING, description: "이 회사가 푸는 핵심 문제 한 문장" },
+        problem_rest: { type: SchemaType.STRING, description: "핵심 문제를 보충하는 한두 문장" },
+        appeal_points: {
+          type: SchemaType.ARRAY,
+          maxItems: 5,
+          description: "3개만 최종 사용되지만, 검증에서 일부가 걸러질 수 있어 최대 5개까지 후보 가능.",
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              title: { type: SchemaType.STRING },
+              body: { type: SchemaType.STRING },
+              source_quote: {
+                type: SchemaType.STRING,
+                description: "원문에서 정확히 그대로 복사한 부분 문자열",
+              },
+            },
+            required: ["title", "body", "source_quote"],
+          },
+        },
+      },
+      required: [
+        "core_keywords",
+        "resume_tip",
+        "task_keywords",
+        "domain_primary",
+        "domain_secondary",
+        "domain_keywords",
+        "problem_lede",
+        "problem_rest",
+        "appeal_points",
+      ],
+    },
+  },
+});
+
+export async function analyzeJobForPanel(
+  title: string,
+  companyName: string,
+  description: string
+): Promise<IngestedJobPanelResult> {
+  const truncated = description.slice(0, MAX_INPUT_CHARS);
+
+  const result = await panelModel.generateContent(
+    `회사명: ${companyName}\n공고 제목: ${title}\n\n다음 채용 공고를 분석해줘.\n\n---\n${truncated}\n---`
+  );
+
+  const parsed = JSON.parse(result.response.text()) as {
+    core_keywords?: string[];
+    resume_tip?: string;
+    task_keywords?: string[];
+    domain_primary?: string;
+    domain_secondary?: string;
+    domain_keywords?: string[];
+    problem_lede?: string;
+    problem_rest?: string;
+    appeal_points?: { title?: string; body?: string; source_quote?: string }[];
+  };
+
+  if (
+    !parsed.core_keywords ||
+    !parsed.resume_tip ||
+    !parsed.task_keywords ||
+    !parsed.domain_primary ||
+    !parsed.domain_secondary ||
+    !parsed.domain_keywords ||
+    !parsed.problem_lede ||
+    !parsed.problem_rest
+  ) {
+    throw new Error("AI 분석 응답 형식이 올바르지 않습니다.");
+  }
+
+  const appealPoints = (parsed.appeal_points ?? [])
+    .filter((p): p is { title: string; body: string; source_quote: string } =>
+      Boolean(p.title && p.body && p.source_quote)
+    )
+    .map((p) => ({ title: p.title, body: p.body, sourceQuote: p.source_quote }));
+
+  return {
+    coreKeywords: parsed.core_keywords,
+    resumeTip: parsed.resume_tip,
+    taskKeywords: parsed.task_keywords.slice(0, 4),
+    domainPrimary: parsed.domain_primary,
+    domainSecondary: parsed.domain_secondary,
+    domainKeywords: parsed.domain_keywords,
+    problemLede: parsed.problem_lede,
+    problemRest: parsed.problem_rest,
+    appealPoints,
+  };
+}
+
 export type JobClassification = {
   role: string;
   platforms: string[];
