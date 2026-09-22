@@ -1152,6 +1152,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "국내에서 검증된 올리브영의 쇼핑 경험을 해외 이용자에게도 매끄럽게 전달하는 게 핵심 문제예요.",
     problemRest: "US·글로벌몰의 UI/UX를 설계하고, 여러 국가에 적용되는 글로벌 디자인 시스템을 구축·운영해요.",
   },
+  "KREAM": {
+    companyUrl: "https://kream.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "커머스 · 리셀 플랫폼",
+    domainSecondary: "네이버제트(SNOW Corp 계열)가 운영하는 국내 대표 스니커즈·명품 리셀 플랫폼이에요. 한정판 상품의 정가품 검수와 안전거래를 지원해요.",
+    domainKeywords: ["리셀 커머스", "스니커즈", "정가품 검수"],
+    problemLede: "한정판 상품 거래의 신뢰 문제를 검수 시스템과 콘텐츠로 풀어내는 게 핵심 문제예요.",
+    problemRest: "상품 이미지부터 스타일탭 콘텐츠, 프로모션 배너까지 구매 경험 전반의 비주얼을 만들어요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
