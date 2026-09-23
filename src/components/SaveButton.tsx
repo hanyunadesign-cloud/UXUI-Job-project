@@ -55,6 +55,11 @@ export function SaveButton({
         next ? { label: "보러가기", href: "/mypage" } : undefined
       );
       toggleGuestSavedJobId(jobId, next);
+      // 게스트 저장은 SavedJob에 안 남아서, saveCount 누적 집계만이라도 서버에 반영한다.
+      // 실패해도 저장 자체(localStorage)는 이미 끝났으니 화면엔 영향 없게 조용히 무시.
+      if (next) {
+        fetch(`/api/jobs/${jobId}/save-count`, { method: "POST" }).catch(() => {});
+      }
       return;
     }
 

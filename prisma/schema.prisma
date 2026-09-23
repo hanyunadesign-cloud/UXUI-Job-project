@@ -125,6 +125,11 @@ model Job {
   // 남겨둔다. null이면 확인 필요 없음.
   flaggedReason String? @db.Text
   flaggedAt   DateTime?
+  // 저장(찜) 버튼을 누른 누적 횟수. 게스트 저장은 SavedJob 행을 안 남기므로(로그인해야
+  // 계정으로 옮겨짐) 저장 데이터 전체를 집계할 다른 방법이 없어서 이 카운터를 따로 둔다.
+  // 언세이브해도 감소하지 않는 누적치 — "총 몇 번 저장됐는지"가 목적이라 라이브 찜 개수가
+  // 아니다. 같은 사람이 저장→해제→재저장을 반복하면 그만큼 다시 늘어난다.
+  saveCount   Int          @default(0)
   savedBy     SavedJob[]
   analysis    JobAnalysis?
   feedback    JobFeedback[]
