@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { FilterBar } from "@/components/FilterBar";
-import { SortDropdown } from "@/components/SortDropdown";
 import { JobCard } from "@/components/JobCard";
 import { EmptyState } from "@/components/EmptyState";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
@@ -111,10 +110,6 @@ export default async function JobsPage({
       </div>
 
       <FilterBar />
-
-      <div className="flex justify-end">
-        <SortDropdown />
-      </div>
 
       {sortedJobs.length === 0 ? (
         <EmptyState
