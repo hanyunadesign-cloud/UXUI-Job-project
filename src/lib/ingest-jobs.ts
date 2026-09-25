@@ -1,8 +1,7 @@
 import * as cheerio from "cheerio";
 import { prisma } from "./prisma";
-import { analyzeJobForPanel, judgeJobRelevance, reflowJobDescriptionParagraphs } from "./gemini";
+import { analyzeJobForPanel, reflowJobDescriptionParagraphs } from "./gemini";
 import { findOrCreateCompanyId } from "./company";
-import { notifyFollowersOfNewJobs } from "./notifications";
 import {
   extractApplicationPeriod,
   extractApplicationDeadline,
@@ -237,15 +236,16 @@ export type NewlyIngestedJob = {
   platforms: string[];
 };
 
-// 스케줄러(Vercel Cron)와 로컬 CLI 스크립트가 함께 사용하는 수집 로직 본체.
+// 스케줄러(Vercel Cron)와 로컬 CLI 스크립트가 함께 사용하는 갱신 로직 본체.
+// 신규 공고 자동 업로드는 하지 않는다 — 이미 올라온 공고의 내용/마감일 갱신과 소스에서
+// 사라진 공고의 자동 archive만 수행한다. newJobs는 그래서 항상 빈 배열이다(호출부인
+// fetch-jobs 크론의 관심 조건 이메일 다이제스트 발송 로직과의 호환을 위해 반환 형태만 유지).
 export async function ingestJobs(): Promise<{
   count: number;
   archived: number;
   newJobs: NewlyIngestedJob[];
 }> {
   let count = 0;
-  // 팔로워 알림(기업 단위)과 별개로, 실행 전체에서 새로 생긴 공고를 모아 관심 조건 이메일
-  // 다이제스트 발송에 쓴다.
   const allNewJobs: NewlyIngestedJob[] = [];
 
   for (const source of SOURCES) {
@@ -263,12 +263,6 @@ export async function ingestJobs(): Promise<{
     });
 
     const companyId = await findOrCreateCompanyId(source);
-    // 회사 채용 페이지 자체(공개 API 엔드포인트가 아니라 사람이 보는 페이지)를 검토 화면에
-    // 참고 링크로 남기기 위한 URL.
-    const sourceUrl =
-      source.provider === "greenhouse"
-        ? `https://boards.greenhouse.io/${source.board}`
-        : `https://jobs.ashbyhq.com/${source.boardName}`;
 
     // 소스 피드에서 더 이상 보이지 않는(마감·삭제된) 공고는 자동으로 archive 처리한다.
     // "상시채용"이라 마감일이 없는 공고는 아래 archiveStaleJobs()의 날짜 기준으로는 절대
@@ -285,10 +279,6 @@ export async function ingestJobs(): Promise<{
     if (staleResult.count > 0) {
       console.log(`  ↳ ${source.companyName}: 소스에서 사라진 공고 ${staleResult.count}건 자동 archive`);
     }
-
-    // 팔로워 알림은 진짜 신규 공고에만 보내야 하므로(기존 공고 정보 업데이트는 제외),
-    // upsert 전에 이미 존재하는지 먼저 확인해 이번 실행에서 새로 생긴 것만 따로 모아둔다.
-    const newlyCreated: { id: string; title: string }[] = [];
 
     for (const job of filtered) {
       // 원본 HTML이 문장마다 별도 <p>로 쪼개져 있는 경우가 많아, 같은 주제의 문장들도
@@ -325,72 +315,15 @@ export async function ingestJobs(): Promise<{
         select: { id: true },
       });
 
-      let savedJob: { id: string; title: string; role: string; industries: string[]; stage: string; platforms: string[] };
+      // 신규 공고는 더 이상 자동으로 올리지 않는다 — 자동화는 이미 올라온 공고의 내용/마감일
+      // 갱신(아래)과 소스에서 사라진 공고의 자동 archive(위)까지만이다. 새 공고 등록은 사람이
+      // 직접 한다.
+      if (!existed) continue;
 
-      if (existed) {
-        // 이미 발행된 공고는 재판단 없이 그대로 최신 내용으로 갱신한다.
-        savedJob = await prisma.job.update({ where: { applyUrl: job.applyUrl }, data });
-      } else {
-        // 검토 대기 중(CandidateJob)인 공고는 매번 다시 판단하지 않고 건너뛴다.
-        const existingCandidate = await prisma.candidateJob.findUnique({
-          where: { applyUrl: job.applyUrl },
-          select: { id: true },
-        });
-        if (existingCandidate) {
-          console.log(`  ↳ ${source.companyName} | ${job.title}: 검토 대기 중, 스킵`);
-          continue;
-        }
+      // 이미 발행된 공고는 재판단 없이 그대로 최신 내용으로 갱신한다.
+      const savedJob = await prisma.job.update({ where: { applyUrl: job.applyUrl }, data });
 
-        // 신규 공고만 제목 정규식 통과 후 본문까지 읽고 실제 UXUI 직군인지 한 번 더 판단한다
-        // (브랜드/그래픽/산업디자인 등 제목만으로는 정규식에 걸리는 무관 공고를 거르기 위함).
-        let judgment;
-        try {
-          judgment = await judgeJobRelevance(job.title, job.description);
-        } catch (error) {
-          console.warn(`  ↳ ${source.companyName} | ${job.title}: 적합성 판단 실패, 안전하게 검토 대기로 보냄`, error);
-          judgment = { verdict: "ambiguous" as const, note: "AI 판단 실패로 자동 검토 대기 처리됨" };
-        }
-        await sleep(1000);
-
-        if (judgment.verdict === "reject") {
-          console.log(`  ↳ ${source.companyName} | ${job.title}: UXUI 무관 판단, 건너뜀 (${judgment.note ?? "근거 없음"})`);
-          continue;
-        }
-
-        if (judgment.verdict === "ambiguous") {
-          await prisma.candidateJob.create({
-            data: {
-              companyName: source.companyName,
-              companyLogo: source.companyLogo,
-              title: job.title,
-              applyUrl: job.applyUrl,
-              description: job.description,
-              sourceUrl,
-              aiNote: judgment.note,
-            },
-          });
-          console.log(`  ↳ ${source.companyName} | ${job.title}: 애매함, 검토 대기로 보냄`);
-          continue;
-        }
-
-        // verdict === "match"
-        savedJob = await prisma.job.create({ data });
-      }
-
-      if (!existed) {
-        newlyCreated.push({ id: savedJob.id, title: savedJob.title });
-        allNewJobs.push({
-          id: savedJob.id,
-          title: savedJob.title,
-          companyName: source.companyName,
-          role: savedJob.role,
-          industries: savedJob.industries,
-          stage: savedJob.stage,
-          platforms: savedJob.platforms,
-        });
-      }
-
-      console.log(`✔ ${source.companyName} | ${job.title}`);
+      console.log(`✔ ${source.companyName} | ${job.title} (갱신)`);
       count += 1;
 
       // 카드 목록에 바로 핵심 업무 키워드를 보여줄 수 있도록, 상세페이지 방문을 기다리지 않고
@@ -448,8 +381,6 @@ export async function ingestJobs(): Promise<{
         await sleep(3000);
       }
     }
-
-    await notifyFollowersOfNewJobs(companyId, source.companyName, newlyCreated);
     } catch (error) {
       console.error(`✗ ${source.companyName} 소스 처리 실패, 다음 소스로 넘어감:`, error);
     }
