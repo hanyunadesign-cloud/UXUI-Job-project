@@ -1161,6 +1161,33 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "한정판 상품 거래의 신뢰 문제를 검수 시스템과 콘텐츠로 풀어내는 게 핵심 문제예요.",
     problemRest: "상품 이미지부터 스타일탭 콘텐츠, 프로모션 배너까지 구매 경험 전반의 비주얼을 만들어요.",
   },
+  "스플랩": {
+    companyUrl: "https://umoh.io",
+    designBlogUrl: null,
+    domainPrimary: "B2B SaaS · 커넥션 툴",
+    domainSecondary: "사람과 사람, 기업과 기업의 연결을 돕는 스케줄링 툴 우모(Umoh)와 센드타임(Sendtime)을 만드는 초기 스타트업이에요. 서울과 미국 샌프란시스코에 고객사를 두고 있어요.",
+    domainKeywords: ["B2B SaaS", "스케줄링", "초기 스타트업"],
+    problemLede: "초기 고객의 패턴을 찾고 가설을 빠르게 검증하는 게 핵심 문제예요.",
+    problemRest: "디자이너가 기획부터 UI/UX, 고객 소통, QA까지 제품 전반을 함께 맡아요.",
+  },
+  "코인원": {
+    companyUrl: "https://coinone.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "핀테크 · 가상자산 거래소",
+    domainSecondary: "국내 대표 가상자산 거래소로, 자산 관리와 거래매칭 엔진 등을 제공해요. 11년 연속 보안 무사고 기록을 보유하고 있어요.",
+    domainKeywords: ["가상자산 거래소", "핀테크", "디자인 시스템"],
+    problemLede: "복잡한 금융 서비스를 신뢰할 수 있고 직관적인 경험으로 바꾸는 게 핵심 문제예요.",
+    problemRest: "자체 디자인 시스템과 AI를 함께 활용해 서비스 전반의 일관성을 관리해요.",
+  },
+  "브이앤지": {
+    companyUrl: "http://vng.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "IT/서비스 · SI 솔루션",
+    domainSecondary: "컴퓨터시스템 통합 자문 및 구축 서비스를 제공하는 SI 전문 기업이에요. 2013년 설립돼 14년째 사내·고객사 시스템을 만들고 있어요.",
+    domainKeywords: ["SI", "시스템통합", "사내 시스템"],
+    problemLede: "복잡한 시스템을 사용자 친화적인 화면으로 풀어내는 게 핵심 문제예요.",
+    problemRest: "사내팀 및 고객과 소통하며 디자인 산출물의 완성도를 함께 맞춰가요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
