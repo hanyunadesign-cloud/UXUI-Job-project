@@ -1188,6 +1188,24 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "복잡한 시스템을 사용자 친화적인 화면으로 풀어내는 게 핵심 문제예요.",
     problemRest: "사내팀 및 고객과 소통하며 디자인 산출물의 완성도를 함께 맞춰가요.",
   },
+  "에이치엔서브": {
+    companyUrl: null,
+    designBlogUrl: null,
+    domainPrimary: "시설관리 · 파견 서비스",
+    domainSecondary: "사업시설 유지·관리 서비스업을 영위하는 기업으로, 하나은행 본점에 상주하며 디지털 채널 업무를 지원하는 파견 포지션이에요.",
+    domainKeywords: ["파견직", "시설관리", "하나은행 상주"],
+    problemLede: "하나은행 본점 내 디지털 채널의 UI/UX를 상주하며 지원하는 게 핵심 업무예요.",
+    problemRest: "모바일·디지털 화면을 기획하고 디자인하는 실무를 맡아요.",
+  },
+  "한국벤자민무어페인트": {
+    companyUrl: "https://www.benjaminmoore.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "유통 · 도료(페인트)",
+    domainSecondary: "글로벌 페인트 브랜드 벤자민무어의 한국 법인으로, 무역·상사업을 영위해요. 서울 강남구 논현동에 컬러스테이션을 운영하고 있어요.",
+    domainKeywords: ["페인트", "무역·상사", "브랜드 디자인"],
+    problemLede: "매장과 마케팅 채널에서 브랜드를 일관되게 전달하는 게 핵심 문제예요.",
+    problemRest: "전단지, POP, 브랜드 비주얼 등 오프라인 중심의 디자인 결과물을 만들어요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
