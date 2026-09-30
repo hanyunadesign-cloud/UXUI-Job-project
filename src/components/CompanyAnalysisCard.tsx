@@ -1206,6 +1206,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "매장과 마케팅 채널에서 브랜드를 일관되게 전달하는 게 핵심 문제예요.",
     problemRest: "전단지, POP, 브랜드 비주얼 등 오프라인 중심의 디자인 결과물을 만들어요.",
   },
+  "현대오토에버": {
+    companyUrl: "https://www.hyundaiautoever.com",
+    designBlogUrl: null,
+    domainPrimary: "IT/서비스 · 모빌리티",
+    domainSecondary: "현대자동차그룹의 IT서비스 전문기업이에요. 차량 소프트웨어부터 그룹 내 다양한 서비스의 IT 인프라·솔루션까지 폭넓게 다뤄요.",
+    domainKeywords: ["대기업 계열사", "모빌리티", "생성형 AI"],
+    problemLede: "그룹 전반의 서비스에 생성형 AI를 실제 업무 흐름에 녹여내는 게 핵심 문제예요.",
+    problemRest: "생성형 AI 서비스 운영에 필요한 UI를 기획하고 디자인해요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
