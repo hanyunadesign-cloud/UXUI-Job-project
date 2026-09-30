@@ -2426,4 +2426,52 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "본인 역량에 맞는 전형 선택 전략", body: "코딩테스트와 과제테스트 중 본인 강점이 더 잘 드러나는 전형을 선택해 지원 전략을 세워보세요.", sourceQuote: "코딩테스트 또는 과제테스트 중 본인 역량에 맞는 전형을 선택해 지원합니다." },
     { title: "신입 공채 지원 전 명확한 포지션 선택", body: "테스트 전형 간 교차 선택이 안 되니, 지원 전 원하는 포지션과 전형을 명확히 정해두세요.", sourceQuote: "서로 다른 테스트 전형 간 포지션 교차 선택은 불가합니다." },
   ],
+  // 토스뱅크 - Product Designer (신입, 2년 이하)
+  cmunprcot0001c2bsbmglhjjb: [
+    { title: "데이터 기반 문제 개선 경험", body: "사용자가 원하는 것을 정량·정성 데이터로 확인하고 개선해본 경험을 구체적으로 보여주세요.", sourceQuote: "내가 원하는 것이 아닌, 사용자가 원하는 것을 정량·정성 데이터 기반으로 개선한 경험이 있는 분이 필요해요." },
+    { title: "직접 설계하고 배포한 경험", body: "사용자에게 집착해 만든 제품을 직접 설계하고 배포하거나 피드백 받은 경험을 보여주세요.", sourceQuote: "이를 근거로 사용자에게 집착해 만든 제품을 직접 설계하고 배포하거나 피드백 받은 경험이 필요해요." },
+    { title: "As-is·To-be로 정리한 개선 과정", body: "개선 전(as-is)과 개선 후(to-be) 화면을 비교할 수 있는 포트폴리오로 보여주세요.", sourceQuote: "개선 전의 화면(as-is)과 개선 후의 화면(to-be)을 잘 확인할 수 있는 이미지가 있으면 더욱 좋아요." },
+  ],
+  // 토스플레이스 - Design Assistant
+  cmunprcqr0003c2bszkviqcwo: [
+    { title: "광고·배너 그래픽 제작 경험", body: "광고나 배너 그래픽을 제작해본 작업물을 구체적으로 보여주세요.", sourceQuote: "광고/배너 그래픽 제작 경험이 있는 분을 찾고 있어요." },
+    { title: "다양한 매체 대응 그래픽 경험", body: "다양한 사이즈와 매체에 맞춰 그래픽을 대응해본 경험을 보여주세요.", sourceQuote: "다양한 사이즈와 매체에 맞는 그래픽 대응이 가능한 분이면 좋아요." },
+    { title: "AI 이미지 생성 툴 활용 경험", body: "AI 이미지 생성 툴로 그래픽 작업을 해본 경험이 있다면 함께 보여주세요.", sourceQuote: "AI 이미지 생성 툴을 활용해 그래픽 작업을 해본 경험이 있다면 더 좋아요." },
+  ],
+  // 토스 - Global UX Research Assistant
+  cmunprcsf0005c2bsysgc5m7d: [
+    { title: "영어로 진행한 사용자 인터뷰 경험", body: "영어로 사용자 인터뷰나 사용성 테스트를 진행해본 경험을 구체적으로 보여주세요.", sourceQuote: "You'll lead interviews and usability tests with users in English-speaking markets, from facilitating sessions to documenting the findings." },
+    { title: "다른 문화권에 대한 호기심", body: "다른 나라 사람과 대화하며 새로운 걸 배웠던 경험을 구체적으로 들려주세요.", sourceQuote: "You're curious about customers and motivated to uncover problems and improve the product." },
+    { title: "낯선 업무에 스스로 답을 찾는 태도", body: "낯선 업무도 스스로 방법을 찾아 끝까지 해결해본 경험을 보여주세요.", sourceQuote: "You're comfortable with unfamiliar work and can find a way forward and see it through." },
+  ],
+  // 토스 - Global UX Research Program Manager
+  cmunprcu20007c2bs9xfdjp4d: [
+    { title: "리서치 프로세스 개선 경험", body: "비효율적인 리서치 프로세스를 찾아 직접 개선해본 경험을 구체적으로 보여주세요.", sourceQuote: "효율적인 리서치 실행을 위해 글로벌 리서치 프로세스를 최적화하고, 비효율적인 영역을 찾아 개선하는 업무를 담당해요." },
+    { title: "리서치 운영 관리 경험", body: "리서치 툴 개선, 교육, 리크루팅 운영 등 리서치 운영을 관리해본 경험을 보여주세요.", sourceQuote: "리서치에 대한 기본 이해가 있는 오퍼레이션 담당자로서, 리서치 운영을 관리한 경험이 필요해요. (예. 리서치 툴 개선, 교육, 프로세스 최적화, 리크루팅 운영 등)" },
+    { title: "글로벌 커뮤니케이션 영어 역량", body: "해외 파트너사와 이메일로 소통하거나 글로벌 고객과 인터뷰 일정을 조율해본 경험을 보여주세요.", sourceQuote: "해외 파트너사와 이메일로 소통하고, 글로벌 고객과 인터뷰 일정을 잡을 때 필요한 영어 역량이 필요해요." },
+  ],
+  // 토스플레이스 - User Interview Assistant
+  cmunprcvn0009c2bsoqfv0l0a: [
+    { title: "다양한 고객 응대 경험", body: "다양한 연령대와 특성의 고객과 유선이나 대면으로 소통해본 경험을 구체적으로 보여주세요.", sourceQuote: "다양한 연령대와 특성을 지닌 고객들과 유선 및 대면 소통 경험이 있는 분을 원해요." },
+    { title: "꼼꼼한 자료 정리 경험", body: "정해진 규칙에 맞춰 자료를 꼼꼼히 정리해본 경험이 있다면 보여주세요.", sourceQuote: "정해진 규칙에 맞춰 자료를 꼼꼼히 정리해본 경험이 있다면 좋아요." },
+    { title: "능동적인 협업 경험", body: "스스로 나서서 능동적으로 협업해본 경험을 구체적으로 보여주세요.", sourceQuote: "능동적으로 협업해 본 경험이 있으신 분이 필요해요." },
+  ],
+  // 토스 - Visual Design Assistant
+  cmunprcxc000bc2bsjuqn8d22: [
+    { title: "브랜딩 콘텐츠 제작 경험", body: "인스타그램 이미지·영상, 배너, 썸네일 등 브랜딩 콘텐츠 작업물을 보여주세요.", sourceQuote: "브랜딩/마케팅에 필요한 다양한 콘텐츠(인스타그램 이미지·영상, 배너, 썸네일 등)를 디자인해요." },
+    { title: "행사·굿즈 디자인 지원 경험", body: "포스터나 굿즈 등 오프라인 행사에 필요한 디자인을 지원해본 경험을 보여주세요.", sourceQuote: "대외 행사 전반에 필요한 디자인 관련 업무를 서포트해요. (포스터, 굿즈 제작 등)" },
+    { title: "AI 활용 디자인 효율화 경험", body: "AI 툴로 다양한 아웃풋을 만들거나 작업을 효율화해본 경험이 있다면 보여주세요.", sourceQuote: "AI 툴로 다양한 아웃풋을 만들거나 디자인 작업을 효율화해 본 적이 있다면 더 좋아요." },
+  ],
+  // 토스뱅크 - Visual Design Assistant
+  cmunprcyx000dc2bs7czs9aqu: [
+    { title: "2D·3D·애니메이션 그래픽 제작 경험", body: "2D, 3D, 애니메이션 등 다양한 형태의 그래픽 제작 작업물을 보여주세요.", sourceQuote: "토스뱅크 서비스에 활용될 2D, 3D, 애니메이션 등의 그래픽 제작을 지원해요." },
+    { title: "3D 프로그램 활용 경험", body: "C4D, Octane, Redshift 등 3D 프로그램을 활용해 작업한 경험을 보여주세요.", sourceQuote: "3D 프로그램 (C4D, Octane, Redshift 등) 활용 능력이 필요해요." },
+    { title: "AI 툴 활용 경험", body: "Gemini, ChatGPT, Midjourney 등 AI 툴을 활용해본 경험이 있다면 보여주세요.", sourceQuote: "AI 툴 (Gemini, Chat GPT, Midjourney 등) 활용 능력이 있다면 더욱 좋아요." },
+  ],
+  // 토스인슈어런스 - Product Designer
+  cmunprd0m000fc2bsukoxfqb4: [
+    { title: "1인 디자이너로 제품 전체를 설계한 경험", body: "고객과 만나는 모든 화면을 혼자 설계하고 의사결정해본 경험을 구체적으로 보여주세요.", sourceQuote: "제품의 1인 디자이너로서 고객과 만나는 모든 화면을 주도적으로 설계하고 의사결정해요." },
+    { title: "독립적인 의사결정 경험", body: "별도 승인 없이 스스로 판단하고 책임져본 경험을 보여주세요.", sourceQuote: "별도 승인이나 보고는 필요 없어요. Product Designer가 사용자 경험에 대해 최고의 책임과 권한을 가져요." },
+    { title: "소규모 팀에서의 주도적 협업 경험", body: "4~6명 정도의 소규모 팀에서 스타트업처럼 주도적으로 일해본 경험을 보여주세요.", sourceQuote: "각 사일로는 제품을 만들기 위한 최소 인원 4~6명으로 구성되어 있어요. 독립적으로 의사결정하기 때문에 마치 작은 스타트업에 합류한 느낌일 거예요." },
+  ],
 };
