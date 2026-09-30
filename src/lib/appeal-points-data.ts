@@ -2480,4 +2480,82 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "Figma·Notion 활용 능력", body: "Figma나 Notion으로 콘텐츠나 디자인 자료를 정리해본 경험을 보여주세요.", sourceQuote: "Figma, Notion, Photoshop 활용 능력" },
     { title: "희망 고용형태를 명확히 밝히는 전략", body: "계약직·인턴도 정규직 전환이 가능하니, 본인이 원하는 고용형태를 지원서에 분명히 밝혀보세요.", sourceQuote: "계약직·인턴은 정규직 전환이 가능해요." },
   ],
+  // 제네시스네스트 - [인턴] UX/UI/모바일/웹 디자이너(전환형)
+  cmunrpcrs00023qerkzm5c9q8: [
+    { title: "UI/GUI 디자인 실무 경험", body: "Web, APP UI/GUI 디자인 작업물을 구체적으로 보여주세요.", sourceQuote: "Web, APP UI/GUI 디자인" },
+    { title: "그래픽·키비주얼 제작 경험", body: "서비스에 어울리는 그래픽 에셋이나 키 비주얼을 제작해본 경험을 보여주세요.", sourceQuote: "서비스의 UI/UX에 어울리는 Graphic Asset, 키 비주얼 제작" },
+    { title: "결과물을 논리적으로 설명하는 능력", body: "본인의 디자인 결과물을 왜 그렇게 만들었는지 논리적으로 설명해보세요.", sourceQuote: "자신의 디자인 결과물에 대해 논리적으로 설명할 수 있는 분" },
+  ],
+  // 포스타입 - [신입/경력] 프로덕트 디자이너(UX/UI)
+  cmunrpcwe00053qers7ylqsrw: [
+    { title: "문제 정의부터 해결까지의 과정", body: "서비스 성장과 사용자 만족에 기여하는 문제를 정의하고 해결책을 도출한 과정을 보여주세요.", sourceQuote: "서비스의 성장과 사용자 만족에 기여하는 문제를 정의하고 최적의 해결책을 도출" },
+    { title: "디자인 시스템 고도화 경험", body: "일관성 있고 효율적인 디자인을 위해 디자인 시스템을 만들거나 발전시켜본 경험을 보여주세요.", sourceQuote: "일관성 있고 효율적인 디자인을 위해 디자인 시스템을 함께 만들고 발전" },
+    { title: "AI 디자인 도구 활용 능력", body: "Figma나 AI 디자인 도구를 실무에 능숙하게 활용해본 경험을 보여주세요.", sourceQuote: "Figma 및 AI 디자인 도구에 대한 높은 숙련도" },
+  ],
+  // 미스터픽 - 프로덕트 디자이너
+  cmunrpd1300083qerejgas8d0: [
+    { title: "데이터 기반 가설 검증 경험", body: "전환율, 리텐션 등 핵심 지표를 분석해 가설을 세우고 검증해본 경험을 보여주세요.", sourceQuote: "전환율, 리텐션 등 핵심 지표 분석과 퍼널 데이터를 기반으로 문제 정의 및 가설 수립·검증" },
+    { title: "AI 툴 실무 적용 경험", body: "Claude, Gemini 등 AI 툴을 실무에 도입해 업무 효율을 높인 경험을 구체적으로 보여주세요.", sourceQuote: "Claude, Gemini, Magnific 등 AI 툴을 실무에 적극 도입해 업무 효율을 높인 경험" },
+    { title: "디자인 시스템·핸드오프 운영 경험", body: "Figma 기반 디자인 시스템을 관리하고 개발 핸드오프를 진행해본 경험을 보여주세요.", sourceQuote: "Figma 기반 디자인 시스템 관리, 개발 핸드오프" },
+  ],
+  // 스터닝 - [라우드소싱] 프로덕트 디자이너(3년 이하)
+  cmunrpd5j000b3qerhuuioxm7: [
+    { title: "데이터 기반 문제 발굴 경험", body: "고객이나 CS 피드백을 통해 반복되는 문제를 찾아낸 경험을 보여주세요.", sourceQuote: "고객, 디자이너, CS 피드백을 통한 반복 문제 발굴" },
+    { title: "A/B 테스트로 가설 검증한 경험", body: "빠르게 가설을 세우고 A/B 테스트로 검증해본 경험을 구체적으로 보여주세요.", sourceQuote: "빠르게 실행 가능한 UX 가설 설계 및 A/B 테스트를 통한 검증" },
+    { title: "제품 런칭·개선 완주 경험", body: "사이드 프로젝트나 인턴 경험을 포함해 서비스 런칭이나 개선을 끝까지 완료해본 경험을 보여주세요.", sourceQuote: "신규 서비스 런칭 또는 제품 개선 프로젝트 완료 경험(사이드 프로젝트, 인턴 경험 포함)" },
+  ],
+  // 널리소프트 - [쌤157] UI/UX 디자이너 (신입)
+  cmunrpda5000e3qer344z2w59: [
+    { title: "복잡한 정보를 단순화한 경험", body: "복잡한 정보를 누구나 이해할 수 있게 단순화해본 경험을 보여주세요.", sourceQuote: "복잡한 세금 정보를 극단적으로 단순화하여 누구나 이해할 수 있게 디자인" },
+    { title: "사용자 경험 문제 발견 능력", body: "사용자 입장에서 불편한 지점을 스스로 발견해본 경험을 보여주세요.", sourceQuote: "사용자 경험 문제를 발견할 수 있는 능력" },
+    { title: "전략적 사고 기반 디자인 능력", body: "심미성뿐 아니라 비즈니스 전략까지 고려해 디자인했던 경험을 보여주세요.", sourceQuote: "심미성뿐 아니라 전략적 사고에 기반한 고객 중심 디자인 구현 능력" },
+  ],
+  // 팀에버플 - Product / UX.UI Designer
+  cmunrpdee000h3qer38vtxsc5: [
+    { title: "제품 전체 주기를 다룬 디자인 경험", body: "리서치부터 구현, 지속 개선까지 제품 전체 주기에 걸쳐 참여해본 경험을 보여주세요.", sourceQuote: "리서치·분석부터 구현·지속 개선까지 제품 전체 주기에 걸친 디자인" },
+    { title: "디자인 시스템 구축·관리 경험", body: "Figma 기반 디자인 시스템을 직접 구축하고 관리해본 경험을 보여주세요.", sourceQuote: "Figma 기반 디자인 시스템 구축·관리" },
+    { title: "디자인 결정의 근거를 제시하는 능력", body: "디자인 결정을 내릴 때 타당한 근거를 제시했던 경험을 구체적으로 보여주세요.", sourceQuote: "디자인 결정에 대한 타당한 근거 제시 능력" },
+  ],
+  // 클라썸 - [Edtech] Product Builder
+  cmunrpdp0000k3qero0icwg2i: [
+    { title: "데이터 기반 가설 검증 경험", body: "유저 데이터를 분석해 가설을 세우고 검증하며 제품을 성장시켜본 경험을 보여주세요.", sourceQuote: "유저 데이터를 상시 모니터링하고 분석하여, 가설 수립과 검증을 통해 제품을 성장" },
+    { title: "다각적 사용자 관점 설계 경험", body: "서로 다른 유형의 사용자 관점을 함께 반영해 핵심 플로우를 설계해본 경험을 보여주세요.", sourceQuote: "관리자·학생 등 다각적인 사용자 관점을 반영한 제품의 핵심 플로우를 설계" },
+    { title: "AI 툴 활용 개발 협업 경험", body: "Claude, v0 등 AI 툴을 활용해 개발자와 협업해본 경험이 있다면 보여주세요.", sourceQuote: "Claude, v0 등 AI 툴을 적극적으로 활용한 경험" },
+  ],
+  // 벳칭 - Product Designer - 주니어(매니저)
+  cmunrpdtg000n3qer02o0sapm: [
+    { title: "문제 정의부터 핸드오프까지의 경험", body: "화면 설계를 문제 정의부터 개발 핸드오프까지 끝까지 책임져본 경험을 보여주세요.", sourceQuote: "화면을 문제 정의부터 핸드오프까지 담당" },
+    { title: "숨은 문제를 파악해 해결한 경험", body: "고객 요청 이면의 숨겨진 문제를 찾아 해결해본 경험을 보여주세요.", sourceQuote: "고객 요청에서 숨겨진 문제를 파악해 해결" },
+    { title: "디자인 시스템 관리 경험", body: "디자인 시스템을 직접 관리해본 경험이 있다면 구체적으로 보여주세요.", sourceQuote: "디자인 시스템 관리 경험" },
+  ],
+  // 똑똑한개발자 - UX/UI 디자이너 (Product Builder로 성장)
+  cmunrpdxy000q3qeraxf2w3n1: [
+    { title: "클라이언트 협업 기반 화면 설계 경험", body: "클라이언트와 협업해 기획을 구체화하고 화면을 디자인해본 경험을 보여주세요.", sourceQuote: "클라이언트와 협업해 기획을 구체화하고 화면 디자인" },
+    { title: "AI 툴로 구현까지 확장한 경험", body: "AI 기반 툴로 디자인을 넘어 직접 구현까지 해본 경험이 있다면 보여주세요.", sourceQuote: "AI 기반 툴을 활용해 디자인 영역을 넘어 구현 영역까지 확장" },
+    { title: "디자인 방향성을 설득한 경험", body: "클라이언트나 팀을 상대로 디자인 방향성을 설득해본 경험을 구체적으로 보여주세요.", sourceQuote: "클라이언트 커뮤니케이션 및 디자인 방향성에 대한 설득" },
+  ],
+  // 링크알파 - Product Designer
+  cmunrpe2a000t3qerbav87uul: [
+    { title: "제품 UX/UI를 엔드투엔드로 책임진 경험", body: "제품의 UX/UI를 처음부터 끝까지 책임지고 설계해본 경험을 보여주세요.", sourceQuote: "핵심 제품 UX/UI를 처음부터 끝까지 책임" },
+    { title: "고객 세션을 디자인 결정으로 전환한 경험", body: "고객과의 세션에서 관찰한 내용을 실제 디자인 결정으로 옮겨본 경험을 보여주세요.", sourceQuote: "글로벌 고객과의 직접 세션을 통해 워크플로우를 관찰하고 이를 디자인 의사결정으로 전환" },
+    { title: "0에서 1을 만든 프로토타이핑 경험", body: "새로운 기능을 0에서부터 시각화하고 반복적으로 검증해본 경험을 보여주세요.", sourceQuote: "0-to-1 기능 시각화, 반복적인 프로토타이핑, 가설 검증" },
+  ],
+  // 엑스에이아이 - AI Tutor - Design Specialist
+  cmunrpe5o000v3qerajiyf6p8: [
+    { title: "디자인 품질을 판단하는 안목", body: "시각적 위계, 타이포그래피, 컬러 등 디자인 기본기를 얼마나 정확히 판단할 수 있는지 보여주세요.", sourceQuote: "Sharp eye for fundamentals: visual hierarchy, typography, spacing, color, composition, consistency, clarity." },
+    { title: "완성도 높은 포트폴리오", body: "본인의 취향과 완성도를 보여줄 수 있는 대표작을 준비해주세요.", sourceQuote: "A portfolio showing strong taste and finished, high-quality work." },
+    { title: "디자인 비평을 글로 정리하는 능력", body: "좋은 디자인과 부족한 디자인의 차이를 논리적으로 글로 설명해본 경험을 보여주세요.", sourceQuote: "Write precise, well-reasoned annotations and critiques advising upon the difference between mediocre, good, and excellent design." },
+  ],
+  // 위클레이 - 프로덕트 디자이너
+  cmunrpeae000y3qere3c33qh3: [
+    { title: "React·Figma 등 프론트엔드 툴 활용 능력", body: "React, Figma, JavaScript, HTML/CSS 등 필요 스킬을 실제로 다뤄본 경험을 보여주세요.", sourceQuote: "React, Figma, JavaScript, HTML/CSS" },
+    { title: "성장지향적 태도", body: "새로운 걸 배우고 스스로 성장하려 했던 구체적인 경험을 보여주세요.", sourceQuote: "성장지향성, 계획성, 성실성, 창의성, 협동심" },
+    { title: "영어 커뮤니케이션 능력", body: "영어로 협업하거나 소통해본 경험이 있다면 보여주세요.", sourceQuote: "영어가능자" },
+  ],
+  // 석세스모드 - [핀테크 스타트업] UI/UX 디자이너 채용
+  cmunrpekt00113qer0zes0o1a: [
+    { title: "부가세 환급 핀테크 서비스 이해", body: "외국인 관광객 대상 부가세 환급처럼 특정 도메인에 특화된 핀테크 서비스에 관심 있는 이유를 보여주세요.", sourceQuote: "외국인 관광객을 위한 부가세 환급 서비스 Success mode를 운영하는 핀테크 스타트업입니다." },
+    { title: "1년 이상의 UI/UX 실무 경력", body: "관련 실무 경력 1년 이상을 증명할 수 있는 대표 결과물을 보여주세요.", sourceQuote: "경력 1년 이상, 대졸 이상(졸업예정자 가능)" },
+    { title: "수습 기간을 감안한 지원 의지", body: "6개월 수습 조건을 확인하고 장기 근무 의사를 분명히 밝혀주세요.", sourceQuote: "정규직(수습 6개월)" },
+  ],
 };
