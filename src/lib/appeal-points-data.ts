@@ -2474,4 +2474,10 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "독립적인 의사결정 경험", body: "별도 승인 없이 스스로 판단하고 책임져본 경험을 보여주세요.", sourceQuote: "별도 승인이나 보고는 필요 없어요. Product Designer가 사용자 경험에 대해 최고의 책임과 권한을 가져요." },
     { title: "소규모 팀에서의 주도적 협업 경험", body: "4~6명 정도의 소규모 팀에서 스타트업처럼 주도적으로 일해본 경험을 보여주세요.", sourceQuote: "각 사일로는 제품을 만들기 위한 최소 인원 4~6명으로 구성되어 있어요. 독립적으로 의사결정하기 때문에 마치 작은 스타트업에 합류한 느낌일 거예요." },
   ],
+  // 유아이볼 - [재택근무] UI/UX 콘텐츠 에디터
+  cmunqf0bx0002y3145kb8bxui: [
+    { title: "UI/UX 콘텐츠 기획·편집 경험", body: "UI/UX 관련 콘텐츠를 직접 기획하고 편집해본 경험을 구체적으로 보여주세요.", sourceQuote: "재택근무 UI/UX 콘텐츠 에디터" },
+    { title: "Figma·Notion 활용 능력", body: "Figma나 Notion으로 콘텐츠나 디자인 자료를 정리해본 경험을 보여주세요.", sourceQuote: "Figma, Notion, Photoshop 활용 능력" },
+    { title: "희망 고용형태를 명확히 밝히는 전략", body: "계약직·인턴도 정규직 전환이 가능하니, 본인이 원하는 고용형태를 지원서에 분명히 밝혀보세요.", sourceQuote: "계약직·인턴은 정규직 전환이 가능해요." },
+  ],
 };

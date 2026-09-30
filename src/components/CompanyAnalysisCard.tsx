@@ -1215,6 +1215,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "그룹 전반의 서비스에 생성형 AI를 실제 업무 흐름에 녹여내는 게 핵심 문제예요.",
     problemRest: "생성형 AI 서비스 운영에 필요한 UI를 기획하고 디자인해요.",
   },
+  "유아이볼": {
+    companyUrl: "https://uibowl.io",
+    designBlogUrl: null,
+    domainPrimary: "IT/서비스 · 디자인 툴",
+    domainSecondary: "디자이너를 위한 UI/UX 패턴 레퍼런스 플랫폼 유아이볼을 운영하는 초기 스타트업이에요. 판교 경기창조경제혁신센터 소속이에요.",
+    domainKeywords: ["UI/UX 레퍼런스", "디자인 툴", "초기 스타트업"],
+    problemLede: "디자이너가 원하는 패턴을 빠르게 찾고 참고할 수 있게 콘텐츠를 정리하는 게 핵심 문제예요.",
+    problemRest: "UI/UX 관련 콘텐츠를 기획하고 편집해 플랫폼에 꾸준히 채워 넣어요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
