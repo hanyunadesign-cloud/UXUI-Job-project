@@ -1323,6 +1323,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "외국인 관광객이 겪는 부가세 환급 절차의 번거로움을 줄이는 게 핵심 문제예요.",
     problemRest: "UI/UX 디자인으로 복잡한 환급 절차를 쉽고 직관적으로 만들어요.",
   },
+  "쿠팡페이": {
+    companyUrl: "https://www.coupangpay.com",
+    designBlogUrl: null,
+    domainPrimary: "핀테크 · 결제",
+    domainSecondary: "쿠팡의 핀테크 사업부로, 한국과 대만 고객을 위한 원터치 결제와 와우 신용카드, BaaS 기반 금융 솔루션을 만들어요.",
+    domainKeywords: ["결제 핀테크", "쿠팡 계열사", "BaaS"],
+    problemLede: "확장된 금융 서비스를 소비자와 판매자 모두가 편하게 누리게 하는 게 핵심 문제예요.",
+    problemRest: "전략 수립부터 실행까지 주요 제품 경험 전반을 리드하며 디자인 시스템 표준을 세워요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
