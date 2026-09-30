@@ -12,6 +12,7 @@ export function JobContentTabs({
   stage,
   companyData,
   description,
+  descriptionImageUrl,
   summary,
   tab,
   onTabChange,
@@ -23,6 +24,8 @@ export function JobContentTabs({
   // 마이페이지 "링크로 추가" 공고용 — 저장 시점에 AI가 만든 기업 정보를 직접 넘긴다.
   companyData?: CompanyAnalysisData;
   description: string;
+  // 공고 원문이 이미지(포스터 등)로만 제공되는 드문 케이스에 쓴다. 대부분 undefined.
+  descriptionImageUrl?: string | null;
   summary?: ReactNode;
   tab: "content" | "company";
   onTabChange: (tab: "content" | "company") => void;
@@ -87,6 +90,14 @@ export function JobContentTabs({
               description
             )}
           </p>
+          {descriptionImageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={descriptionImageUrl}
+              alt="채용 공고 원문 이미지"
+              className="mt-4 w-full rounded-xl border border-neutral-200"
+            />
+          ) : null}
         </div>
         <div
           className={clsx("col-start-1 row-start-1", tab !== "company" && "invisible")}

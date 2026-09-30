@@ -20,6 +20,7 @@ export function AppealJobPanel({
   companyData,
   points,
   description,
+  descriptionImageUrl,
   summary,
 }: {
   jobId: string;
@@ -30,6 +31,7 @@ export function AppealJobPanel({
   companyData?: CompanyAnalysisData;
   points?: AppealPoint[];
   description: string;
+  descriptionImageUrl?: string | null;
   summary?: ReactNode;
 }) {
   const [tab, setTab] = useState<"content" | "company">("content");
@@ -73,6 +75,7 @@ export function AppealJobPanel({
         stage={stage}
         companyData={companyData}
         description={description}
+        descriptionImageUrl={descriptionImageUrl}
         summary={summary}
         tab={tab}
         onTabChange={handleTabChange}

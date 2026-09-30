@@ -149,6 +149,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
             companyData={aiCompanyData}
             points={points}
             description={job.description}
+            descriptionImageUrl={job.descriptionImageUrl}
             summary={
               <JobSummaryCard
                 job={{
@@ -168,6 +169,14 @@ export default async function JobDetailPage({ params }: { params: { id: string }
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-700">
               {job.description}
             </p>
+            {job.descriptionImageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={job.descriptionImageUrl}
+                alt="채용 공고 원문 이미지"
+                className="mt-4 w-full rounded-xl border border-neutral-200"
+              />
+            ) : null}
           </div>
         )}
 

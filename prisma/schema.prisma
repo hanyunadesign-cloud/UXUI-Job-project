@@ -109,6 +109,9 @@ model Job {
   stage       String
   location    String?
   description String       @db.Text
+  // 공고 원문이 이미지(포스터 등)로만 제공되는 경우, 원문 텍스트 아래에 함께 보여줄 이미지.
+  // 드문 케이스라 대부분의 공고는 null이고, public/job-attachments/ 아래 정적 파일로 둔다.
+  descriptionImageUrl String?
   applyUrl    String       @unique
   // 공고 원문에서 추출한 서류접수 기간 텍스트(참고용 원문). 명시된 기간이 없으면 "상시채용".
   applicationPeriod String @default("상시채용")
