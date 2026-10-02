@@ -2564,4 +2564,52 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "디자인 시스템 표준을 정립한 경험", body: "플랫폼 전반의 디자인 시스템을 개선하거나 표준을 세워본 경험을 보여주세요.", sourceQuote: "플랫폼 전반의 디자인 시스템 개선 및 표준 정립 주도" },
     { title: "데이터 기반 A/B 테스트 반복 개선 경험", body: "지표를 기반으로 A/B 테스트를 수행하며 제품을 반복적으로 개선해본 경험을 보여주세요.", sourceQuote: "지표 기반 반복 개선 및 A/B 테스트 수행" },
   ],
+  // 뷰티셀렉션 - [바이오던스] 웹 디자인 인턴
+  cmuqmphrf0002532dvdn9p1hz: [
+    { title: "이커머스 채널 웹 콘텐츠 제작 경험", body: "자사몰이나 올리브영 같은 이커머스 채널의 상세페이지·배너를 만들어본 경험을 보여주세요.", sourceQuote: "자사몰, 올리브영 등 주요 이커머스 채널의 상세페이지, 프로모션 랜딩 페이지, 배너 등 웹 콘텐츠 디자인 제작 지원" },
+    { title: "생성형 AI로 이미지·영상 제작한 경험", body: "생성형 AI를 활용해 이미지나 영상을 만들어본 경험이 있다면 구체적으로 보여주세요.", sourceQuote: "생성형 AI를 활용해 이미지·영상을 만들어본 경험이 있으신 분" },
+    { title: "영어로 리서치·소통한 경험", body: "영어로 자료를 조사하거나 소통해본 경험을 보여주세요.", sourceQuote: "영어로 자료를 리서치하고 원활하게 소통하실 수 있는 분" },
+  ],
+  // 텔유어월드 - UX/UI 서비스 기획·디자이너
+  cmuqmphwq0005532dznygrupu: [
+    { title: "서비스 전체 구조를 고민한 기획 경험", body: "화면 디자인을 넘어 서비스 구조 전체를 고민하고 설계해본 경험을 보여주세요.", sourceQuote: "화면 디자인을 넘어 서비스 전체 구조를 고민하는 역량" },
+    { title: "생성형 AI 실무 활용 경험", body: "ChatGPT, Claude 등 생성형 AI를 실무에 활용해본 경험을 구체적으로 보여주세요.", sourceQuote: "ChatGPT, Claude 등 생성형 AI의 실무 활용 역량" },
+    { title: "개발팀과 협업해 서비스 출시한 경험", body: "개발팀과 직접 협업하며 서비스를 출시까지 이끈 경험을 보여주세요.", sourceQuote: "개발팀과 협업해 서비스 출시한 경험" },
+  ],
+  // PTKOREA - 2027년 상반기 대기업 Mobile E-commerce App 운영 디자인 보조
+  cmuqmpi5e0008532dgmfch43k: [
+    { title: "다국어 콘텐츠 베리에이션 작업 경험", body: "같은 콘텐츠를 여러 사이즈나 언어로 변형 작업해본 경험을 보여주세요.", sourceQuote: "콘텐츠 제작 및 사이즈·다국어 베리에이션 작업 지원" },
+    { title: "Figma·Photoshop 실무 활용 능력", body: "Photoshop과 Figma로 실제 작업해본 결과물을 보여주세요.", sourceQuote: "Photoshop, Figma 활용이 가능하신 분" },
+    { title: "꼼꼼한 산출물 관리 태도", body: "성실하고 꼼꼼하게 산출물을 관리했던 경험을 구체적으로 보여주세요.", sourceQuote: "성실하고 꼼꼼한 업무 태도와 원활한 커뮤니케이션 역량을 보유하신 분" },
+  ],
+  // 네이버 - 헬스케어 UX 디자인 (경력)
+  cmuqmpi98000a532doou0g3li: [
+    { title: "정보구조·User Flow 설계 경험", body: "정보구조와 사용자 흐름을 체계적으로 설계하고 예외상황까지 담은 화면설계서를 작성해본 경험을 보여주세요.", sourceQuote: "정보구조(IA)·User Flow 설계에 능숙하고, 인터랙션·정책·예외상황을 누락 없이 담은 화면설계서 작성 능력" },
+    { title: "데이터·리서치 기반 설계 결정 경험", body: "데이터나 사용자 리서치를 근거로 설계 결정을 내리고 설명해본 경험을 보여주세요.", sourceQuote: "데이터·사용자 리서치·UX 원칙 기반 설계 결정 설명 역량" },
+    { title: "헬스케어 도메인 디자인 경험", body: "헬스케어, 의료, 또는 전문가용 B2B 도구 디자인 경험이 있다면 구체적으로 보여주세요.", sourceQuote: "헬스케어·의료·전문가용 B2B 도구(EMR) 디자인 경험" },
+  ],
+  // 바나플에프엔비 - [banapresso] UX/UI 디자이너 (Product Design)
+  cmuqmpied000d532dtf19fjip: [
+    { title: "5년 이상의 Product Design 실무 경력", body: "5년 이상의 프로덕트 디자인 실무 경력과 대표 결과물을 보여주세요.", sourceQuote: "경력 5년 이상, 학력무관" },
+    { title: "Figma 실무 활용 능력", body: "Figma로 실제 제품을 디자인해본 작업물을 보여주세요.", sourceQuote: "스킬: Figma" },
+    { title: "수습 기간을 감안한 지원 의지", body: "3개월 수습 조건을 확인하고 장기 근무 의사를 분명히 밝혀주세요.", sourceQuote: "정규직(수습 3개월)" },
+  ],
+  // Roblox - [Summer 2027] Product Design Intern
+  cmuqmpiss000g532d0l0vp119: [
+    { title: "프로토타입 제작과 경쟁 분석 경험", body: "기능을 디자인하고 프로토타입을 만들며 경쟁 서비스를 분석해본 경험을 보여주세요.", sourceQuote: "Passionate about designing features, creating prototypes, conducting competitive analysis, user research, and solving business problems through design." },
+    { title: "사람의 행동과 동기에 대한 호기심", body: "사람들의 행동과 니즈를 관찰하고 디자인에 반영해본 경험을 보여주세요.", sourceQuote: "Curious about people's behaviors, needs, and motivations, recognizing this as essential to the design process." },
+    { title: "시니어 디자이너 피드백으로 성장한 경험", body: "선배 디자이너의 피드백을 받아 결과물을 다듬어본 경험을 보여주세요.", sourceQuote: "actively leverage feedback from senior designers to refine your craft" },
+  ],
+  // 무신사 - Content Designer (글로벌 커머스)
+  cmuqmpiw7000i532de53xgdx0: [
+    { title: "세일즈 캠페인 크리에이티브 제작 경험", body: "세일즈 캠페인이나 에디토리얼 디자인을 직접 제작해본 경험을 보여주세요.", sourceQuote: "세일즈 캠페인 및 에디토리얼 디자인 제작" },
+    { title: "모션그래픽 작업 경험", body: "2D 또는 3D 기반 모션그래픽 작업물을 보여주세요.", sourceQuote: "2D, 3D 기반 모션그래픽 디자인 작업 가능" },
+    { title: "디자인 시스템 고도화 경험", body: "Figma 기반 디자인 시스템이나 모듈을 고도화해본 경험을 보여주세요.", sourceQuote: "Figma 기반 디자인 시스템·모듈 고도화" },
+  ],
+  // 무신사 - Product Designer (Commerce)
+  cmuqmpixv000k532djm98qdvp: [
+    { title: "복잡한 구매 여정을 설계한 경험", body: "장바구니부터 주문, 클레임까지 복잡한 구매 여정을 설계하거나 개선해본 경험을 보여주세요.", sourceQuote: "무신사·29CM의 구매 여정 전반(장바구니, 주문서, 주문 완료, 클레임, 세일 프라이싱)의 UX 설계 및 개선" },
+    { title: "데이터 기반 A/B 테스트 전환율 개선 경험", body: "데이터 분석과 A/B 테스트로 전환율을 개선해본 경험을 구체적으로 보여주세요.", sourceQuote: "정성적·정량적 데이터 분석 및 A/B 테스트를 통한 전환율 개선" },
+    { title: "정책 제약 속에서 일관된 경험을 설계한 능력", body: "복잡한 정책이나 시스템 제약 속에서도 일관된 사용자 경험을 만들어본 경험을 보여주세요.", sourceQuote: "정책·시스템 제약 상황에서도 일관된 경험 설계 능력" },
+  ],
 };
