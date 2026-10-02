@@ -2590,8 +2590,8 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
   ],
   // 바나플에프엔비 - [banapresso] UX/UI 디자이너 (Product Design)
   cmuqmpied000d532dtf19fjip: [
-    { title: "5년 이상의 Product Design 실무 경력", body: "5년 이상의 프로덕트 디자인 실무 경력과 대표 결과물을 보여주세요.", sourceQuote: "경력 5년 이상, 학력무관" },
-    { title: "Figma 실무 활용 능력", body: "Figma로 실제 제품을 디자인해본 작업물을 보여주세요.", sourceQuote: "스킬: Figma" },
+    { title: "3년 이상의 UX/UI 디자인 실무 경력", body: "UX/UI 디자인 실무 경력 3년 이상을 증명할 수 있는 대표 결과물을 보여주세요.", sourceQuote: "UX/UI 디자인 실무 경력 3년 이상인 분" },
+    { title: "Figma 실무 활용 능력", body: "Figma로 실제 서비스 화면을 설계해본 작업물을 보여주세요.", sourceQuote: "Figma 등 UX/UI 디자인 툴을 능숙하게 활용할 수 있는 분" },
     { title: "수습 기간을 감안한 지원 의지", body: "3개월 수습 조건을 확인하고 장기 근무 의사를 분명히 밝혀주세요.", sourceQuote: "정규직(수습 3개월)" },
   ],
   // Roblox - [Summer 2027] Product Design Intern
