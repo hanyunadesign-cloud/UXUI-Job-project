@@ -227,7 +227,7 @@ export function JobDeadlineCalendarGrid({
               href={`/calendar?month=${prevMonthParam}`}
               aria-label="이전 달"
               onClick={() => trackEvent("Calendar Month Navigated", { from: `${year}-${pad2(month)}`, to: prevMonthParam, direction: "prev" })}
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
             >
               <ChevronLeft className={ICON_SIZE.sm} strokeWidth={1.75} aria-hidden />
             </Link>
@@ -235,7 +235,7 @@ export function JobDeadlineCalendarGrid({
               href={`/calendar?month=${nextMonthParam}`}
               aria-label="다음 달"
               onClick={() => trackEvent("Calendar Month Navigated", { from: `${year}-${pad2(month)}`, to: nextMonthParam, direction: "next" })}
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
             >
               <ChevronRight className={ICON_SIZE.sm} strokeWidth={1.75} aria-hidden />
             </Link>
@@ -249,7 +249,7 @@ export function JobDeadlineCalendarGrid({
               trackEvent("Calendar Filter Dropdown Toggled", { open: !filterOpen });
               setFilterOpen((v) => !v);
             }}
-            className="grid h-8 rounded-lg bg-white px-3 text-sm font-medium text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
+            className="grid h-9 rounded-lg bg-white px-4 text-sm font-medium text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
           >
             {/* 정렬 버튼과 동일한 사이징 트릭: 가장 긴 라벨 기준으로 너비를 고정해
                 옵션이 바뀌어도 버튼 너비가 흔들리지 않게 한다. */}

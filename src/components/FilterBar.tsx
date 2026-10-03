@@ -252,7 +252,7 @@ export function FilterBar({
               type="button"
               onClick={() => openDropdown(group.key)}
               className={clsx(
-                "flex h-10 items-center gap-1.5 rounded-lg border px-4 text-sm font-medium shadow-sm transition-colors active:scale-[0.95]",
+                "flex h-9 items-center gap-1.5 rounded-lg border px-4 text-sm font-medium shadow-sm transition-colors active:scale-[0.95]",
                 isActive
                   ? "border-primary bg-blue-50 text-primary"
                   : "border-transparent bg-white text-neutral-500 hover:bg-neutral-50 hover:text-ink"
