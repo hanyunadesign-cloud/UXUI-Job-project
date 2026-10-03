@@ -348,7 +348,7 @@ export function JobDeadlineCalendarGrid({
                       openAddForm(cell.day);
                     }}
                     className={clsx(
-                      "flex h-[130px] flex-col overflow-hidden border-r border-neutral-100 p-1.5 last:border-r-0",
+                      "flex h-[160px] flex-col overflow-hidden border-r border-neutral-100 p-1.5 last:border-r-0",
                       !cell.inCurrentMonth && "bg-neutral-50/60"
                     )}
                   >
