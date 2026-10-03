@@ -44,7 +44,7 @@ export function SortDropdown() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="grid h-9 rounded-lg bg-white px-2.5 text-sm font-medium text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
+        className="grid h-9 rounded-lg bg-white px-3 text-sm font-medium text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
       >
         {/* 보이지 않는 사이저: "마감임박순" + 필터 버튼과 동일한 gap-1.5 규칙으로 버튼 너비를
             CSS가 자연스럽게 계산하게 한다(임의의 px 값 없음). 실제로 렌더링되는 아래 span과

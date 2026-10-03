@@ -249,7 +249,7 @@ export function JobDeadlineCalendarGrid({
               trackEvent("Calendar Filter Dropdown Toggled", { open: !filterOpen });
               setFilterOpen((v) => !v);
             }}
-            className="grid h-9 rounded-lg bg-white px-2.5 text-sm font-medium text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
+            className="grid h-9 rounded-lg bg-white px-3 text-sm font-medium text-neutral-500 shadow-sm transition-colors hover:bg-neutral-50 hover:text-ink"
           >
             {/* 정렬 버튼과 동일한 사이징 트릭: 가장 긴 라벨 기준으로 너비를 고정해
                 옵션이 바뀌어도 버튼 너비가 흔들리지 않게 한다. */}
