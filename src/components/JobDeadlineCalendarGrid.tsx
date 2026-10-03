@@ -348,7 +348,7 @@ export function JobDeadlineCalendarGrid({
                       openAddForm(cell.day);
                     }}
                     className={clsx(
-                      "flex h-[160px] flex-col overflow-hidden border-r border-neutral-100 p-1.5 last:border-r-0",
+                      "flex min-h-[160px] flex-col overflow-hidden border-r border-neutral-100 p-1.5 last:border-r-0",
                       !cell.inCurrentMonth && "bg-neutral-50/60"
                     )}
                   >
@@ -368,8 +368,12 @@ export function JobDeadlineCalendarGrid({
                     </div>
 
                     <div
-                      style={{ height: CHIPS_AREA_HEIGHT }}
-                      className="flex flex-col gap-1 overflow-y-auto pb-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                      style={isExpanded ? undefined : { height: CHIPS_AREA_HEIGHT }}
+                      className={clsx(
+                        "flex flex-col gap-1 pb-1.5",
+                        !isExpanded &&
+                          "overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                      )}
                     >
                       {visible.map((job) => (
                         <button
@@ -396,7 +400,7 @@ export function JobDeadlineCalendarGrid({
                           onClick={() => expandDay(cell.day)}
                           className="w-full rounded-md px-1.5 py-1 text-left text-[11px] font-medium text-neutral-400 outline-none transition-colors hover:bg-neutral-100 hover:text-neutral-600"
                         >
-                          +{hiddenCount}개 더
+                          +{hiddenCount}개
                         </button>
                       )}
                     </div>
