@@ -101,7 +101,7 @@ export default async function MyPage() {
       ) : (
         <>
           <p className="text-sm text-neutral-500">{combinedSaved.length}개 저장됨</p>
-          <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {sortedCombinedSaved.map((item) =>
               item.kind === "saved" ? (
                 <JobCard
