@@ -1639,7 +1639,7 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "AI 인프라 관리 제품의 UX/UI를 설계하며 GPU·서버·클러스터 관리 등 데이터 중심 B2B 엔터프라이즈 UI를 담당합니다.",
     problemRest: "서울 강남구 근무이며, 대기업·중견 단계 기업이에요. 자격요건은 \"3년 이상\"이에요.",
   },
-  "에이비일팔공": {
+  "AB180": {
     companyUrl: null,
     designBlogUrl: null,
     domainPrimary: "B2B SaaS",
@@ -1926,15 +1926,6 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     domainKeywords: ["GUI 디자인", "유통", "커머스"],
     problemLede: "비건 스킨케어 '헤브블루'의 자사몰·SNS 웹디자인, 상세페이지·배너·썸네일, 패키지·라벨 디자인을 담당하며 3개월 체험 후 정규직 전환을 검토합니다.",
     problemRest: "서울 강남구 근무이며, 스타트업 단계 기업이에요. 자격요건은 \"디자인 관련 전공자 또는 관련 교육과정 이수자\"이에요.",
-  },
-  "그린라이트그룹": {
-    companyUrl: null,
-    designBlogUrl: null,
-    domainPrimary: "커머스 · 유통",
-    domainSecondary: "뷰티 브랜드(GL cosmetics)의 이커머스 쇼핑몰 웹디자인을 담당합니다.",
-    domainKeywords: ["GUI 디자인", "커머스", "유통"],
-    problemLede: "뷰티 브랜드(GL cosmetics)의 이커머스 쇼핑몰 웹디자인을 담당합니다.",
-    problemRest: "서울 강남구 삼성동 근무이며, 스타트업 단계 기업이에요. 자격요건은 \"경력 3년 이상\"이에요.",
   },
   "퀀텀에어로": {
     companyUrl: null,
