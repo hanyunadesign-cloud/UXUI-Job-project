@@ -49,7 +49,7 @@ export function JobCard({
         trackEvent("Job Card Clicked", { jobId: job.id, companyName: job.companyName, source })
       }
       className={clsx(
-        "relative flex h-full flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]",
+        "relative flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]",
         status.closed && "opacity-60"
       )}
     >

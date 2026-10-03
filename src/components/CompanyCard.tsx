@@ -28,7 +28,7 @@ export function CompanyCard({
   source: "companies_grid" | "recommended_carousel";
 }) {
   return (
-    <div className="relative flex h-full flex-col rounded-2xl border border-neutral-200 bg-white px-3.5 pt-4 pb-8 transition-colors hover:border-neutral-300">
+    <div className="relative flex flex-col rounded-2xl border border-neutral-200 bg-white px-3.5 pt-4 pb-8 transition-colors hover:border-neutral-300">
       {company.hasOpenJobs && (
         <div className="absolute left-4 top-4">
           <Badge>채용중</Badge>
