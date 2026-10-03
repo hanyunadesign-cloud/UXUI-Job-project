@@ -47,7 +47,7 @@ export function SearchBar({
   return (
     <div
       className={clsx(
-        "flex h-8 w-72 shrink-0 items-center gap-2 rounded-lg bg-white px-3 shadow-sm",
+        "flex h-10 w-72 shrink-0 items-center gap-2 rounded-lg bg-white px-4 shadow-sm",
         className
       )}
     >
