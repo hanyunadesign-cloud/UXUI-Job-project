@@ -255,7 +255,7 @@ export function FilterBar({
                 "flex h-9 items-center gap-1.5 rounded-lg border px-3 text-sm font-medium shadow-sm transition-colors active:scale-[0.95]",
                 isActive
                   ? "border-primary bg-blue-50 text-primary"
-                  : "border-transparent bg-white text-neutral-500 hover:bg-neutral-50 hover:text-ink"
+                  : "border-transparent bg-white text-neutral-600 hover:bg-neutral-50 hover:text-ink"
               )}
             >
               {isActive ? displayLabel : group.label}
