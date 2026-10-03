@@ -90,8 +90,8 @@ const VIEW_FILTER_OPTIONS = [
 
 type ViewFilterValue = (typeof VIEW_FILTER_OPTIONS)[number]["value"];
 
-const VISIBLE_COUNT = 2;
-const CHIPS_AREA_HEIGHT = 94;
+const VISIBLE_COUNT = 4;
+const CHIPS_AREA_HEIGHT = 100;
 
 const WEEKDAY_LABELS = ["일", "월", "화", "수", "목", "금", "토"];
 
