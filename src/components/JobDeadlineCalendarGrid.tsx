@@ -91,7 +91,6 @@ const VIEW_FILTER_OPTIONS = [
 type ViewFilterValue = (typeof VIEW_FILTER_OPTIONS)[number]["value"];
 
 const VISIBLE_COUNT = 4;
-const CHIPS_AREA_HEIGHT = 100;
 
 const WEEKDAY_LABELS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -367,21 +366,14 @@ export function JobDeadlineCalendarGrid({
                       </span>
                     </div>
 
-                    <div
-                      style={isExpanded ? undefined : { height: CHIPS_AREA_HEIGHT }}
-                      className={clsx(
-                        "flex flex-col gap-1 pb-1.5",
-                        !isExpanded &&
-                          "overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                      )}
-                    >
+                    <div className="flex flex-col gap-1 pb-1.5">
                       {visible.map((job) => (
                         <button
                           key={job.id}
                           type="button"
                           onClick={() => openJobPreview(job, cell.day)}
                           className={clsx(
-                            "flex w-full items-center gap-1 truncate rounded-md px-1.5 py-1 text-left text-[11px] leading-tight outline-none transition-colors",
+                            "flex w-full shrink-0 items-center gap-1 truncate rounded-md px-1.5 py-1 text-left text-[11px] leading-tight outline-none transition-colors",
                             job.isCustom
                               ? "bg-amber-50 text-amber-900 hover:bg-amber-100"
                               : job.saved
@@ -398,7 +390,7 @@ export function JobDeadlineCalendarGrid({
                         <button
                           type="button"
                           onClick={() => expandDay(cell.day)}
-                          className="w-full rounded-md px-1.5 py-1 text-left text-[11px] font-medium text-neutral-400 outline-none transition-colors hover:bg-neutral-100 hover:text-neutral-600"
+                          className="w-full shrink-0 rounded-md px-1.5 py-1 text-left text-[11px] font-medium text-neutral-400 outline-none transition-colors hover:bg-neutral-100 hover:text-neutral-600"
                         >
                           +{hiddenCount}개
                         </button>
