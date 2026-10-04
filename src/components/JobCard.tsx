@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { Badge } from "@/components/Badge";
 import { SaveButton } from "@/components/SaveButton";
 import { CompanyLogo } from "@/components/CompanyLogo";
+import { formatLocation } from "@/lib/location";
 import { getApplicationStatus } from "@/lib/dday";
 import { clsx } from "clsx";
 
@@ -19,6 +21,9 @@ export type JobCardData = {
   taskKeywords: string[];
 };
 
+// 뱃지 영역을 2줄로 고정하기 위한 최대 노출 개수. 넘치면 "+N"으로 표시한다.
+const MAX_VISIBLE_BADGES = 4;
+
 export function JobCard({
   job,
   saved,
@@ -29,6 +34,12 @@ export function JobCard({
   isLoggedIn: boolean;
 }) {
   const initial = job.companyName.slice(0, 1);
+
+  const allBadges = [...job.platforms, ...job.industries, job.stage];
+  const overflowCount = Math.max(0, allBadges.length - MAX_VISIBLE_BADGES);
+  const visibleBadges = overflowCount > 0
+    ? allBadges.slice(0, MAX_VISIBLE_BADGES - 1)
+    : allBadges;
 
   const status = getApplicationStatus(job.applicationDeadline);
 
@@ -54,9 +65,14 @@ export function JobCard({
             initial={initial}
             size={48}
           />
-          <p className="truncate text-sm font-semibold text-ink hover:underline">
-            {job.companyName}
-          </p>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-ink hover:underline">
+              {job.companyName}
+            </p>
+            <p className="truncate text-xs text-neutral-400">
+              {formatLocation(job.location) ?? "위치 미정"}
+            </p>
+          </div>
         </Link>
       ) : (
         <div className="flex items-center gap-3 pr-12">
@@ -66,20 +82,33 @@ export function JobCard({
             initial={initial}
             size={48}
           />
-          <p className="truncate text-sm font-semibold text-ink">{job.companyName}</p>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-ink">{job.companyName}</p>
+            <p className="truncate text-xs text-neutral-400">
+              {formatLocation(job.location) ?? "위치 미정"}
+            </p>
+          </div>
         </div>
       )}
 
       <Link href={`/jobs/${job.id}`} className="flex flex-col gap-3">
         {/* 제목: 최대 2줄 고정, 1줄짜리 제목도 동일한 자리를 차지 */}
-        <h3 className="text-h3 line-clamp-2 min-h-8 text-ink">
+        <h3 className="line-clamp-2 min-h-11 text-base font-bold leading-snug text-ink">
           {job.title}
         </h3>
 
-        {/* AI 업무 키워드: 카드에서는 2개까지만, 1줄로 고정(넘치면 말줄임). 메타 정보라 caption 톤 */}
-        <p className="text-caption line-clamp-1 min-h-4 text-neutral-500">
-          {job.taskKeywords.slice(0, 2).join(" · ")}
+        {/* AI 업무 키워드: 최대 3줄 고정 */}
+        <p className="line-clamp-3 min-h-16 text-sm text-neutral-500">
+          {job.taskKeywords.length > 0 ? job.taskKeywords.join(" · ") : ""}
         </p>
+
+        {/* 뱃지: 최대 2줄 고정, 넘치면 +N */}
+        <div className="flex min-h-14 flex-wrap content-start gap-1.5">
+          {visibleBadges.map((label, i) => (
+            <Badge key={`${label}-${i}`}>{label}</Badge>
+          ))}
+          {overflowCount > 0 && <Badge>+{overflowCount}</Badge>}
+        </div>
       </Link>
 
       {/* 하단 정보: 위 섹션이 모두 고정 높이라 자연스럽게 맞춰지지만, mt-auto로 이중 보장.
