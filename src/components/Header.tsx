@@ -18,7 +18,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:max-w-[1440px] lg:px-16 xl:max-w-[1400px] xl:px-24 3xl:max-w-[1700px] 3xl:px-24">
+      <div className="mx-auto flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:max-w-[1440px] lg:px-16 xl:max-w-[1400px] xl:px-16 3xl:max-w-[1700px] 3xl:px-24">
         <Link
           href="/jobs"
           onClick={() => trackEvent("Header Logo Clicked")}
