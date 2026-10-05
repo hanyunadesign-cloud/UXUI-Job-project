@@ -344,7 +344,7 @@ export function FilterBar({
 
             {isOpen && !isExperience && (
               <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-64 max-w-[calc(100vw-2rem)] flex-col rounded-2xl border border-neutral-200 bg-white shadow-dropdown">
-                <div className="flex max-h-72 flex-col gap-0.5 overflow-y-auto p-2">
+                <div className="filter-scroll flex max-h-72 flex-col gap-0.5 overflow-y-auto rounded-t-2xl p-2">
                   {group.options.map((option) => {
                     const isSelected = staged.includes(option.value);
                     return (

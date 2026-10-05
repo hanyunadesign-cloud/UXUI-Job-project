@@ -85,6 +85,24 @@ body {
   border-radius: 9999px;
 }
 
+/* 필터 드롭다운 옵션 목록 스크롤바. 트랙(흰 배경 띠)은 투명하게 두고 막대만 보이게 한다.
+   스크롤 영역 자체에도 윗모서리 라운드를 줘서 오른쪽 위가 각져 보이지 않게 한다. */
+.filter-scroll {
+  scrollbar-color: oklch(0.851 0.018 264) transparent;
+}
+.filter-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+.filter-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.filter-scroll::-webkit-scrollbar-thumb {
+  background-color: oklch(0.851 0.018 264);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
 /* 경력 필터의 이중 핸들 슬라이더. <input type="range"> 두 개를 같은 자리에 겹쳐 놓고
    트랙은 투명 처리한 뒤(핸들만 보이게), 채워진 구간은 별도 div로 그린다. */
 .dual-range-thumb {
