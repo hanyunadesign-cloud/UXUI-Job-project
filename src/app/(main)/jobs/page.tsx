@@ -126,10 +126,10 @@ export default async function JobsPage({
     const withoutDeadline = interleaveByCompany(jobs.filter((job) => !job.applicationDeadline));
     sortedJobs = [...withDeadline, ...withoutDeadline];
   } else {
-    // 최신순도 마찬가지로, 같은 회사가 몰아서 등록한 공고들이 postedAt 기준으로 줄줄이
-    // 붙어 보이는 걸 막기 위해 회사별로 섞는다. 각 회사 내부는 여전히 최신순이라 전체적인
-    // "최근 올라온 공고가 먼저" 느낌은 유지된다.
-    sortedJobs = interleaveByCompany(jobs);
+    // 최신순은 interleaveByCompany 없이 순수 postedAt 내림차순으로만 정렬한다.
+    // 같은 회사 공고 2건이 거의 동시에 등록되면 "최신순인데 방금 올린 게 안 보인다"는
+    // 혼란을 주기 때문에(2026-10-12 사용자 피드백), 분산은 마감임박순에서만 적용한다.
+    sortedJobs = [...jobs].sort((a, b) => b.postedAt.getTime() - a.postedAt.getTime());
   }
 
   // 정렬 기준(최신순/마감임박순)과 무관하게, 지원마감된 공고는 항상 맨 뒤로 보낸다.
