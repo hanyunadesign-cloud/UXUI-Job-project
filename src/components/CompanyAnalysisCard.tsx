@@ -2017,7 +2017,7 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "핵심 사용자 플로우를 빠르게 설계하고 실험하며 제품 완성도를 높이는 게 핵심 문제예요.",
     problemRest: "개발자와 함께 빠르게 실험하고, AI를 활용해 새로운 제품 경험을 직접 구현해봐요.",
   },
-  "캠핏": {
+  "넥스트에디션": {
     companyUrl: null,
     designBlogUrl: null,
     domainPrimary: "여행/로컬 · 커머스",
