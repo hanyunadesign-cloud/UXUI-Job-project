@@ -2503,15 +2503,6 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "크리에이터와 구매자 양쪽의 핵심 여정을 설계해 거래를 늘리는 게 핵심 문제예요.",
     problemRest: "와이어프레임부터 디자인 시스템까지 직접 구축하고 데이터로 화면을 계속 개선해요.",
   },
-  "메타엑스": {
-    companyUrl: null,
-    designBlogUrl: null,
-    domainPrimary: "헬스케어 · AI",
-    domainSecondary: "성형·미용 의료 상담 플랫폼 '미리(MIRI)'를 개발하며, AI 시뮬레이션으로 환자와 병원의 상담을 연결해요.",
-    domainKeywords: ["의료 AI", "상담 플랫폼", "PoC"],
-    problemLede: "환자의 시뮬레이션 경험과 병원의 상담 효율을 동시에 설계하는 게 핵심 문제예요.",
-    problemRest: "AI 도구로 기획과 화면 시안을 빠르게 만들고 실제 병원 피드백으로 검증해요.",
-  },
   "더스크랙": {
     companyUrl: "https://duskgroup.co.kr",
     designBlogUrl: null,
