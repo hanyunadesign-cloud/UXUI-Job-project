@@ -2602,6 +2602,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "고객사마다 다른 요구사항에 맞춰 신뢰감 있는 화면을 빠르게 만드는 게 핵심 문제예요.",
     problemRest: "기획자와 함께 사용성 개선 방향을 정리하고 디자인 가이드와 컴포넌트를 운영해요.",
   },
+  "다이닝브랜즈그룹": {
+    companyUrl: "https://diningbrands.career.greetinghr.com/ko/intro",
+    designBlogUrl: null,
+    domainPrimary: "외식 · F&B 브랜드",
+    domainSecondary: "2004년 설립 이후 bhc치킨, 아웃백스테이크하우스, 창고43, 큰맘할매순대국 등 다양한 브랜드를 키워온 글로벌 외식 기업이에요.",
+    domainKeywords: ["외식 프랜차이즈", "멀티 브랜드", "글로벌 매장"],
+    problemLede: "여러 브랜드의 비주얼과 콘텐츠 방향을 일관되게 유지하면서도 각 브랜드의 개성을 살리는 게 핵심 문제예요.",
+    problemRest: "홈페이지·키오스크 UX/UI 기획부터 영상 콘텐츠, 해외 파트너사와의 디자인 협업까지 폭넓게 다뤄요.",
+  },
   "HOHOHO": {
     companyUrl: "https://www.hohohogroup.com",
     designBlogUrl: null,
