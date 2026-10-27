@@ -2611,6 +2611,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "고객사마다 다른 요구사항에 맞춰 신뢰감 있는 화면을 빠르게 만드는 게 핵심 문제예요.",
     problemRest: "기획자와 함께 사용성 개선 방향을 정리하고 디자인 가이드와 컴포넌트를 운영해요.",
   },
+  "HOHOHO": {
+    companyUrl: "https://www.hohohogroup.com",
+    designBlogUrl: null,
+    domainPrimary: "브랜딩 · 디지털 에이전시",
+    domainSecondary: "브랜딩부터 프로덕트, UX/UI까지 아우르는 크리에이티브 스튜디오로, 삼성·넥슨·KT·구글 등 다양한 산업의 브랜드와 협업해요.",
+    domainKeywords: ["브랜딩 에이전시", "UX/UI", "대형 클라이언트"],
+    problemLede: "다양한 산업과 디바이스 환경에서 브랜드 아이덴티티와 유기적으로 연결되는 경험을 만드는 게 핵심 문제예요.",
+    problemRest: "전략부터 실행까지 하나의 팀으로 작업하며 서비스 컨셉 도출부터 인터랙션 설계까지 함께 맡아요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
