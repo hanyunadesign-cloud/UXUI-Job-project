@@ -3668,4 +3668,14 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "명료한 App/Web UI 구성 경험", body: "사용성을 지키면서도 App/Web UI를 명료하게 구성해본 경험을 정말 아주 더 자세히 보여주세요.", sourceQuote: "사용성을 지키면서도 App/Web UI를 명료하게 구성할 수 있는 분" },
     { title: "프로토타이핑 툴 활용 능숙도", body: "Figma나 Figma Make, Claude Design 등 프로토타이핑 툴을 능숙히 다룬다면 아주 자세히 보여주세요.", sourceQuote: "Figma, Figma Make, Claude Design 등 디자인·프로토타이핑 툴 활용에 능숙한 분" },
   ],
+  "cmvsa9j5b00023t5p963pjqzb": [
+    { title: "멀티 디바이스 기획·디자인 경험", body: "웹과 모바일 등 멀티 디바이스 환경에서 기획·디자인을 수행해본 실무 경험을 아주 자세히 보여주세요.", sourceQuote: "웹·모바일 등 멀티 디바이스 환경에서 기획·디자인을 수행한 실무 경험을 보유하신 분" },
+    { title: "기획~출시 전 과정 UX 개선 경험", body: "서비스 기획부터 출시까지 전 과정을 경험하며 사용자 경험을 개선해본 이력을 정말 아주 더 자세히 보여주세요.", sourceQuote: "서비스의 기획부터 설계, 디자인, 출시까지 전 과정을 경험하며 사용자 경험을 개선한 이력이 있는 분" },
+    { title: "피그마 프로토타입·디자인 시스템 활용", body: "피그마로 프로토타입을 만들고 디자인 시스템을 활용해본 경험을 정말 아주 더 구체적으로 자세히 보여주세요.", sourceQuote: "피그마를 활용한 프로토타입 제작과 디자인 시스템 활용에 익숙하며" },
+  ],
+  "cmvsa9jbh00053t5pjn1b9580": [
+    { title: "2년 이상 그래픽 디자인 실무 경력", body: "그래픽 디자인 실무 경력 2년 이상이라면 구체적인 작업물로 정말 아주 더 상세히 자세히 보여주세요.", sourceQuote: "그래픽 디자인 실무 경력 2년 이상 보유하신 분" },
+    { title: "콘텐츠 기획 의도 시각화 경험", body: "콘텐츠 기획 의도를 정확히 파악하고 이를 시각화해본 경험을 정말 아주 더 구체적으로 상세히 보여주세요.", sourceQuote: "콘텐츠 기획 의도를 파악하고 이를 시각화 가능하신 분" },
+    { title: "디자인 툴 고급 활용 역량", body: "Photoshop, Illustrator, Figma 등 디자인 툴을 고급으로 다룬다면 아주 더 자세히 보여주세요.", sourceQuote: "Photoshop, Illustrator, Figma 등 디자인 툴 고급 활용이 가능하신 분" },
+  ],
 };
