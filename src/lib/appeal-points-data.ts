@@ -3653,20 +3653,10 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "반복 업무 환경의 UX 설계 역량", body: "반복적인 업무 환경에서 효율을 고려한 UX 설계 역량을 정말 아주 더 구체적으로 상세히 보여주세요.", sourceQuote: "반복적인 업무 환경을 이해하고 업무 효율을 고려한 UX 설계 역량" },
     { title: "복잡한 정보 구조의 일관된 UI 설계", body: "복잡한 정보 구조 속에서도 명확하고 일관된 UI를 설계해본 경험을 정말 아주 더 자세히 보여주세요.", sourceQuote: "복잡한 정보 구조와 다양한 정책 속에서도 명확하고 일관된 UI 설계 역량" },
   ],
-  "cmvs8e1rz000b13i0qjlixsl6": [
-    { title: "5년 이상 그래픽 디자인 경력", body: "그래픽 디자인 경력이 5년 이상이라면 구체적인 작업물로 정말 아주 더 상세하고 자세하게 보여주세요.", sourceQuote: "그래픽 디자인 경력 5년 이상" },
-    { title: "브랜드 비주얼·아트 디렉션 경험", body: "브랜드 비주얼 기획이나 아트 디렉션 경험이 있다면 구체적인 사례로 정말 아주 더 자세히 보여주세요.", sourceQuote: "브랜드 비주얼 기획 또는 아트 디렉션 경험" },
-    { title: "촬영 기획·디렉팅 경험", body: "제품이나 캠페인 촬영을 직접 기획하고 디렉팅해본 경험을 정말 아주 더 상세하고 자세하게 보여주세요.", sourceQuote: "촬영 기획 및 디렉팅 경험" },
-  ],
   "cmvs8e1xd000e13i0jv13e99m": [
     { title: "디지털 제품 설계·출시 경험", body: "Product Designer로 디지털 제품을 직접 설계하고 출시해본 경험을 정말 아주 더 자세히 보여주세요.", sourceQuote: "Product Designer 또는 유사한 역할로 디지털 제품을 설계하고 출시해본 경험" },
     { title: "User Flow·UX/UI 구조화 역량", body: "사용자 문제를 이해하고 User Flow와 UX/UI로 구조화해본 경험을 아주 더 구체적으로 보여주세요.", sourceQuote: "사용자 문제를 이해하고 User Flow와 UX/UI로 구조화할 수 있는 분" },
     { title: "Design System 설계 경험", body: "Component 기반 Design System을 이해하고 설계해본 경험을 정말 아주 더 자세히 보여주세요.", sourceQuote: "Component 기반 Design System을 이해하고 설계해본 경험" },
-  ],
-  "cmvs8e22k000h13i0urr7r47y": [
-    { title: "3년 이상 브랜드·그래픽 디자인 경력", body: "브랜드나 그래픽 디자인 실무 경력이 3년 이상이라면 구체적인 작업물로 정말 아주 더 자세히 보여주세요.", sourceQuote: "브랜드 디자인 또는 그래픽 디자인 실무 경력 3년 이상" },
-    { title: "시각 요소 기본기", body: "타이포그래피, 컬러, 레이아웃 등 시각 요소에 대한 단단한 기본기를 정말 아주 더 자세히 보여주세요.", sourceQuote: "타이포그래피, 컬러, 레이아웃 등 시각 요소에 대한 단단한 기본기" },
-    { title: "AI 활용 작업 방식 개선 경험", body: "AI를 실무에 활용해 기존 작업 방식을 개선해본 경험을 정말 아주 더 구체적으로 자세히 보여주세요.", sourceQuote: "AI를 실무에 활용해 기존 작업 방식을 개선한 경험" },
   ],
   "cmvs8e286000k13i01wf9gfb2": [
     { title: "PM·프로덕트 디자인 7년 이상 경력", body: "PM 또는 프로덕트 디자인 실무 경력 7년 이상을 구체적인 사례로 정말 아주 더 자세히 보여주세요.", sourceQuote: "프로덕트 매니지먼트(PM) 또는 프로덕트 디자인 실무 경력 7년 이상" },

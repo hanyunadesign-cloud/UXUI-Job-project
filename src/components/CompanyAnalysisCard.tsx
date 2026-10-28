@@ -2629,15 +2629,6 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "복잡한 정보 구조와 업무 흐름 속에서도 명확하고 일관된 CRM 화면을 만드는 게 핵심 문제예요.",
     problemRest: "서비스 구조와 업무 흐름을 분석해 UX를 단계적으로 개선하고 디자인 시스템을 고도화해요.",
   },
-  "워케이션": {
-    companyUrl: "https://www.workation.biz",
-    designBlogUrl: null,
-    domainPrimary: "아웃도어 · 리테일",
-    domainSecondary: "프리미엄 텐트 브랜드 라디트(Ladit)와 오비텐(OBTN), 아웃도어 A/S 플랫폼 바깥을 운영하는 아웃도어 전문 기업이에요.",
-    domainKeywords: ["아웃도어 브랜드", "비주얼 디렉션", "오프라인 행사"],
-    problemLede: "여러 브랜드의 톤앤매너를 지키면서도 시즌마다 새로운 캠페인 비주얼을 만드는 게 핵심 문제예요.",
-    problemRest: "촬영 기획과 디렉팅부터 팝업·행사 VMD, 인쇄물까지 폭넓게 그래픽 디자인을 다뤄요.",
-  },
   "메이저맵": {
     companyUrl: "https://majormap.net",
     designBlogUrl: null,
@@ -2646,15 +2637,6 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     domainKeywords: ["진로 탐색", "에듀테크", "AI 프로토타이핑"],
     problemLede: "학생이 실제로 가치를 느끼고 비용을 지불할 수 있는 서비스 경험을 설계하는 게 핵심 문제예요.",
     problemRest: "AI 도구로 Prototype과 MVP를 빠르게 만들어 검증하고 Design System을 함께 발전시켜요.",
-  },
-  "유닛블랙": {
-    companyUrl: "https://unitblack.co.kr",
-    designBlogUrl: null,
-    domainPrimary: "택스테크 · 핀테크",
-    domainSecondary: "세무 관리 브랜드 세이브택스(SAVETAX)를 운영하는 택스테크 기업으로, 외부 투자 없이 9년간 꾸준히 성장해왔어요.",
-    domainKeywords: ["택스테크", "브랜드 디자인", "세무 서비스"],
-    problemLede: "세무처럼 딱딱한 영역을 신뢰감 있고 친근한 브랜드 경험으로 풀어내는 게 핵심 문제예요.",
-    problemRest: "BI 시스템과 브랜드 가이드라인을 정립하고, 랜딩페이지부터 마케팅 애셋까지 폭넓게 다뤄요.",
   },
   "키즈노트": {
     companyUrl: "https://www.kidsnote.com",
