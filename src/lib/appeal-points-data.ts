@@ -3693,4 +3693,14 @@ export const APPEAL_POINTS: Record<string, AppealPoint[]> = {
     { title: "프로젝트 주도 경험", body: "디자인 콘셉트부터 결과물 제작까지 프로젝트를 직접 주도해본 경험을 정말 아주 더 상세히 보여주세요.", sourceQuote: "디자인 콘셉트부터 결과물 제작까지 프로젝트를 주도한 경험" },
     { title: "비즈니스-UX 연결 역량", body: "비즈니스 목표와 사용자 경험을 디자인으로 연결해본 경험을 정말 아주 더 구체적이고 자세히 보여주세요.", sourceQuote: "비즈니스 목표와 사용자 경험을 디자인에 연결하는 역량" },
   ],
+  "cmvuxox6x0002dj0a7ut4s3po": [
+    { title: "Illustrator·Figma 디자인 툴 역량", body: "Illustrator, Figma 등 디자인 툴을 능숙하게 다룬다면 구체적인 작업물로 아주 자세히 보여주세요.", sourceQuote: "Illustrator, Figma 등 디자인 툴을 능숙하게 다룰 수 있는 분" },
+    { title: "After Effects 모션 작업 경험", body: "After Effects로 기본적인 모션 작업을 해본 경험을 정말 아주 더 구체적으로 자세히 보여주세요.", sourceQuote: "After Effects 등으로 기본적인 모션 작업이 가능한 분" },
+    { title: "톤앤매너 일관된 에셋 세트 제작", body: "일관된 톤앤매너로 디자인 에셋을 세트 단위로 만들어본 경험을 정말 아주 더 구체적으로 자세히 보여주세요.", sourceQuote: "일관된 톤앤매너로 에셋을 세트 단위로 만들어본 경험이 있는 분" },
+  ],
+  "cmvuxoxae0005dj0a7muqhujx": [
+    { title: "5년 이상 UX/UI 디자인 경력", body: "UX/UI 디자인 경력 5년 이상에 준하는 경험을 구체적인 작업물로 정말 아주 더 자세히 보여주세요.", sourceQuote: "UX/UI 디자인 경력 5년 이상 또는 그에 준하는 경험을 보유하신 분" },
+    { title: "웹·대시보드 서비스 디자인 경험", body: "웹 서비스나 대시보드 형태의 서비스를 디자인해본 경험을 정말 아주 더 구체적이고 자세히 보여주세요.", sourceQuote: "웹 서비스 또는 대시보드 형태의 서비스 디자인 경험이 있으신 분" },
+    { title: "디자인 시스템 구축·운영 경험", body: "디자인 시스템을 직접 구축하고 운영해본 경험을 구체적인 사례로 정말 아주 더 상세히 자세히 보여주세요.", sourceQuote: "디자인 시스템 구축 및 운영 경험을 보유하신 분" },
+  ],
 };
