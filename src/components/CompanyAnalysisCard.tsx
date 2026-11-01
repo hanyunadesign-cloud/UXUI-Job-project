@@ -2656,6 +2656,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "해외 고객에게도 제품의 가치를 설득력 있게 전달하는 상세페이지와 콘텐츠를 만드는 게 핵심 문제예요.",
     problemRest: "제품 썸네일부터 상세페이지, 프로모션 배너까지 자사몰과 해외 이커머스 콘텐츠를 폭넓게 다뤄요.",
   },
+  "포스트매스": {
+    companyUrl: null,
+    designBlogUrl: null,
+    domainPrimary: "에듀테크 · AI",
+    domainSecondary: "교사를 위한 무료 문제은행 플랫폼 '수학비서'를 운영하는 에듀테크 스타트업으로, 2021년 대비 매출 약 40배 성장하며 2025년 시리즈A 투자를 유치했어요.",
+    domainKeywords: ["에듀테크", "문제은행 플랫폼", "AI 프로토타이핑"],
+    problemLede: "에이전시급 비주얼 완성도를 유지하면서도 AI로 빠르게 PoC를 검증하는 게 핵심 문제예요.",
+    problemRest: "AI 생성 이미지와 바이브 코딩으로 신규 서비스 아이디어를 빠르게 구현하고 검증해요.",
+  },
   "블루개러지": {
     companyUrl: null,
     designBlogUrl: null,
