@@ -2710,15 +2710,6 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "진단을 받는 개인과 운영하는 기업 담당자, 결과를 해석하는 전문가의 서로 다른 목적을 모두 만족시키는 게 핵심 문제예요.",
     problemRest: "초기 프로토타입의 의도와 리서치 근거를 살피며 사용자 가설을 직접 검증해요.",
   },
-  "문그룹": {
-    companyUrl: null,
-    designBlogUrl: null,
-    domainPrimary: "지역 스타트업 · 웹서비스",
-    domainSecondary: "대구를 기반으로 새로운 웹서비스와 디지털 플랫폼 사업을 준비하고 있는 초기 스타트업이에요.",
-    domainKeywords: ["대구 스타트업", "신규 웹서비스", "초기 팀"],
-    problemLede: "작은 팀으로 시작하는 신규 서비스의 기획부터 디자인, 출시까지 함께 만들어가는 게 핵심 문제예요.",
-    problemRest: "웹 풀스택 개발자와 협업하며 반응형 웹 디자인과 관리자 화면을 직접 설계해요.",
-  },
   "라이드": {
     companyUrl: null,
     designBlogUrl: null,
