@@ -581,15 +581,6 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "AI 캐릭터와의 대화를 게임·웹소설처럼 몰입감 있는 콘텐츠 경험으로 설계하는 게 핵심 문제예요.",
     problemRest: "서비스 구조와 사용자 여정을 정의하고, 배포 후 성과를 분석해 지속적으로 개선해요.",
   },
-  "마상소프트": {
-    companyUrl: "https://www.masangsoft.com/",
-    designBlogUrl: null,
-    domainPrimary: "게임",
-    domainSecondary: "부산에 기반한 게임 개발사로, 라이브 서비스 중인 게임의 UI/UX와 웹·플랫폼 서비스를 함께 만들어요.",
-    domainKeywords: ["라이브 게임", "게임 UI", "부산 게임사"],
-    problemLede: "서비스 중인 게임에서 플레이어가 직관적으로 조작할 수 있는 UI 리소스를 지속적으로 관리하는 게 핵심 문제예요.",
-    problemRest: "게임 UI뿐 아니라 프로모션·이벤트, 웹 플랫폼 디자인까지 폭넓게 다뤄요.",
-  },
   "무신사": {
     companyUrl: "https://www.musinsa.com/",
     designBlogUrl: "https://techblog.musinsa.com/",
