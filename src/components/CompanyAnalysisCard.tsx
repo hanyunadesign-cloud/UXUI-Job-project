@@ -3079,6 +3079,42 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "다양한 산업과 디바이스 환경에서 브랜드 아이덴티티와 유기적으로 연결되는 경험을 만드는 게 핵심 문제예요.",
     problemRest: "전략부터 실행까지 하나의 팀으로 작업하며 서비스 컨셉 도출부터 인터랙션 설계까지 함께 맡아요.",
   },
+  뤼튼테크놀로지스: {
+    companyUrl: "https://wrtn.io",
+    designBlogUrl: null,
+    domainPrimary: "AI · 콘텐츠",
+    domainSecondary: "AI 플랫폼 '뤼튼'과 AI 캐릭터 서비스 '크랙'을 운영해요. 한국과 일본에서 서비스 중이고, 유료화 한 달 만에 월매출 20억 원을 넘겼어요.",
+    domainKeywords: ["AI 캐릭터 서비스", "End-to-End 디자인", "데이터 기반 개선"],
+    problemLede: "채팅·게임·웹소설 등 AI 콘텐츠를 소비하는 경험을 사용자 여정 전체로 설계하는 게 핵심 문제예요.",
+    problemRest: "기획부터 배포, 지표 분석과 개선까지 디자인 전 과정을 혼자 책임지고 끝까지 끌고 가야 해요.",
+  },
+  아이티에프: {
+    companyUrl: null,
+    designBlogUrl: null,
+    domainPrimary: "게임 · IT 외주",
+    domainSecondary: "열 명이 안 되는 팀으로 외주 제작, 자체 플랫폼, 게임을 모두 만들어요. 지금까지 100건 이상을 전부 AI를 활용해 완성했어요.",
+    domainKeywords: ["UI·3D·영상 겸임", "AI 결과물 큐레이션", "소규모 전권"],
+    problemLede: "웹·앱 UI부터 3D 모델링, 숏폼 영상, 게임 UI까지 한 사람이 여러 영역을 오가며 만드는 게 핵심 문제예요.",
+    problemRest: "AI가 만든 결과물 중 쓸 만한 것을 골라 사람의 손길로 완성도를 높이는 감각도 중요한 과제예요.",
+  },
+  센트린: {
+    companyUrl: null,
+    designBlogUrl: null,
+    domainPrimary: "에이전시 · 브랜딩",
+    domainSecondary: "부산을 기반으로 여러 기업과 기관의 프로젝트를 수행하는 디자인 에이전시예요. 2021년 매출 4천만 원에서 2025년 5억 원으로 성장했어요.",
+    domainKeywords: ["브랜딩·편집 디자인", "클라이언트 설득", "본질적인 디자인"],
+    problemLede: "클라이언트의 문제와 목적을 먼저 이해한 뒤, 정해진 답을 반복하지 않고 방향을 제안하는 게 핵심 문제예요.",
+    problemRest: "로고부터 브로슈어, 제안서, 광고까지 매체를 가리지 않고 결과물의 비주얼 완성도를 책임져야 해요.",
+  },
+  닥터블릿헬스케어: {
+    companyUrl: "https://doctorblet.com",
+    designBlogUrl: null,
+    domainPrimary: "유통 · 웰니스 브랜드",
+    domainSecondary: "제품, 공간, 서비스를 아우르는 글로벌 웰니스 브랜드 그룹이에요. 건강기능식품 브랜드 dr.blet 등을 운영해요.",
+    domainKeywords: ["광고 콘텐츠", "AI 제작 활용", "웰니스 브랜드"],
+    problemLede: "브랜드의 메시지를 짧은 광고 이미지 안에 효과적으로 담아내는 게 핵심 문제예요.",
+    problemRest: "AI를 활용해 광고 콘텐츠 제작 속도를 높이면서도 브랜드 톤을 일관되게 유지하는 것도 중요한 과제예요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
