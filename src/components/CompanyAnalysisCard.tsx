@@ -3214,6 +3214,33 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "문제 정의부터 유저 플로우, 프로토타입까지 혼자 만들어 개발팀에 전달하는 높은 자율성과 책임이 핵심 문제예요.",
     problemRest: "출시 후에도 가설 검증을 꾸준히 추적해 그 인사이트를 팀의 자산으로 쌓아가는 것도 중요한 과제예요.",
   },
+  더블유클럽: {
+    companyUrl: "https://wclub.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "SNS · 프리미엄 매칭",
+    domainSecondary: "2019년부터 '실제 만남'에 집중해 온 프리미엄 매칭 서비스예요. 누적 만남 11만 건, 다운로드 30만 회를 넘겼고 하이엔드 매칭 앱 최초로 TV 광고를 진행했어요.",
+    domainKeywords: ["AI 기획·제작", "앱 UX 전권", "디자인 시스템"],
+    problemLede: "대표부터 AI로 기획하고 제작하는 문화 속에서, 문서 대신 실제 동작하는 결과물로 빠르게 시도하고 고치는 게 핵심 문제예요.",
+    problemRest: "신뢰가 중요한 매칭 서비스 특성상, 회원 반응과 데이터를 바탕으로 화면을 지속적으로 개선하는 것도 중요한 과제예요.",
+  },
+  한국모바일결제: {
+    companyUrl: "https://baroapp.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "핀테크 · 무인 결제",
+    domainSecondary: "셀프빨래방 키오스크 결제 서비스 '바로(baro)'를 만드는 회사예요. 전국 400여 개 매장이 사용하며, 무인 매장 운영 전체로 서비스를 확장하고 있어요.",
+    domainKeywords: ["키오스크 UX", "무인 매장 운영", "AI 시안 제작"],
+    problemLede: "키오스크, 고객 앱, 점주 앱이라는 서로 다른 세 화면의 경험을 하나의 기준으로 일관되게 설계하는 게 핵심 문제예요.",
+    problemRest: "현장 문의와 데이터를 바탕으로 헷갈리는 화면을 찾아 AI로 빠르게 시안을 만들고 개선하는 것도 중요한 과제예요.",
+  },
+  데이터스트림즈: {
+    companyUrl: "https://datastreams.co.kr",
+    designBlogUrl: null,
+    domainPrimary: "B2B SaaS · 빅데이터",
+    domainSecondary: "데이터 통합 및 품질관리 분야에서 25년간 자체 기술로 사업을 이어온 빅데이터 전문기업이에요.",
+    domainKeywords: ["제안서 시각화", "IR 자료 디자인", "생성형 AI 툴"],
+    problemLede: "복잡한 데이터 기술을 고객사가 이해하기 쉬운 제안서와 발표 자료로 시각화하는 게 핵심 문제예요.",
+    problemRest: "Gamma, Midjourney 같은 생성형 AI 툴을 활용해 제안 산출물 제작 속도를 높이는 것도 중요한 과제예요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
