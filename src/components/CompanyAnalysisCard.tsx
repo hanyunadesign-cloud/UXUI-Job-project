@@ -3241,6 +3241,15 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "복잡한 데이터 기술을 고객사가 이해하기 쉬운 제안서와 발표 자료로 시각화하는 게 핵심 문제예요.",
     problemRest: "Gamma, Midjourney 같은 생성형 AI 툴을 활용해 제안 산출물 제작 속도를 높이는 것도 중요한 과제예요.",
   },
+  바운더리웍스: {
+    companyUrl: null,
+    designBlogUrl: null,
+    domainPrimary: "B2B SaaS · IT 서비스",
+    domainSecondary: "기업의 비즈니스 환경에 맞는 디지털 서비스를 구축하는 IT 서비스 기업이에요. 글로벌 기업 웹사이트, B2B 서비스, CRM·업무 시스템을 기획부터 구축·운영까지 맡아요.",
+    domainKeywords: ["서비스 기획", "고객사 인터뷰", "구축·운영"],
+    problemLede: "고객사마다 다른 비즈니스 환경을 이해하고, 기획 산출물부터 UX/UI까지 일관되게 설계하는 게 핵심 문제예요.",
+    problemRest: "테스트 시나리오 작성과 품질 검수까지 디자이너가 직접 책임지는 범위가 넓은 것도 중요한 과제예요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
