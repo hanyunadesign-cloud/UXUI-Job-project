@@ -3664,6 +3664,24 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemLede: "금융 월렛 플랫폼 전반의 UX 원칙과 패턴을 세우는 게 핵심 문제예요.",
     problemRest: "분석·개발·테스트 전 과정에 UX 기준을 전파하는 것도 중요한 과제예요.",
   },
+  "삼구아이앤씨": {
+    companyUrl: "https://www.samkoo.com",
+    designBlogUrl: null,
+    domainPrimary: "커머스 · 코스메틱 파견",
+    domainSecondary: "1968년 청소용품 제조로 시작한 종합 아웃소싱 기업이에요. 이 포지션은 신세계인터내셔날 스위스퍼펙션팀에 파견되는 체험형 인턴이에요.",
+    domainKeywords: ["신세계인터내셔날", "글로벌 코스메틱", "체험형 인턴"],
+    problemLede: "고가 스킨케어 브랜드의 감도를 온라인몰 화면에서 그대로 전달하는 게 핵심 문제예요.",
+    problemRest: "디자인과 영상 편집, 사무보조까지 함께 맡는 만큼 업무 범위를 미리 확인하는 것도 중요한 과제예요.",
+  },
+  "NHN": {
+    companyUrl: "https://www.nhn.com",
+    designBlogUrl: null,
+    domainPrimary: "IT/서비스 · 게임·결제·클라우드",
+    domainSecondary: "게임, 결제(페이코), 클라우드 등 여러 IT 서비스를 운영하는 판교 소재 IT 기업이에요.",
+    domainKeywords: ["디자인 시스템", "AI 도구 활용", "체험형 인턴"],
+    problemLede: "여러 서비스에 쓰이는 디자인 시스템 컴포넌트를 일관되게 정리하는 게 핵심 문제예요.",
+    problemRest: "AI 도구로 UI 제작 속도를 높이면서 품질 기준을 지키는 것도 중요한 과제예요.",
+  },
 };
 
 // 처음 보는 유저도 "스테이지"·"도메인"이 뭔지 바로 알 수 있도록 라벨 옆에 다는 설명 툴팁.
