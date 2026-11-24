@@ -3557,7 +3557,7 @@ const COMPANY_ANALYSIS: Record<string, CompanyAnalysisData> = {
     problemRest: "본사가 아닌 파견지에서 고객사와 밀접하게 협업하는 것도 중요한 과제예요.",
   },
   "엔지엘코리아": {
-    companyUrl: "https://ngltrans.com",
+    companyUrl: null,
     designBlogUrl: null,
     domainPrimary: "B2B SaaS · 물류 시스템",
     domainSecondary: "미국 애리조나 본사를 둔 물류회사의 한국 법인으로, TMS·YMS 같은 물류 운영 시스템을 만들어요.",
