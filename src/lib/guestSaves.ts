@@ -36,3 +36,30 @@ export function clearGuestSavedJobIds(): void {
     // ignore
   }
 }
+
+// 게스트가 저장 공고 페이지에서 "지원완료"로 표시한 공고 ID 목록. 저장 목록과 같은 방식으로
+// 브라우저에만 남긴다.
+const GUEST_APPLIED_KEY = "uxui_guest_applied_jobs";
+
+export function getGuestAppliedJobIds(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(GUEST_APPLIED_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function setGuestApplied(jobId: string, applied: boolean): void {
+  const current = getGuestAppliedJobIds();
+  const next = applied
+    ? Array.from(new Set([...current, jobId]))
+    : current.filter((id) => id !== jobId);
+  try {
+    window.localStorage.setItem(GUEST_APPLIED_KEY, JSON.stringify(next));
+  } catch {
+    // ignore
+  }
+}

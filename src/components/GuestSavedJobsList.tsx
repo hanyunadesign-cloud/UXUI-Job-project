@@ -1,16 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { JobCard, type JobCardData } from "@/components/JobCard";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
-import { getGuestSavedJobIds } from "@/lib/guestSaves";
+import { getGuestAppliedJobIds, getGuestSavedJobIds } from "@/lib/guestSaves";
+import { SortDropdown } from "@/components/SortDropdown";
+import { sortSavedJobs } from "@/lib/sortSavedJobs";
+
+type GuestJob = JobCardData & { postedAt: Date };
 
 // 게스트(비로그인)용 저장 공고 목록. 서버는 localStorage를 모르니 클라이언트에서
 // jobId 목록을 읽어 /api/saved-jobs/guest로 실제 공고 데이터를 받아온다.
 export function GuestSavedJobsList() {
-  const [jobs, setJobs] = useState<JobCardData[] | null>(null);
+  const searchParams = useSearchParams();
+  const sort = searchParams.get("sort") === "deadline" ? "deadline" : "latest";
+  const [jobs, setJobs] = useState<GuestJob[] | null>(null);
+  const [appliedIds, setAppliedIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    setAppliedIds(getGuestAppliedJobIds());
+  }, []);
+
+  const sorted = useMemo(
+    () =>
+      jobs
+        ? sortSavedJobs(
+            jobs.map((job) => ({ ...job, applied: appliedIds.includes(job.id) })),
+            sort
+          )
+        : [],
+    [jobs, appliedIds, sort]
+  );
 
   useEffect(() => {
     const ids = getGuestSavedJobIds();
@@ -22,11 +45,12 @@ export function GuestSavedJobsList() {
     const ordered = [...ids].reverse();
     fetch(`/api/saved-jobs/guest?ids=${ordered.join(",")}`)
       .then((res) => (res.ok ? res.json() : []))
-      .then((data: (Omit<JobCardData, "applicationDeadline"> & { applicationDeadline: string | null })[]) =>
+      .then((data: (Omit<GuestJob, "applicationDeadline" | "postedAt"> & { applicationDeadline: string | null; postedAt: string })[]) =>
         setJobs(
           data.map((job) => ({
             ...job,
             applicationDeadline: job.applicationDeadline ? new Date(job.applicationDeadline) : null,
+            postedAt: new Date(job.postedAt),
           }))
         )
       )
@@ -53,10 +77,22 @@ export function GuestSavedJobsList() {
 
   return (
     <>
-      <p className="text-sm text-neutral-500">{jobs.length}개 저장됨</p>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm text-neutral-500">
+          {jobs.length}개 저장됨 · 지원완료 {sorted.filter((job) => job.applied).length}개
+        </p>
+        <SortDropdown />
+      </div>
       <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {jobs.map((job) => (
-          <JobCard key={job.id} job={job} saved isLoggedIn={false} source="mypage_saved" />
+        {sorted.map((job) => (
+          <JobCard
+            key={job.id}
+            job={job}
+            saved
+            isLoggedIn={false}
+            source="mypage_saved"
+            applied={job.applied}
+          />
         ))}
       </div>
     </>

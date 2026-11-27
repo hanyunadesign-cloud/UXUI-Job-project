@@ -9,7 +9,8 @@ import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
 import { TrackPageView } from "@/components/TrackPageView";
 import { GuestSavedJobsList } from "@/components/GuestSavedJobsList";
-import { getApplicationStatus } from "@/lib/dday";
+import { SortDropdown } from "@/components/SortDropdown";
+import { sortSavedJobs } from "@/lib/sortSavedJobs";
 
 // GNB "저장 공고" 탭 전용 페이지. 여기는 저장한 공고만 보여주고, 관심사 설정/이메일
 // 알림 같은 "마이페이지" 성격의 내용은 별도 페이지(/profile)에 있다. 공고 저장 자체가
@@ -17,7 +18,12 @@ import { getApplicationStatus } from "@/lib/dday";
 // GuestSavedJobsList로 보여준다(링크로 추가한 공고 저장은 여전히 로그인 전용).
 export const dynamic = "force-dynamic";
 
-export default async function MyPage() {
+export default async function MyPage({
+  searchParams,
+}: {
+  searchParams: { sort?: string };
+}) {
+  const sort = searchParams.sort === "deadline" ? "deadline" : "latest";
   const session = await getServerSession(authOptions);
   const userId = (session?.user as { id?: string } | undefined)?.id;
 
@@ -55,22 +61,27 @@ export default async function MyPage() {
   // 직접 못 걸러서 include 후 여기서 필터링한다.
   const liveSavedJobs = savedJobs.filter((sj) => sj.job.archivedAt === null);
 
-  // 저장한 공고(우리 DB)와 링크로 추가한 공고(외부)를 최신순으로 한 그리드에 섞어서 보여준다.
-  // /jobs 목록과 동일하게, 지원마감된 공고는 저장 순서 유지한 채 뒤로 밀어서 일관되게 보여준다.
+  // 저장한 공고(우리 DB)와 링크로 추가한 공고(외부)를 한 그리드에 섞어서 보여준다.
+  // 정렬은 홈(/jobs)과 같은 최신순·마감임박순을 따르고, 링크로 추가한 공고는 등록일이
+  // 없으니 저장한 시각을 대신 쓴다. 지원완료·지원마감 공고는 sortSavedJobs가 뒤로 보낸다.
   const combinedSaved = [
-    ...liveSavedJobs.map((sj) => ({ kind: "saved" as const, createdAt: sj.createdAt, data: sj.job })),
+    ...liveSavedJobs.map((sj) => ({
+      kind: "saved" as const,
+      postedAt: sj.job.postedAt,
+      applicationDeadline: sj.job.applicationDeadline,
+      applied: Boolean(sj.appliedAt),
+      data: sj.job,
+    })),
     ...externalJobs.map((ej) => ({
       kind: "external" as const,
-      createdAt: ej.createdAt,
+      postedAt: ej.createdAt,
+      applicationDeadline: ej.applicationDeadline,
+      applied: Boolean(ej.appliedAt),
       data: { ...ej, companyLogo: logoByCompanyName.get(ej.companyName) ?? null },
     })),
-  ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  const isClosedItem = (item: (typeof combinedSaved)[number]) =>
-    item.kind === "saved" && getApplicationStatus(item.data.applicationDeadline).closed;
-  const sortedCombinedSaved = [
-    ...combinedSaved.filter((item) => !isClosedItem(item)),
-    ...combinedSaved.filter(isClosedItem),
   ];
+  const sortedCombinedSaved = sortSavedJobs(combinedSaved, sort);
+  const appliedCount = combinedSaved.filter((item) => item.applied).length;
 
   return (
     <div className="flex flex-col gap-8">
@@ -100,7 +111,12 @@ export default async function MyPage() {
         />
       ) : (
         <>
-          <p className="text-sm text-neutral-500">{combinedSaved.length}개 저장됨</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm text-neutral-500">
+              {combinedSaved.length}개 저장됨 · 지원완료 {appliedCount}개
+            </p>
+            <SortDropdown />
+          </div>
           <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {sortedCombinedSaved.map((item) =>
               item.kind === "saved" ? (
@@ -110,6 +126,7 @@ export default async function MyPage() {
                   saved
                   isLoggedIn
                   source="mypage_saved"
+                  applied={item.applied}
                 />
               ) : (
                 <ExternalJobCard key={`external-${item.data.id}`} job={item.data} />

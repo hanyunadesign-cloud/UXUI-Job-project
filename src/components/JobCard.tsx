@@ -4,6 +4,7 @@ import Link from "next/link";
 import { SaveButton } from "@/components/SaveButton";
 import { CompanyLogo } from "@/components/CompanyLogo";
 import { NewBadge } from "@/components/NewBadge";
+import { AppliedToggle } from "@/components/AppliedToggle";
 import { getApplicationStatus } from "@/lib/dday";
 import { trackEvent } from "@/lib/analytics";
 import { clsx } from "clsx";
@@ -29,6 +30,7 @@ export function JobCard({
   isLoggedIn,
   isNew,
   source,
+  applied = false,
 }: {
   job: JobCardData;
   saved: boolean;
@@ -37,6 +39,8 @@ export function JobCard({
   // 이 카드가 어느 화면에 떠 있었는지("jobs_list"/"mypage_saved"/"company_detail").
   // 상세 페이지 조회만으로는 목록 클릭인지 다른 경로인지 구분이 안 돼서 카드 클릭 자체를 남긴다.
   source: "jobs_list" | "mypage_saved" | "company_detail";
+  // 저장 공고 페이지에서만 쓰는 "지원완료" 표시 상태.
+  applied?: boolean;
 }) {
   const initial = job.companyName.slice(0, 1);
 
@@ -96,7 +100,11 @@ export function JobCard({
           {job.taskKeywords.slice(0, 2).join(" · ")}
         </p>
 
-        {source === "mypage_saved" && <div className="min-h-14" />}
+        {source === "mypage_saved" && (
+          <div className="flex min-h-14 flex-wrap content-start gap-1.5">
+            <AppliedToggle kind="job" id={job.id} initialApplied={applied} isLoggedIn={isLoggedIn} />
+          </div>
+        )}
       </div>
 
       {/* 하단 정보: 위 섹션이 모두 고정 높이라 자연스럽게 맞춰지지만, mt-auto로 이중 보장.

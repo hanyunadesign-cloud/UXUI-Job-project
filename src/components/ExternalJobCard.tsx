@@ -7,6 +7,7 @@ import { Bookmark } from "lucide-react";
 import { clsx } from "clsx";
 import { Badge } from "@/components/Badge";
 import { CompanyLogo } from "@/components/CompanyLogo";
+import { AppliedToggle } from "@/components/AppliedToggle";
 import { useToast } from "@/components/ToastProvider";
 import { trackEvent } from "@/lib/analytics";
 import { ICON_SIZE } from "@/lib/design-tokens";
@@ -21,6 +22,7 @@ export type ExternalJobCardData = {
   coreKeywords: string[];
   createdAt: Date;
   applicationDeadline: Date | null;
+  appliedAt?: Date | null;
 };
 
 function hostnameOf(url: string): string {
@@ -101,6 +103,7 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
 
         <div className="flex min-h-14 flex-wrap content-start gap-1.5">
           <Badge tone="ink">🔗 링크 저장</Badge>
+          <AppliedToggle kind="external" id={job.id} initialApplied={Boolean(job.appliedAt)} isLoggedIn />
         </div>
       </Link>
 

@@ -182,6 +182,8 @@ model SavedJob {
   userId    String
   jobId     String
   createdAt DateTime @default(now())
+  // 저장 공고 페이지에서 유저가 직접 "지원완료"로 표시한 시각. null이면 아직 지원 전.
+  appliedAt DateTime?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
@@ -217,6 +219,8 @@ model ExternalJobSave {
   // 저장 시점에 원문(description)에서 정식 Job과 동일한 extractApplicationDeadline()
   // 정규식으로 뽑아낸 마감일. 못 찾으면 null(카드에는 마감일 정보 없이 표시).
   applicationDeadline DateTime?
+  // 저장 공고 페이지에서 유저가 직접 "지원완료"로 표시한 시각. null이면 아직 지원 전.
+  appliedAt    DateTime?
   createdAt    DateTime @default(now())
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
