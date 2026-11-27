@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { SaveButton } from "@/components/SaveButton";
 import { CompanyLogo } from "@/components/CompanyLogo";
@@ -45,6 +46,8 @@ export function JobCard({
   const initial = job.companyName.slice(0, 1);
 
   const status = getApplicationStatus(job.applicationDeadline);
+  // 저장 공고 페이지에서 "지원완료"를 누르면 마감 공고처럼 카드를 흐리게 보여준다.
+  const [isApplied, setIsApplied] = useState(applied);
 
   return (
     <Link
@@ -54,7 +57,7 @@ export function JobCard({
       }
       className={clsx(
         "relative flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]",
-        status.closed && "opacity-60"
+        (status.closed || (source === "mypage_saved" && isApplied)) && "opacity-60"
       )}
     >
       {/* SaveButton의 p-1.5(6px) 내부 패딩을 미리 빼서, 아이콘 실제 가장자리가
@@ -71,10 +74,21 @@ export function JobCard({
           initial={initial}
           size={48}
         />
-        <p className="flex min-w-0 items-center gap-1.5">
-          <span className="truncate text-sm font-semibold text-ink">{job.companyName}</span>
-          {isNew && <NewBadge jobId={job.id} />}
-        </p>
+        <div className="flex min-w-0 flex-col items-start gap-1">
+          <p className="flex min-w-0 max-w-full items-center gap-1.5">
+            <span className="truncate text-sm font-semibold text-ink">{job.companyName}</span>
+            {isNew && <NewBadge jobId={job.id} />}
+          </p>
+          {source === "mypage_saved" && (
+            <AppliedToggle
+              kind="job"
+              id={job.id}
+              initialApplied={applied}
+              isLoggedIn={isLoggedIn}
+              onChange={setIsApplied}
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -100,11 +114,7 @@ export function JobCard({
           {job.taskKeywords.slice(0, 2).join(" · ")}
         </p>
 
-        {source === "mypage_saved" && (
-          <div className="flex min-h-14 flex-wrap content-start gap-1.5">
-            <AppliedToggle kind="job" id={job.id} initialApplied={applied} isLoggedIn={isLoggedIn} />
-          </div>
-        )}
+        {source === "mypage_saved" && <div className="min-h-14" />}
       </div>
 
       {/* 하단 정보: 위 섹션이 모두 고정 높이라 자연스럽게 맞춰지지만, mt-auto로 이중 보장.

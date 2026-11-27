@@ -70,13 +70,13 @@ export function AppliedToggle({
       disabled={isPending}
       aria-pressed={applied}
       className={clsx(
-        "inline-flex items-center gap-1 rounded-md px-3 py-1 text-xs font-medium transition-colors disabled:opacity-60",
+        "inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-semibold leading-4 transition-colors disabled:opacity-60",
         applied
           ? "bg-primary text-white hover:bg-primary-strong"
           : "border border-neutral-200 bg-white text-neutral-500 hover:border-primary hover:text-primary"
       )}
     >
-      <Check className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />
+      <Check className="h-3 w-3" strokeWidth={2.75} aria-hidden />
       {applied ? "지원완료" : "지원완료 표시"}
     </button>
   );

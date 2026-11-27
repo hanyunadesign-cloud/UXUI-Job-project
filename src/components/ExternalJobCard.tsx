@@ -41,6 +41,7 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
   const showToast = useToast();
   const [isPending, startTransition] = useTransition();
   const [removed, setRemoved] = useState(false);
+  const [isApplied, setIsApplied] = useState(Boolean(job.appliedAt));
 
   const remove = () => {
     setRemoved(true);
@@ -64,7 +65,12 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
   const status = getApplicationStatus(job.applicationDeadline);
 
   return (
-    <div className="relative flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]">
+    <div
+      className={clsx(
+        "relative flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]",
+        (status.closed || isApplied) && "opacity-60"
+      )}
+    >
       <button
         type="button"
         onClick={remove}
@@ -82,9 +88,18 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
           initial={job.companyName.slice(0, 1)}
           size={48}
         />
-        <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-ink">{job.companyName}</p>
-          <p className="truncate text-xs text-neutral-400">{hostnameOf(job.sourceUrl)}</p>
+        <div className="flex min-w-0 flex-col items-start gap-1">
+          <p className="max-w-full truncate text-sm font-semibold text-ink">
+            {job.companyName}
+            <span className="ml-1.5 text-xs font-normal text-neutral-400">{hostnameOf(job.sourceUrl)}</span>
+          </p>
+          <AppliedToggle
+            kind="external"
+            id={job.id}
+            initialApplied={Boolean(job.appliedAt)}
+            isLoggedIn
+            onChange={setIsApplied}
+          />
         </div>
       </div>
 
@@ -103,7 +118,6 @@ export function ExternalJobCard({ job }: { job: ExternalJobCardData }) {
 
         <div className="flex min-h-14 flex-wrap content-start gap-1.5">
           <Badge tone="ink">🔗 링크 저장</Badge>
-          <AppliedToggle kind="external" id={job.id} initialApplied={Boolean(job.appliedAt)} isLoggedIn />
         </div>
       </Link>
 
